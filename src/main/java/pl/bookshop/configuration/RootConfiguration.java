@@ -93,9 +93,4 @@ public class RootConfiguration {
 	public BeanPostProcessor beanPostProcessor() {
 		return new PersistenceAnnotationBeanPostProcessor();
 	}
-	
-	@Bean
-	public String testBean() {
-		return "test";
-	}
 }
