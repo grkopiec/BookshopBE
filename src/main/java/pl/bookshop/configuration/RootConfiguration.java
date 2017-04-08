@@ -22,7 +22,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
-@ComponentScan(basePackages = {"pl.bookshop.configuration.database"})
+@ComponentScan(basePackages = {"pl.bookshop.configuration.database", "pl.bookshop.services"})
 public class RootConfiguration {
 	@Value("${driverClassName}")
 	private String driverClassName;
