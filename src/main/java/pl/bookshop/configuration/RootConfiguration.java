@@ -51,7 +51,7 @@ public class RootConfiguration {
 		return propertyPlaceholderConfigurer;
 	}
 	
-	@Bean
+	@Bean(destroyMethod = "close")
 	public DataSource dataSource() {
 		BasicDataSource basicDataSource = new BasicDataSource();
 		basicDataSource.setDriverClassName(driverClassName);
@@ -82,7 +82,7 @@ public class RootConfiguration {
 	}
 	
 	@Bean
-	public PlatformTransactionManager platformTransactionManager(EntityManagerFactory entityManagerFactory) {
+	public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
 		return new JpaTransactionManager(entityManagerFactory);
 	}
 	
