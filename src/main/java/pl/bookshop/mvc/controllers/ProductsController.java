@@ -69,9 +69,4 @@ public class ProductsController {
 		productsService.delete(id);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
-	
-	@RequestMapping(path = "/test")
-	public List<Product> test() {
-		return productsService.findByName("Javaprogramming");
-	}
 }

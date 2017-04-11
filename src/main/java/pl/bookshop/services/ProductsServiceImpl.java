@@ -26,6 +26,11 @@ public class ProductsServiceImpl implements ProductsService {
 	}
 	
 	@Override
+	public List<Product> findByName(String name) {
+		return productsRepository.findByName(name);
+	}
+	
+	@Override
 	public Boolean isExsit(Product product) {
 		if (productsRepository.findByName(product.getName()).isEmpty()) {
 			return false;
@@ -52,10 +57,5 @@ public class ProductsServiceImpl implements ProductsService {
 	@Override
 	public void delete(Long id) {
 		productsRepository.delete(id);
-	}
-	
-	@Override
-	public List<Product> findByName(String name) {
-		return productsRepository.findByName(name);
 	}
 }
