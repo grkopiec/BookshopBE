@@ -31,7 +31,7 @@ public class ProductsServiceImpl implements ProductsService {
 	}
 	
 	@Override
-	public Boolean isExsit(Product product) {
+	public Boolean isExist(Product product) {
 		if (productsRepository.findByName(product.getName()).isEmpty()) {
 			return false;
 		}

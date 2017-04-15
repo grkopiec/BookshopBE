@@ -42,7 +42,7 @@ public class ProductsController {
 	
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> create(@RequestBody Product product) {
-		if (productsService.isExsit(product)) {
+		if (productsService.isExist(product)) {
 			productsService.create(product);
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}

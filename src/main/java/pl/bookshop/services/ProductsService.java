@@ -8,7 +8,7 @@ public interface ProductsService {
 	public List<Product> findAll();
 	public Product findOne(Long id);
 	public List<Product> findByName(String name);
-	public Boolean isExsit(Product product);
+	public Boolean isExist(Product product);
 	public void create(Product product);
 	public Product update(Long id, Product product);
 	public void delete(Long id);

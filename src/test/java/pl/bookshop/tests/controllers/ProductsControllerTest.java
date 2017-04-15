@@ -17,6 +17,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import pl.bookshop.domains.Product;
 import pl.bookshop.mvc.controllers.ProductsController;
 import pl.bookshop.services.ProductsService;
@@ -81,6 +84,40 @@ public class ProductsControllerTest {
 		Mockito.verifyNoMoreInteractions(productsService);
 	}
 	
+	@Test
+	public void test_create_success() throws Exception {
+		Product product1 = getProduct1();
+		
+		Mockito.when(productsService.isExist(product1)).thenReturn(false);
+		Mockito.doNothing().when(productsService).create(product1);
+		mockMvc.perform(MockMvcRequestBuilders
+						.post("/products")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(toJson(product1)))
+				.andExpect(MockMvcResultMatchers.status().isCreated());
+		Mockito.verify(productsService, Mockito.times(1)).isExist(product1);
+		Mockito.verify(productsService, Mockito.times(1)).create(product1);
+		Mockito.verifyNoMoreInteractions(productsService);
+	}
+	
+	
+	/**
+	 * Should occur 409 code error, passed product already exists
+	 */
+	@Test
+	public void test_create_fail() throws Exception {
+		Product product1 = getProduct1();
+		
+		Mockito.when(productsService.isExist(product1)).thenReturn(true);
+		mockMvc.perform(MockMvcRequestBuilders
+						.post("/products")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(new ObjectMapper().writeValueAsString(product1)))
+				.andExpect(MockMvcResultMatchers.status().isConflict());
+		Mockito.verify(productsService, Mockito.times(1)).isExist(product1);
+		Mockito.verifyNoMoreInteractions(productsService);
+	}
+	
 	private Product getProduct1() {
 		Product product1 = new Product();
 		product1.setName(RandomStringUtils.randomAlphabetic(10));
@@ -93,5 +130,10 @@ public class ProductsControllerTest {
 		product2.setName(RandomStringUtils.randomAlphabetic(5));
 		product2.setDescription(RandomStringUtils.randomAlphabetic(50));
 		return product2;
+	}
+	
+	
+	private String toJson(Object object) throws JsonProcessingException {
+		return new ObjectMapper().writeValueAsString(object);
 	}
 }
