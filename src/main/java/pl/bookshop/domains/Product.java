@@ -1,5 +1,7 @@
 package pl.bookshop.domains;
 
+import java.util.Objects;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -39,5 +41,26 @@ public class Product {
 	@Override
 	public String toString() {
 		return "Product [id=" + id + ", name=" + name + ", description=" + description + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(name, description);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (this.getClass() != obj.getClass()) {
+			return false;
+		}
+		
+		Product other = (Product) obj;
+		return Objects.equals(this.name, other.name) && Objects.equals(this.description, other.description);
 	}
 }
