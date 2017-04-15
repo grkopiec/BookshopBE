@@ -43,10 +43,10 @@ public class ProductsController {
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> create(@RequestBody Product product) {
 		if (productsService.isExist(product)) {
-			productsService.create(product);
-			return new ResponseEntity<>(HttpStatus.CREATED);
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
-		return new ResponseEntity<>(HttpStatus.CONFLICT);
+		productsService.create(product);
+		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
 	@RequestMapping(path = "/{id}", method = RequestMethod.PUT)
