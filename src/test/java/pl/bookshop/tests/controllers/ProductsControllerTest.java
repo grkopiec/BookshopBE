@@ -171,6 +171,36 @@ public class ProductsControllerTest {
 		Mockito.verifyNoMoreInteractions(productsService);
 	}
 	
+	@Test
+	public void test_delete_success() throws Exception {
+		Product product1 = getProduct1();
+		
+		Mockito.when(productsService.findOne(product1.getId())).thenReturn(product1);
+		Mockito.doNothing().when(productsService).delete(product1.getId());
+		mockMvc.perform(MockMvcRequestBuilders
+						.delete("/products/{id}", product1.getId()))
+				.andExpect(MockMvcResultMatchers.status().isNoContent());
+		Mockito.verify(productsService, Mockito.times(1)).findOne(product1.getId());
+		Mockito.verify(productsService, Mockito.times(1)).delete(product1.getId());
+		Mockito.verifyNoMoreInteractions(productsService);
+	}
+	
+	/**
+	 * Should occur 409 code error, product do not exist
+	 */
+	@Test
+	public void test_delete_fail() throws Exception {
+		Product product1 = getProduct1();
+		
+		Mockito.when(productsService.findOne(product1.getId())).thenReturn(null);
+		Mockito.doNothing().when(productsService).delete(product1.getId());
+		mockMvc.perform(MockMvcRequestBuilders
+						.delete("/products/{id}", product1.getId()))
+				.andExpect(MockMvcResultMatchers.status().isNotFound());
+		Mockito.verify(productsService, Mockito.times(1)).findOne(product1.getId());
+		Mockito.verifyNoMoreInteractions(productsService);
+	}
+	
 	private Product getProduct1() {
 		Product product1 = new Product();
 		product1.setId(1L);
