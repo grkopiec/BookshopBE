@@ -12,7 +12,10 @@ public class Product {
 	@Id
 	private Long id;
 	private String name;
+	private String producer;
 	private String description;
+	private Double price;
+	private Double discount;
 
 	public Long getId() {
 		return id;
@@ -30,6 +33,14 @@ public class Product {
 		this.name = name;
 	}
 
+	public String getProducer() {
+		return producer;
+	}
+
+	public void setProducer(String producer) {
+		this.producer = producer;
+	}
+
 	public String getDescription() {
 		return description;
 	}
@@ -38,14 +49,31 @@ public class Product {
 		this.description = description;
 	}
 
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+
+	public Double getDiscount() {
+		return discount;
+	}
+
+	public void setDiscount(Double discount) {
+		this.discount = discount;
+	}
+
 	@Override
 	public String toString() {
-		return "Product [id=" + id + ", name=" + name + ", description=" + description + "]";
+		return "Product [id=" + id + ", name=" + name + ", producer=" + producer + ", description=" + description +
+				", price=" + price + ", discount=" + discount + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(name, description);
+		return Objects.hash(name, producer, description, price, discount);
 	}
 
 	@Override
@@ -61,6 +89,8 @@ public class Product {
 		}
 		
 		Product other = (Product) obj;
-		return Objects.equals(this.name, other.name) && Objects.equals(this.description, other.description);
+		return Objects.equals(this.name, other.name) && Objects.equals(this.producer, other.producer) &&
+				Objects.equals(this.description, other.description) && Objects.equals(this.price, other.price) &&
+				Objects.equals(this.discount, other.discount);
 	}
 }

@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.RandomUtils;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -52,10 +53,16 @@ public class ProductsControllerTest {
 				.andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(2)))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[0].id", Matchers.is(products.get(0).getId().intValue())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[0].name", Matchers.is(products.get(0).getName())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].producer", Matchers.is(products.get(0).getProducer())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[0].description", Matchers.is(products.get(0).getDescription())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].price", Matchers.is(products.get(0).getPrice())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].discount", Matchers.is(products.get(0).getDiscount())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[1].id", Matchers.is(products.get(1).getId().intValue())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[1].name", Matchers.is(products.get(1).getName())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[1].description", Matchers.is(products.get(1).getDescription())));
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].producer", Matchers.is(products.get(1).getProducer())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].description", Matchers.is(products.get(1).getDescription())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].price", Matchers.is(products.get(1).getPrice())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].discount", Matchers.is(products.get(1).getDiscount())));
 		Mockito.verify(productsService, Mockito.times(1)).findAll();
 		Mockito.verifyNoMoreInteractions(productsService);
 	}
@@ -70,7 +77,10 @@ public class ProductsControllerTest {
 				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(product1.getId().intValue())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(product1.getName())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.description", Matchers.is(product1.getDescription())));
+				.andExpect(MockMvcResultMatchers.jsonPath("$.producer", Matchers.is(product1.getProducer())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.description", Matchers.is(product1.getDescription())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.price", Matchers.is(product1.getPrice())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.discount", Matchers.is(product1.getDiscount())));
 		Mockito.verify(productsService, Mockito.times(1)).findOne(1L);
 		Mockito.verifyNoMoreInteractions(productsService);
 	}
@@ -144,7 +154,10 @@ public class ProductsControllerTest {
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(afterUpdateProduct.getId().intValue())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(afterUpdateProduct.getName())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.description", Matchers.is(afterUpdateProduct.getDescription())));
+				.andExpect(MockMvcResultMatchers.jsonPath("$.producer", Matchers.is(afterUpdateProduct.getProducer())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.description", Matchers.is(afterUpdateProduct.getDescription())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.price", Matchers.is(afterUpdateProduct.getPrice())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.discount", Matchers.is(afterUpdateProduct.getDiscount())));
 		Mockito.verify(productsService, Mockito.times(1)).update(previousProduct.getId(), beforeUpdateProduct);
 		Mockito.verifyNoMoreInteractions(productsService);
 	}
@@ -205,7 +218,10 @@ public class ProductsControllerTest {
 		Product product1 = new Product();
 		product1.setId(1L);
 		product1.setName(RandomStringUtils.randomAlphabetic(10));
+		product1.setProducer(RandomStringUtils.randomAlphabetic(15));
 		product1.setDescription(RandomStringUtils.randomAlphabetic(100));
+		product1.setPrice(RandomUtils.nextDouble(10, 20));
+		product1.setDiscount(RandomUtils.nextDouble(2, 4));
 		return product1;
 	}
 	
@@ -213,7 +229,10 @@ public class ProductsControllerTest {
 		Product product2 = new Product();
 		product2.setId(2L);
 		product2.setName(RandomStringUtils.randomAlphabetic(5));
+		product2.setProducer(RandomStringUtils.randomAlphabetic(10));
 		product2.setDescription(RandomStringUtils.randomAlphabetic(50));
+		product2.setPrice(RandomUtils.nextDouble(5, 15));
+		product2.setDiscount(RandomUtils.nextDouble(10, 15));
 		return product2;
 	}
 	
