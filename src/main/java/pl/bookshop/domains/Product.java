@@ -4,9 +4,11 @@ import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@Entity
+@Entity	
 @Table(name = "PRODUCTS")
 public class Product {
 	@Id
@@ -16,6 +18,9 @@ public class Product {
 	private String description;
 	private Double price;
 	private Double discount;
+	@ManyToOne
+	@JoinColumn(name = "category_id	")
+	private Category category;
 
 	public Long getId() {
 		return id;
@@ -65,10 +70,18 @@ public class Product {
 		this.discount = discount;
 	}
 
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
 	@Override
 	public String toString() {
 		return "Product [id=" + id + ", name=" + name + ", producer=" + producer + ", description=" + description +
-				", price=" + price + ", discount=" + discount + "]";
+				", price=" + price + ", discount=" + discount + ", category=" + category + "]";
 	}
 
 	@Override
