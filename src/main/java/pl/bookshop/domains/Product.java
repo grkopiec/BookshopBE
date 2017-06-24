@@ -8,6 +8,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity	
 @Table(name = "PRODUCTS")
 public class Product {
@@ -20,6 +22,7 @@ public class Product {
 	private Double discount;
 	@ManyToOne
 	@JoinColumn(name = "category_id	")
+	@JsonManagedReference
 	private Category category;
 
 	public Long getId() {

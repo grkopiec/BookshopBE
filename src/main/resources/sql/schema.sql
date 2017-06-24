@@ -2,13 +2,13 @@ EXEC drop_if_table_exists('categories');
 EXEC drop_if_table_exists('products');
 
 CREATE TABLE categories (
-	id NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1),
+	id NUMBER GENERATED ALWAYS AS IDENTITY MINVALUE 0 START WITH 0 INCREMENT BY 1,
 	name VARCHAR2(100) NOT NULL,
 	CONSTRAINT category_id PRIMARY KEY (id)
 );
 
 CREATE TABLE products (
-	id NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1),
+	id NUMBER GENERATED ALWAYS AS IDENTITY MINVALUE 0 START WITH 0 INCREMENT BY 1,
 	name VARCHAR2(100) NOT NULL,
 	producer VARCHAR2(100) NOT NULL,
 	description VARCHAR2(1000),
@@ -25,17 +25,17 @@ INSERT INTO categories (name) VALUES ('Office articles');
 INSERT INTO categories (name) VALUES ('Another');
 
 INSERT INTO products (name, producer, description, price, discount, category_id)
-	VALUES ('Java programming', 'Hemingway', 'This is book that describes programing techniques', 40.17, 10.00, 1);
+	VALUES ('Java programming', 'Hemingway', 'This is book that describes programing techniques', 40.17, 10.00, 0);
 INSERT INTO products (name, producer, description, price, category_id)
-	VALUES ('Angular learning', 'Damian Kalbarczyk', 'It presents techniques that use angular', 35.50, 1);
+	VALUES ('Angular learning', 'Damian Kalbarczyk', 'It presents techniques that use angular', 35.50, 0);
 INSERT INTO products (name, producer, description, price, category_id)
-	VALUES ('Plastic car', 'Simba', 'Small plastic car, replica of Volkswagen Golf III', 42.00, 2);
+	VALUES ('Plastic car', 'Simba', 'Small plastic car, replica of Volkswagen Golf III', 42.00, 1);
 INSERT INTO products (name, producer, description, price, discount, category_id)
-	VALUES ('Train', 'Lego', 'Small train with railways', 30.00, 5.20, 2);
+	VALUES ('Train', 'Lego', 'Small train with railways', 30.00, 5.20, 1);
 INSERT INTO products (name, producer, description, price, category_id)
-	VALUES ('Pencil', 'Pencil manufacture', 'Stiff pencil for writing in sheets', 1.15, 3);
+	VALUES ('Pencil', 'Pencil manufacture', 'Stiff pencil for writing in sheets', 1.15, 2);
 INSERT INTO products (name, producer, description, price, discount, category_id)
-	VALUES ('Black glasses', 'Glasses and sons', 'Glassys that prottect against sun', 10.00, 1.00, 4);
+	VALUES ('Black glasses', 'Glasses and sons', 'Glassys that prottect against sun', 10.00, 1.00, 3);
 	
 --procedure for droping table if exists
 --CREATE OR REPLACE PROCEDURE drop_if_table_exists(table_name VARCHAR2) IS

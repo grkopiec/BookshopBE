@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "CATEGORIES")
 public class Category {
@@ -15,6 +17,7 @@ public class Category {
 	private Long id;
 	private String name;
 	@OneToMany
+	@JsonBackReference
 	private List<Product> products;
 	
 	public Long getId() {

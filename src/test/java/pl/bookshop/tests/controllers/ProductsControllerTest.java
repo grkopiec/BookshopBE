@@ -18,12 +18,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import pl.bookshop.domains.Product;
 import pl.bookshop.mvc.controllers.ProductsController;
 import pl.bookshop.services.ProductsService;
+import pl.bookshop.tests.utils.TestUtils;
 
 public class ProductsControllerTest {
 	private MockMvc mockMvc;
@@ -108,7 +106,7 @@ public class ProductsControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders
 						.post("/products")
 						.contentType(MediaType.APPLICATION_JSON)
-						.content(toJson(product1)))
+						.content(TestUtils.toJson(product1)))
 				.andExpect(MockMvcResultMatchers.status().isCreated());
 		Mockito.verify(productsService, Mockito.times(1)).isExist(product1);
 		Mockito.verify(productsService, Mockito.times(1)).create(product1);
@@ -127,7 +125,7 @@ public class ProductsControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders
 						.post("/products")
 						.contentType(MediaType.APPLICATION_JSON)
-						.content(toJson(product1)))
+						.content(TestUtils.toJson(product1)))
 				.andExpect(MockMvcResultMatchers.status().isConflict());
 		Mockito.verify(productsService, Mockito.times(1)).isExist(product1);
 		Mockito.verifyNoMoreInteractions(productsService);
@@ -150,7 +148,7 @@ public class ProductsControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders
 						.put("/products/{id}", previousProduct.getId())
 						.contentType(MediaType.APPLICATION_JSON)
-						.content(toJson(beforeUpdateProduct)))
+						.content(TestUtils.toJson(beforeUpdateProduct)))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(afterUpdateProduct.getId().intValue())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(afterUpdateProduct.getName())))
@@ -178,7 +176,7 @@ public class ProductsControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders
 						.put("/products/{id}", previousProduct.getId())
 						.contentType(MediaType.APPLICATION_JSON)
-						.content(toJson(beforeUpdateProduct)))
+						.content(TestUtils.toJson(beforeUpdateProduct)))
 				.andExpect(MockMvcResultMatchers.status().isNotFound());
 		Mockito.verify(productsService, Mockito.times(1)).update(previousProduct.getId(), beforeUpdateProduct);
 		Mockito.verifyNoMoreInteractions(productsService);
@@ -234,10 +232,5 @@ public class ProductsControllerTest {
 		product2.setPrice(RandomUtils.nextDouble(5, 15));
 		product2.setDiscount(RandomUtils.nextDouble(10, 15));
 		return product2;
-	}
-	
-	
-	private String toJson(Object object) throws JsonProcessingException {
-		return new ObjectMapper().writeValueAsString(object);
 	}
 }
