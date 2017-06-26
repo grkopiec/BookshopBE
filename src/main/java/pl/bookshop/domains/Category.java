@@ -8,16 +8,16 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "CATEGORIES")
+@Table(name = "categories")
 public class Category {
 	@Id
 	private Long id;
 	private String name;
 	@OneToMany
-	@JsonBackReference
+	@JsonIgnore
 	private List<Product> products;
 	
 	public Long getId() {

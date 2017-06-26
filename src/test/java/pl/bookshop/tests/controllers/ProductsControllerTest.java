@@ -55,12 +55,13 @@ public class ProductsControllerTest {
 				.andExpect(MockMvcResultMatchers.jsonPath("$[0].description", Matchers.is(products.get(0).getDescription())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[0].price", Matchers.is(products.get(0).getPrice())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[0].discount", Matchers.is(products.get(0).getDiscount())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].imagePath", Matchers.is(products.get(0).getImagePath())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[1].id", Matchers.is(products.get(1).getId().intValue())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[1].name", Matchers.is(products.get(1).getName())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[1].producer", Matchers.is(products.get(1).getProducer())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[1].description", Matchers.is(products.get(1).getDescription())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[1].price", Matchers.is(products.get(1).getPrice())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[1].discount", Matchers.is(products.get(1).getDiscount())));
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].imagePath", Matchers.is(products.get(1).getImagePath())));
 		Mockito.verify(productsService, Mockito.times(1)).findAll();
 		Mockito.verifyNoMoreInteractions(productsService);
 	}
@@ -78,7 +79,8 @@ public class ProductsControllerTest {
 				.andExpect(MockMvcResultMatchers.jsonPath("$.producer", Matchers.is(product1.getProducer())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.description", Matchers.is(product1.getDescription())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.price", Matchers.is(product1.getPrice())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.discount", Matchers.is(product1.getDiscount())));
+				.andExpect(MockMvcResultMatchers.jsonPath("$.discount", Matchers.is(product1.getDiscount())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.imagePath", Matchers.is(product1.getImagePath())));
 		Mockito.verify(productsService, Mockito.times(1)).findOne(1L);
 		Mockito.verifyNoMoreInteractions(productsService);
 	}
@@ -155,7 +157,8 @@ public class ProductsControllerTest {
 				.andExpect(MockMvcResultMatchers.jsonPath("$.producer", Matchers.is(afterUpdateProduct.getProducer())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.description", Matchers.is(afterUpdateProduct.getDescription())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.price", Matchers.is(afterUpdateProduct.getPrice())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.discount", Matchers.is(afterUpdateProduct.getDiscount())));
+				.andExpect(MockMvcResultMatchers.jsonPath("$.discount", Matchers.is(afterUpdateProduct.getDiscount())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.imagePath", Matchers.is(afterUpdateProduct.getImagePath())));
 		Mockito.verify(productsService, Mockito.times(1)).update(previousProduct.getId(), beforeUpdateProduct);
 		Mockito.verifyNoMoreInteractions(productsService);
 	}
@@ -220,6 +223,7 @@ public class ProductsControllerTest {
 		product1.setDescription(RandomStringUtils.randomAlphabetic(100));
 		product1.setPrice(RandomUtils.nextDouble(10, 20));
 		product1.setDiscount(RandomUtils.nextDouble(2, 4));
+		product1.setImagePath(RandomStringUtils.randomAlphabetic(60));
 		return product1;
 	}
 	
@@ -231,6 +235,7 @@ public class ProductsControllerTest {
 		product2.setDescription(RandomStringUtils.randomAlphabetic(50));
 		product2.setPrice(RandomUtils.nextDouble(5, 15));
 		product2.setDiscount(RandomUtils.nextDouble(10, 15));
+		product2.setImagePath(RandomStringUtils.randomAlphabetic(60));
 		return product2;
 	}
 }

@@ -2,16 +2,15 @@ package pl.bookshop.domains;
 
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 @Entity	
-@Table(name = "PRODUCTS")
+@Table(name = "products")
 public class Product {
 	@Id
 	private Long id;
@@ -20,9 +19,10 @@ public class Product {
 	private String description;
 	private Double price;
 	private Double discount;
+	@Column(name = "image_path")
+	private String imagePath;
 	@ManyToOne
 	@JoinColumn(name = "category_id	")
-	@JsonManagedReference
 	private Category category;
 
 	public Long getId() {
@@ -73,6 +73,14 @@ public class Product {
 		this.discount = discount;
 	}
 
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
+	}
+
 	public Category getCategory() {
 		return category;
 	}
@@ -84,12 +92,12 @@ public class Product {
 	@Override
 	public String toString() {
 		return "Product [id=" + id + ", name=" + name + ", producer=" + producer + ", description=" + description +
-				", price=" + price + ", discount=" + discount + ", category=" + category + "]";
+				", price=" + price + ", discount=" + discount + ", category=" + category + ", imagePath=" + imagePath + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(name, producer, description, price, discount);
+		return Objects.hash(name, producer, description, price, discount, imagePath);
 	}
 
 	@Override
@@ -107,6 +115,6 @@ public class Product {
 		Product other = (Product) obj;
 		return Objects.equals(this.name, other.name) && Objects.equals(this.producer, other.producer) &&
 				Objects.equals(this.description, other.description) && Objects.equals(this.price, other.price) &&
-				Objects.equals(this.discount, other.discount);
+				Objects.equals(this.discount, other.discount) && Objects.equals(this.imagePath, other.imagePath);
 	}
 }
