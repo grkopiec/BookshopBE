@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import pl.bookshop.criteria.ProductCriteria;
 import pl.bookshop.domains.Product;
 import pl.bookshop.repositories.ProductsRepository;
 
@@ -28,6 +29,11 @@ public class ProductsServiceImpl implements ProductsService {
 	@Override
 	public List<Product> findByName(String name) {
 		return productsRepository.findByName(name);
+	}
+	
+	@Override
+	public List<Product> search(ProductCriteria productCriteria) {
+		return productsRepository.search(productCriteria);
 	}
 	
 	@Override
