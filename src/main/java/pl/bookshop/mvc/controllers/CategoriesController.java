@@ -51,6 +51,10 @@ public class CategoriesController {
 	
 	@RequestMapping(path = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Category> update(@PathVariable Long id, @RequestBody Category category) {
+		if (categoriesService.isExist(category)) {
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
+		}
+		
 		Category updatedCategory = categoriesService.update(id, category);
 		
 		if (updatedCategory == null) {

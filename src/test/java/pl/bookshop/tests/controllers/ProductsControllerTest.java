@@ -143,9 +143,8 @@ public class ProductsControllerTest {
 		Product previousProduct = getProduct1();
 		Product beforeUpdateProduct = getProduct2();
 		Product afterUpdateProduct = getProduct2();
-		afterUpdateProduct.setId(previousProduct.getId());
-
 		
+		Mockito.when(productsService.isExist(beforeUpdateProduct)).thenReturn(false);
 		Mockito.when(productsService.update(previousProduct.getId(), beforeUpdateProduct)).thenReturn(afterUpdateProduct);
 		mockMvc.perform(MockMvcRequestBuilders
 						.put("/products/{id}", previousProduct.getId())
@@ -159,6 +158,7 @@ public class ProductsControllerTest {
 				.andExpect(MockMvcResultMatchers.jsonPath("$.price", Matchers.is(afterUpdateProduct.getPrice())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.discount", Matchers.is(afterUpdateProduct.getDiscount())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.imagePath", Matchers.is(afterUpdateProduct.getImagePath())));
+		Mockito.verify(productsService, Mockito.times(1)).isExist(beforeUpdateProduct);
 		Mockito.verify(productsService, Mockito.times(1)).update(previousProduct.getId(), beforeUpdateProduct);
 		Mockito.verifyNoMoreInteractions(productsService);
 	}
@@ -171,17 +171,35 @@ public class ProductsControllerTest {
 	public void test_update_fail() throws Exception {
 		Product previousProduct = getProduct1();
 		Product beforeUpdateProduct = getProduct2();
-		Product afterUpdateProduct = getProduct2();
-		afterUpdateProduct.setId(previousProduct.getId());
-
 		
+		Mockito.when(productsService.isExist(beforeUpdateProduct)).thenReturn(false);
 		Mockito.when(productsService.update(previousProduct.getId(), beforeUpdateProduct)).thenReturn(null);
 		mockMvc.perform(MockMvcRequestBuilders
 						.put("/products/{id}", previousProduct.getId())
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(TestUtils.toJson(beforeUpdateProduct)))
 				.andExpect(MockMvcResultMatchers.status().isNotFound());
+		Mockito.verify(productsService, Mockito.times(1)).isExist(beforeUpdateProduct);
 		Mockito.verify(productsService, Mockito.times(1)).update(previousProduct.getId(), beforeUpdateProduct);
+		Mockito.verifyNoMoreInteractions(productsService);
+	}
+	
+	/**
+	 * Should occur 409 code error, product name already exists
+	 * In this scenario object will not be change because product name already exists
+	 */
+	@Test
+	public void test_update_nameColisionFail() throws Exception {
+		Product previousProduct = getProduct1();
+		Product beforeUpdateProduct = getProduct2();
+		
+		Mockito.when(productsService.isExist(beforeUpdateProduct)).thenReturn(true);
+		mockMvc.perform(MockMvcRequestBuilders
+						.put("/products/{id}", previousProduct.getId())
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(TestUtils.toJson(beforeUpdateProduct)))
+				.andExpect(MockMvcResultMatchers.status().isConflict());
+		Mockito.verify(productsService, Mockito.times(1)).isExist(beforeUpdateProduct);
 		Mockito.verifyNoMoreInteractions(productsService);
 	}
 	

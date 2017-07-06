@@ -128,9 +128,8 @@ public class CategoriesControllerTest {
 		Category previousCategory = getCategory1();
 		Category beforeUpdateCategory = getCategory2();
 		Category afterUpdateCategory = getCategory2();
-		afterUpdateCategory.setId(previousCategory.getId());
 
-		
+		Mockito.when(categoriesService.isExist(beforeUpdateCategory)).thenReturn(false);
 		Mockito.when(categoriesService.update(previousCategory.getId(), beforeUpdateCategory)).thenReturn(afterUpdateCategory);
 		mockMvc.perform(MockMvcRequestBuilders
 						.put("/categories/{id}", previousCategory.getId())
@@ -139,29 +138,50 @@ public class CategoriesControllerTest {
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(afterUpdateCategory.getId().intValue())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(afterUpdateCategory.getName())));
+		Mockito.verify(categoriesService, Mockito.times(1)).isExist(beforeUpdateCategory);
 		Mockito.verify(categoriesService, Mockito.times(1)).update(previousCategory.getId(), beforeUpdateCategory);
 		Mockito.verifyNoMoreInteractions(categoriesService);
 	}
 	
 	/**
-	 * Should occur 404 code error, do not found user
+	 * Should occur 404 code error, do not found category
 	 * In this scenario object will not be change because do not exist requested id
 	 */
 	@Test
-	public void test_update_fail() throws Exception {
+	public void test_update_doNotFindIdfail() throws Exception {
 		Category previousCategory = getCategory1();
 		Category beforeUpdateCategory = getCategory2();
-		Category afterUpdateCategory = getCategory2();
-		afterUpdateCategory.setId(previousCategory.getId());
 
-		
+		Mockito.when(categoriesService.isExist(beforeUpdateCategory)).thenReturn(false);
 		Mockito.when(categoriesService.update(previousCategory.getId(), beforeUpdateCategory)).thenReturn(null);
 		mockMvc.perform(MockMvcRequestBuilders
 						.put("/categories/{id}", previousCategory.getId())
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(TestUtils.toJson(beforeUpdateCategory)))
 				.andExpect(MockMvcResultMatchers.status().isNotFound());
+		Mockito.verify(categoriesService, Mockito.times(1)).isExist(beforeUpdateCategory);
 		Mockito.verify(categoriesService, Mockito.times(1)).update(previousCategory.getId(), beforeUpdateCategory);
+		Mockito.verifyNoMoreInteractions(categoriesService);
+	}
+	
+	
+	/**
+	 * Should occur 409 code error, category name already exists
+	 * In this scenario object will not be change because category name already exists
+	 */
+	@Test
+	public void test_update_nameColisionFail() throws Exception {
+		Category previousCategory = getCategory1();
+		Category beforeUpdateCategory = getCategory2();
+
+		
+		Mockito.when(categoriesService.isExist(beforeUpdateCategory)).thenReturn(true);
+		mockMvc.perform(MockMvcRequestBuilders
+						.put("/categories/{id}", previousCategory.getId())
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(TestUtils.toJson(beforeUpdateCategory)))
+				.andExpect(MockMvcResultMatchers.status().isConflict());
+		Mockito.verify(categoriesService, Mockito.times(1)).isExist(beforeUpdateCategory);
 		Mockito.verifyNoMoreInteractions(categoriesService);
 	}
 	

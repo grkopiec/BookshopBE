@@ -63,6 +63,10 @@ public class ProductsController {
 	
 	@RequestMapping(path = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Product> update(@PathVariable Long id, @RequestBody Product product) {
+		if (productsService.isExist(product)) {
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
+		}
+		
 		Product updatedProduct = productsService.update(id, product);
 		
 		if (updatedProduct == null) {
