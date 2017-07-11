@@ -27,7 +27,7 @@ public class ProductsServiceImpl implements ProductsService {
 	}
 	
 	@Override
-	public List<Product> findByName(String name) {
+	public Product findByName(String name) {
 		return productsRepository.findByName(name);
 	}
 	
@@ -38,7 +38,7 @@ public class ProductsServiceImpl implements ProductsService {
 	
 	@Override
 	public Boolean isExist(Product product) {
-		if (productsRepository.findByName(product.getName()).isEmpty()) {
+		if (productsRepository.findByName(product.getName()) == null) {
 			return false;
 		}
 		return true;

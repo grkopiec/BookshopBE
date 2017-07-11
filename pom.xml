@@ -9,10 +9,14 @@
 	<name>bookshop Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 	<properties>
-		<junit.version>4.12</junit.version>
-		<mockito.version>2.7.22</mockito.version>
 		<hamcrest.version>1.3</hamcrest.version>
+		<junit.version>4.12</junit.version>
+		<dbunit.version>2.5.3</dbunit.version>
+		<springtestdbunit.version>1.3.0</springtestdbunit.version>
+		<mockito.version>2.7.22</mockito.version>
 		<jsonpath.version>2.2.0</jsonpath.version>
+        <h2.version>1.4.196</h2.version>
+        <bonecp.version>0.8.0.RELEASE</bonecp.version>
 		
 		<spring.version>4.3.7.RELEASE</spring.version>
 		<spring-data.version>1.11.1.RELEASE</spring-data.version>
@@ -21,12 +25,38 @@
 		<jackson.version>2.8.7</jackson.version>
 		<apache-commons.version>3.5</apache-commons.version>
 	</properties>
+    
 	<dependencies>
+		<dependency>
+		    <groupId>org.hamcrest</groupId>
+		    <artifactId>hamcrest-all</artifactId>
+		    <version>${hamcrest.version}</version>
+		    <scope>test</scope>
+		</dependency>
+		
 		<dependency>
 		    <groupId>junit</groupId>
 		    <artifactId>junit</artifactId>
 		    <version>${junit.version}</version>
 		    <scope>test</scope>
+		    <exclusions>
+		    	<exclusion>
+		    		<artifactId>hamcrest-core</artifactId>
+		    		<groupId>org.hamcrest</groupId>
+		    	</exclusion>
+		    </exclusions>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.dbunit</groupId>
+		    <artifactId>dbunit</artifactId>
+		    <version>${dbunit.version}</version>
+		    <exclusions>
+		    	<exclusion>
+		    		<artifactId>junit</artifactId>
+		    		<groupId>junit</groupId>
+		    	</exclusion>
+		    </exclusions>
 		</dependency>
 		
 		<dependency>
@@ -37,25 +67,39 @@
 		</dependency>
 
 		<dependency>
+		    <groupId>com.github.springtestdbunit</groupId>
+		    <artifactId>spring-test-dbunit</artifactId>
+		    <version>${springtestdbunit.version}</version>
+		    <scope>test</scope>
+		</dependency>
+
+		<dependency>
 		    <groupId>org.mockito</groupId>
 		    <artifactId>mockito-core</artifactId>
 		    <version>${mockito.version}</version>
 		    <scope>test</scope>
 		</dependency>
-		
-		<dependency>
-		    <groupId>org.hamcrest</groupId>
-		    <artifactId>hamcrest-all</artifactId>
-		    <version>${hamcrest.version}</version>
-		    <scope>test</scope>
-		</dependency>
-		
+
 		<dependency>
 		    <groupId>com.jayway.jsonpath</groupId>
 		    <artifactId>json-path</artifactId>
 		    <version>${jsonpath.version}</version>
 		    <scope>test</scope>
 		</dependency>
+		
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${h2.version}</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.jolbox</groupId>
+            <artifactId>bonecp</artifactId>
+            <version>${bonecp.version}</version>
+            <scope>test</scope>
+        </dependency>
 		
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -103,7 +147,4 @@
 		    <version>${apache-commons.version}</version>
 		</dependency>
 	</dependencies>
-	<build>
-		<finalName>bookshop</finalName>
-	</build>
 </project>

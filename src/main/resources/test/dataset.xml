@@ -1,0 +1,19 @@
+<dataset>
+	<categories id="0" name="Books" />
+	<categories id="1" name="Toys" />
+	<categories id="2" name="Office articles" />
+	<categories id="3" name="Another" />
+
+	<products id="0" name="Java programming" producer="Hemingway" description="This is book that describes programing techniques"
+			price="40.17" discount="10.00" image_path="/bookshop/resources/0.png" category_id="0" />
+	<products id="1" name="Angular learning" producer="Damian Kalbarczyk" description="It presents techniques that use angular"
+			price="35.50" category_id="0" />
+	<products id="2" name="Plastic car" producer="Simba" description="Small plastic car, replica of Volkswagen Golf III"
+			price="42.00" image_path="/bookshop/resources/2.png" category_id="1" />
+	<products id="3" name="Train" producer="Lego" description="Small train with railways"
+			price="30.00" discount="5.20" category_id="1" />
+	<products id="4" name="Pencil" producer="Pencil manufacture" description="Stiff pencil for writing in sheets"
+			price="1.15" image_path="/bookshop/resources/4.png" category_id="2" />
+	<products id="5" name="Black glasses" producer="Glasses and sons" description="Glassys that prottect against sun"
+			price="10.00" discount="1.00" image_path="/bookshop/resources/5.png" category_id="3" />
+</dataset>

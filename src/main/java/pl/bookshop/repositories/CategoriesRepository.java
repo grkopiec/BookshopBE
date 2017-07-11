@@ -1,11 +1,11 @@
 package pl.bookshop.repositories;
 
-import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import pl.bookshop.domains.Category;
 
+@Repository
 public interface CategoriesRepository extends JpaRepository<Category, Long> {
-	public List<Category> findByName(String name);
+	public Category findByName(String name);
 }

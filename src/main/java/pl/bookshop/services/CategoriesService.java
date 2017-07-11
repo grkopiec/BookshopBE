@@ -7,7 +7,7 @@ import pl.bookshop.domains.Category;
 public interface CategoriesService {
 	public List<Category> findAll();
 	public Category findOne(Long id);
-	public List<Category> findByName(String name);
+	public Category findByName(String name);
 	
 	/**
 	 * This method extracts name from received object ant try find it in database

@@ -16,7 +16,7 @@ public class Category {
 	@Id
 	private Long id;
 	private String name;
-	@OneToMany
+	@OneToMany(mappedBy = "category")
 	@JsonIgnore
 	private List<Product> products;
 	

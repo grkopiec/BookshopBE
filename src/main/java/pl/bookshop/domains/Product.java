@@ -9,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity	
 @Table(name = "products")
 public class Product {
@@ -23,6 +25,7 @@ public class Product {
 	private String imagePath;
 	@ManyToOne
 	@JoinColumn(name = "category_id	")
+	@JsonIgnore
 	private Category category;
 
 	public Long getId() {

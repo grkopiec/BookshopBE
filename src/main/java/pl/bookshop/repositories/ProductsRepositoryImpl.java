@@ -11,21 +11,21 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Repository;
 
 import pl.bookshop.criteria.ProductCriteria;
 import pl.bookshop.domains.Category;
 import pl.bookshop.domains.Product;
 
+@Repository
 public class ProductsRepositoryImpl implements ProductsRepositoryCustom {
 	@PersistenceContext
 	private EntityManager entityManager;
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	@Transactional
 	public List<Product> search(ProductCriteria productCriteria) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Product> criteriaQuery = criteriaBuilder.createQuery(Product.class);

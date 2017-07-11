@@ -27,13 +27,13 @@ public class CategoriesServiceImpl implements CategoriesService {
 	}
 
 	@Override
-	public List<Category> findByName(String name) {
+	public Category findByName(String name) {
 		return categoriesRepository.findByName(name);
 	}
 
 	@Override
 	public Boolean isExist(Category category) {
-		if (categoriesRepository.findByName(category.getName()).isEmpty()) {
+		if (categoriesRepository.findByName(category.getName()) == null) {
 			return false;
 		}
 		return true;

@@ -8,7 +8,7 @@ import pl.bookshop.domains.Product;
 public interface ProductsService {
 	public List<Product> findAll();
 	public Product findOne(Long id);
-	public List<Product> findByName(String name);
+	public Product findByName(String name);
 	public List<Product> search(ProductCriteria productCriteria);
 	
 	/**
