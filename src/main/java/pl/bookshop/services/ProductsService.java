@@ -2,14 +2,14 @@ package pl.bookshop.services;
 
 import java.util.List;
 
-import pl.bookshop.criteria.ProductCriteria;
+import pl.bookshop.criteria.ProductsCriteria;
 import pl.bookshop.domains.Product;
 
 public interface ProductsService {
 	public List<Product> findAll();
 	public Product findOne(Long id);
 	public Product findByName(String name);
-	public List<Product> search(ProductCriteria productCriteria);
+	public List<Product> search(ProductsCriteria productsCriteria);
 	
 	/**
 	 * This method extracts name from received object ant try find it in database

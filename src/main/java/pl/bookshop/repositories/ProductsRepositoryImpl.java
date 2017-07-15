@@ -15,9 +15,10 @@ import javax.persistence.criteria.Root;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
-import pl.bookshop.criteria.ProductCriteria;
+import pl.bookshop.criteria.ProductsCriteria;
 import pl.bookshop.domains.Category;
 import pl.bookshop.domains.Product;
+import pl.bookshop.enums.OrderBy;
 
 @Repository
 public class ProductsRepositoryImpl implements ProductsRepositoryCustom {
@@ -26,19 +27,51 @@ public class ProductsRepositoryImpl implements ProductsRepositoryCustom {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Product> search(ProductCriteria productCriteria) {
+	public List<Product> search(ProductsCriteria productsCriteria) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Product> criteriaQuery = criteriaBuilder.createQuery(Product.class);
 		Root<Product> root = criteriaQuery.from(Product.class);
 		
+		criteriaQuery.select(root);
+		
 		List<Predicate> predicates = new ArrayList<>();
 		
-		if (StringUtils.isNotBlank(productCriteria.getCategory())) {
+		if (StringUtils.isNotBlank(productsCriteria.getCategory())) {
 			Path<Category> path = root.join("category").get("name");
-			predicates.add(criteriaBuilder.equal(path, productCriteria.getCategory()));
+			predicates.add(
+					criteriaBuilder.equal(path, productsCriteria.getCategory()));
 		}
 		
-		criteriaQuery.select(root).where(predicates.toArray(new Predicate[] {}));
+		if (StringUtils.isNotBlank(productsCriteria.getName())) {
+			predicates.add(
+					criteriaBuilder.like(
+							criteriaBuilder.lower(root.get("name")),
+							"%" + productsCriteria.getName().toLowerCase() + "%"));
+		}
+		
+		if (productsCriteria.getPriceFrom() != null) {
+			predicates.add(
+					criteriaBuilder.gt(root.get("price"), productsCriteria.getPriceFrom()));
+		}
+		
+		if (productsCriteria.getPriceTo() != null) {
+			predicates.add(
+					criteriaBuilder.lt(root.get("price"), productsCriteria.getPriceTo()));
+		}
+		
+		criteriaQuery.where(predicates.toArray(new Predicate[] {}));
+		
+		if (productsCriteria.getOrderBy() != null) {
+			if (productsCriteria.getOrderBy().equals(OrderBy.NAMEASCENDING)) {
+				criteriaQuery.orderBy(criteriaBuilder.asc(root.get("name")));
+			} else if (productsCriteria.getOrderBy().equals(OrderBy.NAMEDESCENDING)) {
+				criteriaQuery.orderBy(criteriaBuilder.desc(root.get("name")));
+			} else if (productsCriteria.getOrderBy().equals(OrderBy.PRICEASCENDING)) {
+				criteriaQuery.orderBy(criteriaBuilder.asc(root.get("price")));
+			} else if (productsCriteria.getOrderBy().equals(OrderBy.PRICEDESCENDING)) {
+				criteriaQuery.orderBy(criteriaBuilder.desc(root.get("price")));
+			}
+		}
 		
 		Query query = entityManager.createQuery(criteriaQuery);
 		List<Product> products = query.getResultList();

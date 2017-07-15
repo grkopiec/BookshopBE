@@ -2,7 +2,7 @@ package pl.bookshop.repositories;
 
 import java.util.List;
 
-import pl.bookshop.criteria.ProductCriteria;
+import pl.bookshop.criteria.ProductsCriteria;
 import pl.bookshop.domains.Product;
 
 public interface ProductsRepositoryCustom {
@@ -14,5 +14,5 @@ public interface ProductsRepositoryCustom {
 	 * @param object that contains data like criteria, sort order, pagination
 	 * @return list of filtered, sorted and after pagination products
 	 */
-	public List<Product> search(ProductCriteria productCriteria);
+	public List<Product> search(ProductsCriteria productsCriteria);
 }

@@ -44,16 +44,16 @@ public class PersistanceContext {
 		return propertyPlaceholderConfigurer;
 	}
 	
-    @Bean
-    public DataSource dataSource() {
-        BoneCPDataSource boneCPDataSource = new BoneCPDataSource();
-        boneCPDataSource.setDriverClass(driverClassName);
-        boneCPDataSource.setJdbcUrl(url);
-        boneCPDataSource.setUsername(username);
-        boneCPDataSource.setPassword(password);
-        return boneCPDataSource;
-    }
-    
+	@Bean
+	public DataSource dataSource() {
+		BoneCPDataSource boneCPDataSource = new BoneCPDataSource();
+		boneCPDataSource.setDriverClass(driverClassName);
+		boneCPDataSource.setJdbcUrl(url);
+		boneCPDataSource.setUsername(username);
+		boneCPDataSource.setPassword(password);
+		return boneCPDataSource;
+	}
+	
 	@Bean
 	public JpaVendorAdapter jpaVendorAdapter() {
 		HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();

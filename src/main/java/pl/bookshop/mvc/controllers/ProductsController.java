@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import pl.bookshop.criteria.ProductCriteria;
+import pl.bookshop.criteria.ProductsCriteria;
 import pl.bookshop.domains.Product;
 import pl.bookshop.services.ProductsService;
 
@@ -43,8 +43,8 @@ public class ProductsController {
 	}
 	
 	@RequestMapping(path = "/search")
-	public ResponseEntity<List<Product>> search(@ModelAttribute ProductCriteria productCriteria) {
-		List<Product> products = productsService.search(productCriteria);
+	public ResponseEntity<List<Product>> search(@ModelAttribute ProductsCriteria productsCriteria) {
+		List<Product> products = productsService.search(productsCriteria);
 		
 		if (products.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
