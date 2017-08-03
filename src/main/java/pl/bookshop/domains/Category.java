@@ -4,8 +4,11 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -14,6 +17,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "categories")
 public class Category {
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "categoriesSequence")
+	@SequenceGenerator(name = "categoriesSequence", sequenceName = "categories_sequence")
 	private Long id;
 	private String name;
 	@OneToMany(mappedBy = "category")

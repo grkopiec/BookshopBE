@@ -2,19 +2,23 @@ package pl.bookshop.domains;
 
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity	
 @Table(name = "products")
 public class Product {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "productsSequence")
+	@SequenceGenerator(name = "productsSequence", sequenceName = "products_sequence")
 	private Long id;
 	private String name;
 	private String producer;
@@ -23,9 +27,8 @@ public class Product {
 	private Double discount;
 	@Column(name = "image_path")
 	private String imagePath;
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.DETACH)
 	@JoinColumn(name = "category_id	")
-	@JsonIgnore
 	private Category category;
 
 	public Long getId() {
