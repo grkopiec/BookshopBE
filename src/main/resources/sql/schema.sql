@@ -20,9 +20,11 @@
 
 EXEC drop_if_table_exists('categories');
 EXEC drop_if_table_exists('products');
+EXEC drop_if_table_exists('users');
 
 EXEC drop_if_sequence_exists('products_sequence');
 EXEC drop_if_sequence_exists('categories_sequence');
+EXEC drop_if_sequence_exists('users_sequence');
 
 CREATE SEQUENCE products_sequence
   MINVALUE 0
@@ -30,6 +32,11 @@ CREATE SEQUENCE products_sequence
   INCREMENT BY 1;
 
 CREATE SEQUENCE categories_sequence
+  MINVALUE 0
+  START WITH 0
+  INCREMENT BY 1;
+  
+CREATE SEQUENCE users_sequence
   MINVALUE 0
   START WITH 0
   INCREMENT BY 1;
@@ -53,6 +60,19 @@ CREATE TABLE products (
 	CONSTRAINT category_id_fk FOREIGN KEY (category_id) REFERENCES categories(id)
 );
 
+CREATE TABLE users (
+	id NUMBER,
+	username VARCHAR2(30) NOT NULL,
+	password VARCHAR2(1000) NOT NULL,
+	last_password_reset DATE,
+	authorities VARCHAR2(100),
+	account_non_expired NUMBER(1) NOT NULL,
+	account_non_locked NUMBER(1) NOT NULL,
+	credentials_non_expired NUMBER(1) NOT NULL,
+	enabled NUMBER(1) NOT NULL,
+	CONSTRAINT user_id_pk PRIMARY KEY (id)
+);
+
 INSERT INTO categories (id, name) VALUES (categories_sequence.nextval, 'Books');
 INSERT INTO categories (id, name) VALUES (categories_sequence.nextval, 'Toys');
 INSERT INTO categories (id, name) VALUES (categories_sequence.nextval, 'Office articles');
@@ -70,3 +90,6 @@ INSERT INTO products (id, name, producer, description, price, category_id, image
 	VALUES (products_sequence.nextval, 'Pencil', 'Pencil manufacture', 'Stiff pencil for writing in sheets', 1.15, 2, '/bookshop/resources/4.png');
 INSERT INTO products (id, name, producer, description, price, discount, category_id, image_path)
 	VALUES (products_sequence.nextval, 'Black glasses', 'Glasses and sons', 'Glassys that prottect against sun', 10.00, 1.00, 3, '/bookshop/resources/5.png');
+	
+INSERT INTO users (id, username, password, last_password_reset, authorities, account_non_expired, account_non_locked, credentials_non_expired, enabled)
+	VALUES (users_sequence.nextval, 'admin', '$2y$10$NGWnNtc.KO5p9M6Tin88QuMMIP31i60u2C4fmdjudcW6fFx7nNvOW', NULL, 'ROLE_ADMIN,ROLE_USER', 0, 1, 1, 1);
