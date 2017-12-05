@@ -34,7 +34,7 @@ public class AuthenticationController {
     private UserDetailsService userDetailsService;
     
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<AuthenticationResponse> authenticationRequest(@RequestBody AuthenticationRequest authenticationRequest)
+    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest authenticationRequest)
             throws AuthenticationException {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                 authenticationRequest.getUsername(),
@@ -50,8 +50,9 @@ public class AuthenticationController {
     }
 
     @RequestMapping(value = "/refresh")
-    public ResponseEntity<AuthenticationResponse> authenticationRequest(HttpServletRequest request) {
+    public ResponseEntity<AuthenticationResponse> refresh(HttpServletRequest request) {
         String token = request.getHeader(StringUtils.AUTHORIZATION_HEADER);
+        token = token.substring(StringUtils.TOKEN_HEADER_STARTS_WITH.length());
         String username = this.tokenUtils.getUsernameFromToken(token);
         User user = (User) this.userDetailsService.loadUserByUsername(username);
         
