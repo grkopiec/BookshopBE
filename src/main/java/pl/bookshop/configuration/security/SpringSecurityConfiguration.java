@@ -55,7 +55,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.and().authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/categories/**").authenticated()
-                .antMatchers("/products/**").permitAll()
+                .antMatchers("/products/**").authenticated()
                 .antMatchers("/resources/**").permitAll()
                 .anyRequest().authenticated()
 				.and().addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class)
