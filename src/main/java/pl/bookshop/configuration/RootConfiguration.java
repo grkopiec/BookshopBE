@@ -4,7 +4,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
-import org.hibernate.dialect.Oracle12cDialect;
+import org.hibernate.dialect.Oracle10gDialect;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
@@ -67,7 +67,7 @@ public class RootConfiguration {
 	public JpaVendorAdapter jpaVendorAdapter() {
 		HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
 		hibernateJpaVendorAdapter.setDatabase(Database.ORACLE);
-		hibernateJpaVendorAdapter.setDatabasePlatform(Oracle12cDialect.class.getCanonicalName());
+		hibernateJpaVendorAdapter.setDatabasePlatform(Oracle10gDialect.class.getCanonicalName());
 		hibernateJpaVendorAdapter.setShowSql(showSql);
 		return hibernateJpaVendorAdapter;
 	}
