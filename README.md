@@ -1,6 +1,6 @@
 ## Project Bookshop
 
-This is repository with application that shows my experimentals creations of Spring application. This is backend part of application, on *BookshopFE* repository is *angular* frontend. This project has been crated ratrer for learning purpouses.
+This is repository with application that shows my experimentals creations of spring application. This is backend part of application, on *BookshopFE* repository is *angular* frontend. This project has been crated ratrer for learning purpouses.
 
 ## Description
 
@@ -62,10 +62,16 @@ For easier display database structure is recomended to install [sql developer](h
 First of all create folder and name it for example *RealProjects* and clone this project from github
 
 ```code
-git clone https://raw.githubusercontent.com/sindresorhus/pageres/master/readme.md
+git clone https://github.com/grkopiec/BookshopBE.git
 ```
 
-Next open eclipse and import cloned project to workspace, after it create server for application, best way is indicate for it in current instaled location on disc
+For properly displaying example images on frontend, copy from folder in cloned project *src/main/resources/libs/* folder *images* to user home folder(home/user_name/ in linux, users/user_name/ in windows)
+
+Next open eclipse and import cloned project to workspace, after it create server for application, best way is indicate for it in current instaled location on disc. When server is created configure run configurations for tomcat by adding below line to vm arguments(it is also possible change this variable in envaironment variables and directly in java code)
+
+```code
+-Dspring.profiles.active=development
+```
 
 After configure ide is time to setup database, first create new one, open command protompt and input
 
