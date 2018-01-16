@@ -21,10 +21,10 @@ import pl.bookshop.hibernate.CollectionStringConverter;
 @Table(name = "users")
 public class User implements UserDetails {
 	private static final long serialVersionUID = -7633438667478513077L;
-	
+	//TODO change sequence on userSequence
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "productsSequence")
-	@SequenceGenerator(name = "productsSequence", sequenceName = "products_sequence")
+	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "usersSequence")
+	@SequenceGenerator(name = "usersSequence", sequenceName = "users_sequence")
 	private Long id;
 	private String username;
 	private String password;

@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import pl.bookshop.components.UserUtils;
 import pl.bookshop.domains.User;
 import pl.bookshop.repositories.UsersRepository;
 
@@ -15,6 +16,8 @@ import pl.bookshop.repositories.UsersRepository;
 public class UsersServiceImpl implements UsersService {
 	@Autowired
 	private UsersRepository usersRepository;
+	@Autowired
+	private UserUtils userUtils;
 
 	@Override
 	public List<User> findAll() {
@@ -41,6 +44,9 @@ public class UsersServiceImpl implements UsersService {
 
 	@Override
 	public void create(User user) {
+		String password = user.getPassword();
+		String encodedPassword = userUtils.encodePassword(password);
+		user.setPassword(encodedPassword);
 		usersRepository.save(user);
 	}
 

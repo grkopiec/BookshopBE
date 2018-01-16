@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import pl.bookshop.components.TokenUtils;
+import pl.bookshop.components.UserUtils;
 import pl.bookshop.domains.User;
 import pl.bookshop.mvc.controllers.objects.AuthenticationRequest;
 import pl.bookshop.mvc.controllers.objects.AuthenticationResponse;
+import pl.bookshop.services.UsersService;
 import pl.bookshop.utils.StringUtils;
 
 @RestController
@@ -31,9 +33,31 @@ public class AuthenticationController {
     @Autowired
     private TokenUtils tokenUtils;
     @Autowired
+    private UserUtils userUtils;
+    @Autowired
     private UserDetailsService userDetailsService;
+    @Autowired
+    private UsersService usersService;
     
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody AuthenticationRequest authenticationRequest) {
+    	User user = userUtils.createNormalUser(authenticationRequest);
+    	usersService.create(user);
+    	
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                authenticationRequest.getUsername(),
+                authenticationRequest.getPassword()
+        );
+        Authentication authentication = this.authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        
+        UserDetails userDetails = this.userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+        String token = this.tokenUtils.generateToken(userDetails);
+        AuthenticationResponse authenticationResponse = new AuthenticationResponse(token);
+        return new ResponseEntity<>(authenticationResponse, HttpStatus.OK);
+    }
+    
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest authenticationRequest)
             throws AuthenticationException {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
