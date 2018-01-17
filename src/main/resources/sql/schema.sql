@@ -92,4 +92,4 @@ INSERT INTO products (id, name, producer, description, price, discount, category
 	VALUES (products_sequence.nextval, 'Black glasses', 'Glasses and sons', 'Glassys that prottect against sun', 10.00, 1.00, 3, '/bookshop/resources/5.png');
 	
 INSERT INTO users (id, username, password, last_password_reset, authorities, account_non_expired, account_non_locked, credentials_non_expired, enabled)
-	VALUES (users_sequence.nextval, 'admin', '$2y$10$NGWnNtc.KO5p9M6Tin88QuMMIP31i60u2C4fmdjudcW6fFx7nNvOW', NULL, 'ROLE_ADMIN,ROLE_USER', 0, 1, 1, 1);
+	VALUES (users_sequence.nextval, 'admin', '$2a$10$JzNf.Zx0S1hT21jIaKNF.OKulAzg9kwm/Dsw9Keslcpb1oA2HnWU6', NULL, 'ROLE_ADMIN,ROLE_USER', 1, 1, 1, 1);

@@ -53,7 +53,7 @@ public class AuthenticationController {
         
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         String token = this.tokenUtils.generateToken(userDetails);
-        AuthenticationResponse authenticationResponse = new AuthenticationResponse(token);
+        AuthenticationResponse authenticationResponse = new AuthenticationResponse(token, userDetails.getUsername(), userDetails.getAuthorities());
         return new ResponseEntity<>(authenticationResponse, HttpStatus.OK);
     }
     
@@ -69,7 +69,7 @@ public class AuthenticationController {
         
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         String token = this.tokenUtils.generateToken(userDetails);
-        AuthenticationResponse authenticationResponse = new AuthenticationResponse(token);
+        AuthenticationResponse authenticationResponse = new AuthenticationResponse(token, userDetails.getUsername(), userDetails.getAuthorities());
         return new ResponseEntity<>(authenticationResponse, HttpStatus.OK);
     }
 
@@ -82,7 +82,7 @@ public class AuthenticationController {
         
         if (this.tokenUtils.canTokenBeRefreshed(token, user.getLastPasswordReset())) {
             String refreshedToken = this.tokenUtils.refreshToken(token);
-            AuthenticationResponse response = new AuthenticationResponse(refreshedToken);
+            AuthenticationResponse response = new AuthenticationResponse(refreshedToken, user.getUsername(), user.getAuthorities());
             return new ResponseEntity<AuthenticationResponse>(response, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
