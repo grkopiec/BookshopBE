@@ -56,7 +56,7 @@ public class ProductsController {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> create(@RequestBody Product product) {
-		if (productsService.isExist(product)) {
+		if (productsService.isExist(product) == true) {
 			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
 		productsService.create(product);
@@ -66,7 +66,7 @@ public class ProductsController {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(path = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Product> update(@PathVariable Long id, @RequestBody Product product) {
-		if (productsService.isExist(product) == false) {
+		if (productsService.isExist(product) == true) {
 			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
 		
