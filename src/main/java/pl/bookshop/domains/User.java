@@ -15,6 +15,9 @@ import javax.persistence.Table;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import pl.bookshop.converters.AuthoritiesSerializer;
 import pl.bookshop.hibernate.CollectionStringConverter;
 
 @Entity	
@@ -30,6 +33,7 @@ public class User implements UserDetails {
 	@Column(name = "last_password_reset")
 	private Date lastPasswordReset;
 	@Convert(converter = CollectionStringConverter.class)
+	@JsonSerialize(converter = AuthoritiesSerializer.class)
 	private Collection<? extends GrantedAuthority> authorities;
 	@Column(name = "account_non_expired")
 	private Boolean accountNonExpired = true;
