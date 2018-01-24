@@ -153,12 +153,10 @@ public class User implements UserDetails {
 		}
 		
 		User other = (User) obj;
-		return Objects.equals(this.username, other.username) && Objects.equals(this.password, other.password) &&
-				Objects.equals(this.lastPasswordReset, other.lastPasswordReset) &&
-				Objects.equals(this.authorities, other.authorities) &&
-				Objects.equals(this.accountNonExpired, other.accountNonExpired) &&
-				Objects.equals(this.accountNonLocked, other.accountNonLocked) &&
-				Objects.equals(this.credentialsNonExpired, other.credentialsNonExpired) &&
-				Objects.equals(this.enabled, other.enabled);
+		return Objects.equals(this.username, other.username) && Objects.equals(this.password, other.password)
+				&& Objects.equals(this.lastPasswordReset, other.lastPasswordReset) && Objects.equals(this.authorities, other.authorities)
+				&& Objects.equals(this.accountNonExpired, other.accountNonExpired)
+				&& Objects.equals(this.accountNonLocked, other.accountNonLocked)
+				&& Objects.equals(this.credentialsNonExpired, other.credentialsNonExpired) && Objects.equals(this.enabled, other.enabled);
 	}
 }

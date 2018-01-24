@@ -119,8 +119,8 @@ public class Product {
 		}
 		
 		Product other = (Product) obj;
-		return Objects.equals(this.name, other.name) && Objects.equals(this.producer, other.producer) &&
-				Objects.equals(this.description, other.description) && Objects.equals(this.price, other.price) &&
-				Objects.equals(this.discount, other.discount) && Objects.equals(this.imagePath, other.imagePath);
+		return Objects.equals(this.name, other.name) && Objects.equals(this.producer, other.producer)
+				&& Objects.equals(this.description, other.description) && Objects.equals(this.price, other.price)
+				&& Objects.equals(this.discount, other.discount) && Objects.equals(this.imagePath, other.imagePath);
 	}
 }
