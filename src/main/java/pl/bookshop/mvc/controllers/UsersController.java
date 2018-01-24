@@ -42,7 +42,7 @@ public class UsersController {
 	
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> create(@RequestBody User user) {
-		if (usersService.isExist(user)) {
+		if (usersService.isExist(user) == true) {
 			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
 		usersService.create(user);
@@ -51,7 +51,7 @@ public class UsersController {
 	
 	@RequestMapping(path = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User user) {
-		if (usersService.isExist(user)) {
+		if (usersService.isExist(user) == true) {
 			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
 		

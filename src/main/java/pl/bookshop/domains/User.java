@@ -2,6 +2,7 @@ package pl.bookshop.domains;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -15,8 +16,10 @@ import javax.persistence.Table;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import pl.bookshop.converters.AuthoritiesDeserializer;
 import pl.bookshop.converters.AuthoritiesSerializer;
 import pl.bookshop.hibernate.CollectionStringConverter;
 
@@ -34,6 +37,7 @@ public class User implements UserDetails {
 	private Date lastPasswordReset;
 	@Convert(converter = CollectionStringConverter.class)
 	@JsonSerialize(converter = AuthoritiesSerializer.class)
+	@JsonDeserialize(converter = AuthoritiesDeserializer.class)
 	private Collection<? extends GrantedAuthority> authorities;
 	@Column(name = "account_non_expired")
 	private Boolean accountNonExpired = true;
@@ -120,5 +124,41 @@ public class User implements UserDetails {
 
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", username=" + username + ", password=" + password + ", lastPasswordReset="
+				+ lastPasswordReset + ", authorities=" + authorities + ", accountNonExpired=" + accountNonExpired
+				+ ", accountNonLocked=" + accountNonLocked + ", credentialsNonExpired=" + credentialsNonExpired
+				+ ", enabled=" + enabled + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(username, password, lastPasswordReset, authorities, accountNonExpired, accountNonLocked,
+				credentialsNonExpired, enabled);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (this.getClass() != obj.getClass()) {
+			return false;
+		}
+		
+		User other = (User) obj;
+		return Objects.equals(this.username, other.username) && Objects.equals(this.password, other.password) &&
+				Objects.equals(this.lastPasswordReset, other.lastPasswordReset) &&
+				Objects.equals(this.authorities, other.authorities) &&
+				Objects.equals(this.accountNonExpired, other.accountNonExpired) &&
+				Objects.equals(this.accountNonLocked, other.accountNonLocked) &&
+				Objects.equals(this.credentialsNonExpired, other.credentialsNonExpired) &&
+				Objects.equals(this.enabled, other.enabled);
 	}
 }
