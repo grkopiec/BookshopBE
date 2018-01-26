@@ -48,11 +48,11 @@ public class AuthenticationController {
                 authenticationRequest.getUsername(),
                 authenticationRequest.getPassword()
         );
-        Authentication authentication = this.authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+        Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         
-        UserDetails userDetails = this.userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-        String token = this.tokenUtils.generateToken(userDetails);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+        String token = tokenUtils.generateToken(userDetails);
         AuthenticationResponse authenticationResponse = new AuthenticationResponse(token, userDetails.getUsername(), userDetails.getAuthorities());
         return new ResponseEntity<>(authenticationResponse, HttpStatus.OK);
     }
@@ -67,8 +67,8 @@ public class AuthenticationController {
         Authentication authentication = this.authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         
-        UserDetails userDetails = this.userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-        String token = this.tokenUtils.generateToken(userDetails);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+        String token = tokenUtils.generateToken(userDetails);
         AuthenticationResponse authenticationResponse = new AuthenticationResponse(token, userDetails.getUsername(), userDetails.getAuthorities());
         return new ResponseEntity<>(authenticationResponse, HttpStatus.OK);
     }
@@ -77,11 +77,11 @@ public class AuthenticationController {
     public ResponseEntity<AuthenticationResponse> refresh(HttpServletRequest request) {
         String token = request.getHeader(StringUtils.AUTHORIZATION_HEADER);
         token = token.substring(StringUtils.TOKEN_HEADER_STARTS_WITH.length());
-        String username = this.tokenUtils.getUsernameFromToken(token);
-        User user = (User) this.userDetailsService.loadUserByUsername(username);
+        String username = tokenUtils.getUsernameFromToken(token);
+        User user = (User) userDetailsService.loadUserByUsername(username);
         
-        if (this.tokenUtils.canTokenBeRefreshed(token, user.getLastPasswordReset())) {
-            String refreshedToken = this.tokenUtils.refreshToken(token);
+        if (tokenUtils.canTokenBeRefreshed(token, user.getLastPasswordReset())) {
+            String refreshedToken = tokenUtils.refreshToken(token);
             AuthenticationResponse response = new AuthenticationResponse(refreshedToken, user.getUsername(), user.getAuthorities());
             return new ResponseEntity<AuthenticationResponse>(response, HttpStatus.OK);
         } else {

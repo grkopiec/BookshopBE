@@ -1,5 +1,9 @@
 package pl.bookshop.mvc.controllers.objects;
 
+import java.util.Objects;
+
+import pl.bookshop.domains.User;
+
 public class AuthenticationRequest {
     private String username;
     private String password;
@@ -26,4 +30,30 @@ public class AuthenticationRequest {
     public void setPassword(String password) {
         this.password = password;
     }
+
+	@Override
+	public String toString() {
+		return "AuthenticationRequest [username=" + username + ", password=" + password + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(username, password);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (this.getClass() != obj.getClass()) {
+			return false;
+		}
+		
+		AuthenticationRequest other = (AuthenticationRequest) obj;
+		return Objects.equals(this.username, other.username) && Objects.equals(this.password, other.password);
+	}
 }
