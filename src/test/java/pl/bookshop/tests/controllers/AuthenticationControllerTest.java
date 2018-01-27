@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -33,6 +34,7 @@ import pl.bookshop.mvc.controllers.objects.AuthenticationRequest;
 import pl.bookshop.mvc.controllers.objects.AuthenticationResponse;
 import pl.bookshop.services.UsersService;
 import pl.bookshop.tests.utils.TestUtils;
+import pl.bookshop.utils.StringUtils;
 
 public class AuthenticationControllerTest {
 	private MockMvc mockMvc;
@@ -74,6 +76,7 @@ public class AuthenticationControllerTest {
     	AuthenticationResponse authenticationResponse = getAuthenticationResponse(userDetails, token);
     	
     	Mockito.when(userUtils.createNormalUser(authenticationRequest)).thenReturn(user);
+    	Mockito.when(usersService.isExist(user)).thenReturn(false);
     	Mockito.doNothing().when(usersService).create(user);
     	Mockito.when(authenticationManager.authenticate(UsernamePasswordAuthenticationTokenCaptor.capture()))
     			.thenReturn(authenticationCaptor.capture());
@@ -90,10 +93,169 @@ public class AuthenticationControllerTest {
 				.andExpect(MockMvcResultMatchers.jsonPath("$.roles", Matchers.is(authenticationResponse.getRoles())));
 		
 		Mockito.verify(userUtils, Mockito.times(1)).createNormalUser(authenticationRequest);
+		Mockito.verify(usersService, Mockito.times(1)).isExist(user);
 		Mockito.verify(usersService, Mockito.times(1)).create(user);
 		Mockito.verify(authenticationManager, Mockito.times(1)).authenticate(UsernamePasswordAuthenticationTokenCaptor.capture());
 		Mockito.verify(userDetailsService, Mockito.times(1)).loadUserByUsername(authenticationRequest.getUsername());
 		Mockito.verify(tokenUtils, Mockito.times(1)).generateToken(userDetails);
+		Mockito.verifyNoMoreInteractions(userUtils);
+		Mockito.verifyNoMoreInteractions(usersService);
+		Mockito.verifyNoMoreInteractions(authenticationManager);
+		Mockito.verifyNoMoreInteractions(userDetailsService);
+		Mockito.verifyNoMoreInteractions(tokenUtils);
+    }
+    
+	/**
+	 * Should occur 409 code error, passed user already exists
+	 */
+    @Test
+    public void test_register_fail() throws Exception {
+    	AuthenticationRequest authenticationRequest = getAuthenticationRequest();
+    	User user = getUser();
+    	
+    	Mockito.when(userUtils.createNormalUser(authenticationRequest)).thenReturn(user);
+    	Mockito.when(usersService.isExist(user)).thenReturn(true);
+    	
+		mockMvc.perform(MockMvcRequestBuilders
+						.post("/auth/register")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(TestUtils.toJson(authenticationRequest)))
+				.andExpect(MockMvcResultMatchers.status().isConflict());
+		
+		Mockito.verify(userUtils, Mockito.times(1)).createNormalUser(authenticationRequest);
+		Mockito.verify(usersService, Mockito.times(1)).isExist(user);
+		Mockito.verifyNoMoreInteractions(userUtils);
+		Mockito.verifyNoMoreInteractions(usersService);
+		Mockito.verifyNoMoreInteractions(authenticationManager);
+		Mockito.verifyNoMoreInteractions(userDetailsService);
+		Mockito.verifyNoMoreInteractions(tokenUtils);
+    }
+    
+    @Test
+    public void test_login_success() throws Exception {
+    	AuthenticationRequest authenticationRequest = getAuthenticationRequest();
+    	UserDetails userDetails = getUserDetails();
+    	String token = getToken();
+    	AuthenticationResponse authenticationResponse = getAuthenticationResponse(userDetails, token);
+    	
+    	Mockito.when(userDetailsService.loadUserByUsername(authenticationRequest.getUsername())).thenReturn(userDetails);
+    	Mockito.when(authenticationManager.authenticate(UsernamePasswordAuthenticationTokenCaptor.capture()))
+    			.thenReturn(authenticationCaptor.capture());
+    	Mockito.when(tokenUtils.generateToken(userDetails)).thenReturn(token);
+    	
+		mockMvc.perform(MockMvcRequestBuilders
+						.post("/auth/login")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(TestUtils.toJson(authenticationRequest)))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.jsonPath("$.token", Matchers.is(authenticationResponse.getToken())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.username", Matchers.is(authenticationResponse.getUsername())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.roles", Matchers.is(authenticationResponse.getRoles())));
+		
+		Mockito.verify(userDetailsService, Mockito.times(1)).loadUserByUsername(authenticationRequest.getUsername());
+		Mockito.verify(authenticationManager, Mockito.times(1)).authenticate(UsernamePasswordAuthenticationTokenCaptor.capture());
+		Mockito.verify(tokenUtils, Mockito.times(1)).generateToken(userDetails);
+		Mockito.verifyNoMoreInteractions(userUtils);
+		Mockito.verifyNoMoreInteractions(usersService);
+		Mockito.verifyNoMoreInteractions(authenticationManager);
+		Mockito.verifyNoMoreInteractions(userDetailsService);
+		Mockito.verifyNoMoreInteractions(tokenUtils);
+    }
+    
+    /**
+     * Should occur 404 code error,because passed as argument incorrect login
+     */
+    @Test
+    public void test_login_failWithIncorrectUsername() throws Exception {
+    	AuthenticationRequest authenticationRequest = getAuthenticationRequest();
+    	
+    	Mockito.when(userDetailsService.loadUserByUsername(authenticationRequest.getUsername())).thenReturn(null);
+    	
+		mockMvc.perform(MockMvcRequestBuilders
+						.post("/auth/login")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(TestUtils.toJson(authenticationRequest)))
+				.andExpect(MockMvcResultMatchers.status().isNotFound());
+		
+		Mockito.verify(userDetailsService, Mockito.times(1)).loadUserByUsername(authenticationRequest.getUsername());
+		Mockito.verifyNoMoreInteractions(userDetailsService);
+    }
+    
+    /**
+     * Should occur 401 code error, passed user correct login but incorrect password
+     */
+    @Test
+    public void test_login_failWithCorrectUsernameButIncorrectPassword() throws Exception {
+    	AuthenticationRequest authenticationRequest = getAuthenticationRequest();
+    	UserDetails userDetails = getUserDetails();
+    	
+    	Mockito.when(userDetailsService.loadUserByUsername(authenticationRequest.getUsername())).thenReturn(userDetails);
+    	Mockito.when(authenticationManager.authenticate(UsernamePasswordAuthenticationTokenCaptor.capture()))
+    			.thenThrow(BadCredentialsException.class);
+    	
+		mockMvc.perform(MockMvcRequestBuilders
+						.post("/auth/login")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(TestUtils.toJson(authenticationRequest)))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		
+		Mockito.verify(userDetailsService, Mockito.times(1)).loadUserByUsername(authenticationRequest.getUsername());
+		Mockito.verify(authenticationManager, Mockito.times(1)).authenticate(UsernamePasswordAuthenticationTokenCaptor.capture());
+		Mockito.verifyNoMoreInteractions(userDetailsService);
+		Mockito.verifyNoMoreInteractions(authenticationManager);
+    }
+    
+    @Test
+    public void test_refresh_success() throws Exception {
+    	String token = getToken();
+    	User user = getUser();
+    	String refreshedToken = getToken();
+    	AuthenticationResponse authenticationResponse = getAuthenticationResponse(user, refreshedToken);
+    	
+    	Mockito.when(tokenUtils.getUsernameFromToken(token)).thenReturn(user.getUsername());
+    	Mockito.when(userDetailsService.loadUserByUsername(user.getUsername())).thenReturn(user);
+    	Mockito.when(tokenUtils.canTokenBeRefreshed(token, user.getLastPasswordReset())).thenReturn(true);
+    	Mockito.when(tokenUtils.refreshToken(token)).thenReturn(refreshedToken);
+    	
+		mockMvc.perform(MockMvcRequestBuilders
+						.get("/auth/refresh")
+						.header(StringUtils.AUTHORIZATION_HEADER, StringUtils.TOKEN_HEADER_STARTS_WITH + token))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.jsonPath("$.token", Matchers.is(authenticationResponse.getToken())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.username", Matchers.is(authenticationResponse.getUsername())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.roles", Matchers.is(authenticationResponse.getRoles())));
+		
+		Mockito.verify(tokenUtils, Mockito.times(1)).getUsernameFromToken(token);
+		Mockito.verify(userDetailsService, Mockito.times(1)).loadUserByUsername(user.getUsername());
+		Mockito.verify(tokenUtils, Mockito.times(1)).canTokenBeRefreshed(token, user.getLastPasswordReset());
+		Mockito.verify(tokenUtils, Mockito.times(1)).refreshToken(token);
+		Mockito.verifyNoMoreInteractions(userUtils);
+		Mockito.verifyNoMoreInteractions(usersService);
+		Mockito.verifyNoMoreInteractions(authenticationManager);
+		Mockito.verifyNoMoreInteractions(userDetailsService);
+		Mockito.verifyNoMoreInteractions(tokenUtils);
+    }
+    
+    /**
+     * Should occur 401 code error, passed token can not be refreshed
+     */
+    @Test
+    public void test_refresh_failTokenCannotRefresh() throws Exception {
+    	String token = getToken();
+    	User user = getUser();
+    	
+    	Mockito.when(tokenUtils.getUsernameFromToken(token)).thenReturn(user.getUsername());
+    	Mockito.when(userDetailsService.loadUserByUsername(user.getUsername())).thenReturn(user);
+    	Mockito.when(tokenUtils.canTokenBeRefreshed(token, user.getLastPasswordReset())).thenReturn(false);
+    	
+		mockMvc.perform(MockMvcRequestBuilders
+						.get("/auth/refresh")
+						.header(StringUtils.AUTHORIZATION_HEADER, StringUtils.TOKEN_HEADER_STARTS_WITH + token))
+				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+		
+		Mockito.verify(tokenUtils, Mockito.times(1)).getUsernameFromToken(token);
+		Mockito.verify(userDetailsService, Mockito.times(1)).loadUserByUsername(user.getUsername());
+		Mockito.verify(tokenUtils, Mockito.times(1)).canTokenBeRefreshed(token, user.getLastPasswordReset());
 		Mockito.verifyNoMoreInteractions(userUtils);
 		Mockito.verifyNoMoreInteractions(usersService);
 		Mockito.verifyNoMoreInteractions(authenticationManager);

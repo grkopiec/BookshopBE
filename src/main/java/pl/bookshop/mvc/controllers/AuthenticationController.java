@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -42,6 +43,9 @@ public class AuthenticationController {
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<AuthenticationResponse> register(@RequestBody AuthenticationRequest authenticationRequest) {
     	User user = userUtils.createNormalUser(authenticationRequest);
+		if (usersService.isExist(user) == true) {
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
+		}
     	usersService.create(user);
     	
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
@@ -64,11 +68,20 @@ public class AuthenticationController {
                 authenticationRequest.getUsername(),
                 authenticationRequest.getPassword()
         );
-        Authentication authentication = this.authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+        if (userDetails == null) {
+        	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Authentication authentication;
+        try {
+        	authentication = this.authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+        } catch (BadCredentialsException exception)	 {
+        	return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        
+        String token = tokenUtils.generateToken(userDetails);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         
-        UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-        String token = tokenUtils.generateToken(userDetails);
         AuthenticationResponse authenticationResponse = new AuthenticationResponse(token, userDetails.getUsername(), userDetails.getAuthorities());
         return new ResponseEntity<>(authenticationResponse, HttpStatus.OK);
     }
