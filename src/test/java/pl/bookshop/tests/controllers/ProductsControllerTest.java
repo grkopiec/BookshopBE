@@ -45,6 +45,7 @@ public class ProductsControllerTest {
 		List<Product> products = Arrays.asList(getProduct1(), getProduct2());
 		
 		Mockito.when(productsService.findAll()).thenReturn(products);
+		
 		mockMvc.perform(MockMvcRequestBuilders.get("/products"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
@@ -62,6 +63,7 @@ public class ProductsControllerTest {
 				.andExpect(MockMvcResultMatchers.jsonPath("$[1].description", Matchers.is(products.get(1).getDescription())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[1].price", Matchers.is(products.get(1).getPrice())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[1].imagePath", Matchers.is(products.get(1).getImagePath())));
+		
 		Mockito.verify(productsService, Mockito.times(1)).findAll();
 		Mockito.verifyNoMoreInteractions(productsService);
 	}
@@ -71,6 +73,7 @@ public class ProductsControllerTest {
 		Product product1 = getProduct1();
 		
 		Mockito.when(productsService.findOne(product1.getId())).thenReturn(product1);
+		
 		mockMvc.perform(MockMvcRequestBuilders.get("/products/{id}", product1.getId()))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
@@ -81,6 +84,7 @@ public class ProductsControllerTest {
 				.andExpect(MockMvcResultMatchers.jsonPath("$.price", Matchers.is(product1.getPrice())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.discount", Matchers.is(product1.getDiscount())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.imagePath", Matchers.is(product1.getImagePath())));
+		
 		Mockito.verify(productsService, Mockito.times(1)).findOne(1L);
 		Mockito.verifyNoMoreInteractions(productsService);
 	}
@@ -93,8 +97,10 @@ public class ProductsControllerTest {
 		Product product1 = getProduct1();
 		
 		Mockito.when(productsService.findOne(1L)).thenReturn(null);
+		
 		mockMvc.perform(MockMvcRequestBuilders.get("/products/{id}", product1.getId()))
 				.andExpect(MockMvcResultMatchers.status().isNotFound());
+		
 		Mockito.verify(productsService, Mockito.times(1)).findOne(1L);
 		Mockito.verifyNoMoreInteractions(productsService);
 	}
@@ -105,11 +111,13 @@ public class ProductsControllerTest {
 		
 		Mockito.when(productsService.isExist(product1)).thenReturn(false);
 		Mockito.doNothing().when(productsService).create(product1);
+		
 		mockMvc.perform(MockMvcRequestBuilders
 						.post("/products")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(TestUtils.toJson(product1)))
 				.andExpect(MockMvcResultMatchers.status().isCreated());
+		
 		Mockito.verify(productsService, Mockito.times(1)).isExist(product1);
 		Mockito.verify(productsService, Mockito.times(1)).create(product1);
 		Mockito.verifyNoMoreInteractions(productsService);
@@ -124,11 +132,13 @@ public class ProductsControllerTest {
 		Product product1 = getProduct1();
 		
 		Mockito.when(productsService.isExist(product1)).thenReturn(true);
+		
 		mockMvc.perform(MockMvcRequestBuilders
 						.post("/products")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(TestUtils.toJson(product1)))
 				.andExpect(MockMvcResultMatchers.status().isConflict());
+		
 		Mockito.verify(productsService, Mockito.times(1)).isExist(product1);
 		Mockito.verifyNoMoreInteractions(productsService);
 	}
@@ -146,6 +156,7 @@ public class ProductsControllerTest {
 		
 		Mockito.when(productsService.isExist(beforeUpdateProduct)).thenReturn(false);
 		Mockito.when(productsService.update(previousProduct.getId(), beforeUpdateProduct)).thenReturn(afterUpdateProduct);
+		
 		mockMvc.perform(MockMvcRequestBuilders
 						.put("/products/{id}", previousProduct.getId())
 						.contentType(MediaType.APPLICATION_JSON)
@@ -158,6 +169,7 @@ public class ProductsControllerTest {
 				.andExpect(MockMvcResultMatchers.jsonPath("$.price", Matchers.is(afterUpdateProduct.getPrice())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.discount", Matchers.is(afterUpdateProduct.getDiscount())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.imagePath", Matchers.is(afterUpdateProduct.getImagePath())));
+		
 		Mockito.verify(productsService, Mockito.times(1)).isExist(beforeUpdateProduct);
 		Mockito.verify(productsService, Mockito.times(1)).update(previousProduct.getId(), beforeUpdateProduct);
 		Mockito.verifyNoMoreInteractions(productsService);
@@ -174,11 +186,13 @@ public class ProductsControllerTest {
 		
 		Mockito.when(productsService.isExist(beforeUpdateProduct)).thenReturn(false);
 		Mockito.when(productsService.update(previousProduct.getId(), beforeUpdateProduct)).thenReturn(null);
+		
 		mockMvc.perform(MockMvcRequestBuilders
 						.put("/products/{id}", previousProduct.getId())
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(TestUtils.toJson(beforeUpdateProduct)))
 				.andExpect(MockMvcResultMatchers.status().isNotFound());
+		
 		Mockito.verify(productsService, Mockito.times(1)).isExist(beforeUpdateProduct);
 		Mockito.verify(productsService, Mockito.times(1)).update(previousProduct.getId(), beforeUpdateProduct);
 		Mockito.verifyNoMoreInteractions(productsService);
@@ -194,11 +208,13 @@ public class ProductsControllerTest {
 		Product beforeUpdateProduct = getProduct2();
 		
 		Mockito.when(productsService.isExist(beforeUpdateProduct)).thenReturn(true);
+		
 		mockMvc.perform(MockMvcRequestBuilders
 						.put("/products/{id}", previousProduct.getId())
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(TestUtils.toJson(beforeUpdateProduct)))
 				.andExpect(MockMvcResultMatchers.status().isConflict());
+		
 		Mockito.verify(productsService, Mockito.times(1)).isExist(beforeUpdateProduct);
 		Mockito.verifyNoMoreInteractions(productsService);
 	}
@@ -209,9 +225,11 @@ public class ProductsControllerTest {
 		
 		Mockito.when(productsService.findOne(product1.getId())).thenReturn(product1);
 		Mockito.doNothing().when(productsService).delete(product1.getId());
+		
 		mockMvc.perform(MockMvcRequestBuilders
 						.delete("/products/{id}", product1.getId()))
 				.andExpect(MockMvcResultMatchers.status().isNoContent());
+		
 		Mockito.verify(productsService, Mockito.times(1)).findOne(product1.getId());
 		Mockito.verify(productsService, Mockito.times(1)).delete(product1.getId());
 		Mockito.verifyNoMoreInteractions(productsService);
@@ -226,9 +244,11 @@ public class ProductsControllerTest {
 		
 		Mockito.when(productsService.findOne(product1.getId())).thenReturn(null);
 		Mockito.doNothing().when(productsService).delete(product1.getId());
+		
 		mockMvc.perform(MockMvcRequestBuilders
 						.delete("/products/{id}", product1.getId()))
 				.andExpect(MockMvcResultMatchers.status().isNotFound());
+		
 		Mockito.verify(productsService, Mockito.times(1)).findOne(product1.getId());
 		Mockito.verifyNoMoreInteractions(productsService);
 	}

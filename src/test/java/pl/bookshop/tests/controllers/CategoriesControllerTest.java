@@ -44,6 +44,7 @@ public class CategoriesControllerTest {
 		List<Category> categories = Arrays.asList(getCategory1(), getCategory2());
 		
 		Mockito.when(categoriesService.findAll()).thenReturn(categories);
+		
 		mockMvc.perform(MockMvcRequestBuilders.get("/categories"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
@@ -52,6 +53,7 @@ public class CategoriesControllerTest {
 				.andExpect(MockMvcResultMatchers.jsonPath("$[0].name", Matchers.is(categories.get(0).getName())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[1].id", Matchers.is(categories.get(1).getId().intValue())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[1].name", Matchers.is(categories.get(1).getName())));
+		
 		Mockito.verify(categoriesService, Mockito.times(1)).findAll();
 		Mockito.verifyNoMoreInteractions(categoriesService);
 	}
@@ -61,11 +63,13 @@ public class CategoriesControllerTest {
 		Category category1 = getCategory1();
 		
 		Mockito.when(categoriesService.findOne(category1.getId())).thenReturn(category1);
+		
 		mockMvc.perform(MockMvcRequestBuilders.get("/categories/{id}", category1.getId()))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(category1.getId().intValue())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(category1.getName())));
+		
 		Mockito.verify(categoriesService, Mockito.times(1)).findOne(1L);
 		Mockito.verifyNoMoreInteractions(categoriesService);
 	}
@@ -78,8 +82,10 @@ public class CategoriesControllerTest {
 		Category category1 = getCategory1();
 		
 		Mockito.when(categoriesService.findOne(1L)).thenReturn(null);
+		
 		mockMvc.perform(MockMvcRequestBuilders.get("/categories/{id}", category1.getId()))
 				.andExpect(MockMvcResultMatchers.status().isNotFound());
+		
 		Mockito.verify(categoriesService, Mockito.times(1)).findOne(1L);
 		Mockito.verifyNoMoreInteractions(categoriesService);
 	}
@@ -90,11 +96,13 @@ public class CategoriesControllerTest {
 		
 		Mockito.when(categoriesService.isExist(category1)).thenReturn(false);
 		Mockito.doNothing().when(categoriesService).create(category1);
+		
 		mockMvc.perform(MockMvcRequestBuilders
 						.post("/categories")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(TestUtils.toJson(category1)))
 				.andExpect(MockMvcResultMatchers.status().isCreated());
+		
 		Mockito.verify(categoriesService, Mockito.times(1)).isExist(category1);
 		Mockito.verify(categoriesService, Mockito.times(1)).create(category1);
 		Mockito.verifyNoMoreInteractions(categoriesService);
@@ -109,11 +117,13 @@ public class CategoriesControllerTest {
 		Category category1 = getCategory1();
 		
 		Mockito.when(categoriesService.isExist(category1)).thenReturn(true);
+		
 		mockMvc.perform(MockMvcRequestBuilders
 						.post("/categories")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(TestUtils.toJson(category1)))
 				.andExpect(MockMvcResultMatchers.status().isConflict());
+		
 		Mockito.verify(categoriesService, Mockito.times(1)).isExist(category1);
 		Mockito.verifyNoMoreInteractions(categoriesService);
 	}
@@ -131,6 +141,7 @@ public class CategoriesControllerTest {
 
 		Mockito.when(categoriesService.isExist(beforeUpdateCategory)).thenReturn(false);
 		Mockito.when(categoriesService.update(previousCategory.getId(), beforeUpdateCategory)).thenReturn(afterUpdateCategory);
+		
 		mockMvc.perform(MockMvcRequestBuilders
 						.put("/categories/{id}", previousCategory.getId())
 						.contentType(MediaType.APPLICATION_JSON)
@@ -138,6 +149,7 @@ public class CategoriesControllerTest {
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(afterUpdateCategory.getId().intValue())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(afterUpdateCategory.getName())));
+		
 		Mockito.verify(categoriesService, Mockito.times(1)).isExist(beforeUpdateCategory);
 		Mockito.verify(categoriesService, Mockito.times(1)).update(previousCategory.getId(), beforeUpdateCategory);
 		Mockito.verifyNoMoreInteractions(categoriesService);
@@ -154,11 +166,13 @@ public class CategoriesControllerTest {
 
 		Mockito.when(categoriesService.isExist(beforeUpdateCategory)).thenReturn(false);
 		Mockito.when(categoriesService.update(previousCategory.getId(), beforeUpdateCategory)).thenReturn(null);
+		
 		mockMvc.perform(MockMvcRequestBuilders
 						.put("/categories/{id}", previousCategory.getId())
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(TestUtils.toJson(beforeUpdateCategory)))
 				.andExpect(MockMvcResultMatchers.status().isNotFound());
+		
 		Mockito.verify(categoriesService, Mockito.times(1)).isExist(beforeUpdateCategory);
 		Mockito.verify(categoriesService, Mockito.times(1)).update(previousCategory.getId(), beforeUpdateCategory);
 		Mockito.verifyNoMoreInteractions(categoriesService);
@@ -176,11 +190,13 @@ public class CategoriesControllerTest {
 
 		
 		Mockito.when(categoriesService.isExist(beforeUpdateCategory)).thenReturn(true);
+		
 		mockMvc.perform(MockMvcRequestBuilders
 						.put("/categories/{id}", previousCategory.getId())
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(TestUtils.toJson(beforeUpdateCategory)))
 				.andExpect(MockMvcResultMatchers.status().isConflict());
+		
 		Mockito.verify(categoriesService, Mockito.times(1)).isExist(beforeUpdateCategory);
 		Mockito.verifyNoMoreInteractions(categoriesService);
 	}
@@ -191,9 +207,11 @@ public class CategoriesControllerTest {
 		
 		Mockito.when(categoriesService.findOne(category1.getId())).thenReturn(category1);
 		Mockito.doNothing().when(categoriesService).delete(category1.getId());
+		
 		mockMvc.perform(MockMvcRequestBuilders
 						.delete("/categories/{id}", category1.getId()))
 				.andExpect(MockMvcResultMatchers.status().isNoContent());
+		
 		Mockito.verify(categoriesService, Mockito.times(1)).findOne(category1.getId());
 		Mockito.verify(categoriesService, Mockito.times(1)).delete(category1.getId());
 		Mockito.verifyNoMoreInteractions(categoriesService);
@@ -208,9 +226,11 @@ public class CategoriesControllerTest {
 		
 		Mockito.when(categoriesService.findOne(category1.getId())).thenReturn(null);
 		Mockito.doNothing().when(categoriesService).delete(category1.getId());
+		
 		mockMvc.perform(MockMvcRequestBuilders
 						.delete("/categories/{id}", category1.getId()))
 				.andExpect(MockMvcResultMatchers.status().isNotFound());
+		
 		Mockito.verify(categoriesService, Mockito.times(1)).findOne(category1.getId());
 		Mockito.verifyNoMoreInteractions(categoriesService);
 	}

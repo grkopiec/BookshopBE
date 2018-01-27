@@ -49,6 +49,7 @@ public class UsersControllerTest {
 		List<String> authorities2 = users.get(1).getAuthorities().stream().map(n -> n.getAuthority()).collect(Collectors.toList());
 		
 		Mockito.when(usersService.findAll()).thenReturn(users);
+		
 		mockMvc.perform(MockMvcRequestBuilders.get("/users"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
@@ -71,6 +72,7 @@ public class UsersControllerTest {
 				.andExpect(MockMvcResultMatchers.jsonPath("$[1].accountNonLocked", Matchers.is(users.get(1).isAccountNonLocked())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[1].credentialsNonExpired", Matchers.is(users.get(1).isCredentialsNonExpired())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[1].enabled", Matchers.is(users.get(1).isEnabled())));
+		
 		Mockito.verify(usersService, Mockito.times(1)).findAll();
 		Mockito.verifyNoMoreInteractions(usersService);
 	}
@@ -81,6 +83,7 @@ public class UsersControllerTest {
 		List<String> authorities = user1.getAuthorities().stream().map(n -> n.getAuthority()).collect(Collectors.toList());
 		
 		Mockito.when(usersService.findOne(user1.getId())).thenReturn(user1);
+		
 		mockMvc.perform(MockMvcRequestBuilders.get("/users/{id}", user1.getId()))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
@@ -93,6 +96,7 @@ public class UsersControllerTest {
 				.andExpect(MockMvcResultMatchers.jsonPath("$.accountNonLocked", Matchers.is(user1.isAccountNonLocked())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.credentialsNonExpired", Matchers.is(user1.isCredentialsNonExpired())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.enabled", Matchers.is(user1.isEnabled())));
+		
 		Mockito.verify(usersService, Mockito.times(1)).findOne(1L);
 		Mockito.verifyNoMoreInteractions(usersService);
 	}
@@ -105,8 +109,10 @@ public class UsersControllerTest {
 		User user1 = getUser1();
 		
 		Mockito.when(usersService.findOne(1L)).thenReturn(null);
+		
 		mockMvc.perform(MockMvcRequestBuilders.get("/users/{id}", user1.getId()))
 				.andExpect(MockMvcResultMatchers.status().isNotFound());
+		
 		Mockito.verify(usersService, Mockito.times(1)).findOne(1L);
 		Mockito.verifyNoMoreInteractions(usersService);
 	}
@@ -117,11 +123,13 @@ public class UsersControllerTest {
 
 		Mockito.when(usersService.isExist(user1)).thenReturn(false);
 		Mockito.doNothing().when(usersService).create(user1);
+		
 		mockMvc.perform(MockMvcRequestBuilders
 						.post("/users")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(TestUtils.toJson(user1)))
 				.andExpect(MockMvcResultMatchers.status().isCreated());
+		
 		Mockito.verify(usersService, Mockito.times(1)).isExist(user1);
 		Mockito.verify(usersService, Mockito.times(1)).create(user1);
 		Mockito.verifyNoMoreInteractions(usersService);
@@ -136,11 +144,13 @@ public class UsersControllerTest {
 		User user1 = getUser1();
 		
 		Mockito.when(usersService.isExist(user1)).thenReturn(true);
+		
 		mockMvc.perform(MockMvcRequestBuilders
 						.post("/users")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(TestUtils.toJson(user1)))
 				.andExpect(MockMvcResultMatchers.status().isConflict());
+		
 		Mockito.verify(usersService, Mockito.times(1)).isExist(user1);
 		Mockito.verifyNoMoreInteractions(usersService);
 	}
@@ -159,6 +169,7 @@ public class UsersControllerTest {
 
 		Mockito.when(usersService.isExist(beforeUpdateUser)).thenReturn(false);
 		Mockito.when(usersService.update(previousUser.getId(), beforeUpdateUser)).thenReturn(afterUpdateUser);
+		
 		mockMvc.perform(MockMvcRequestBuilders
 						.put("/users/{id}", previousUser.getId())
 						.contentType(MediaType.APPLICATION_JSON)
@@ -173,6 +184,7 @@ public class UsersControllerTest {
 				.andExpect(MockMvcResultMatchers.jsonPath("$.accountNonLocked", Matchers.is(afterUpdateUser.isAccountNonLocked())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.credentialsNonExpired", Matchers.is(afterUpdateUser.isCredentialsNonExpired())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.enabled", Matchers.is(afterUpdateUser.isEnabled())));
+		
 		Mockito.verify(usersService, Mockito.times(1)).isExist(beforeUpdateUser);
 		Mockito.verify(usersService, Mockito.times(1)).update(previousUser.getId(), beforeUpdateUser);
 		Mockito.verifyNoMoreInteractions(usersService);
@@ -189,11 +201,13 @@ public class UsersControllerTest {
 		
 		Mockito.when(usersService.isExist(beforeUpdateUser)).thenReturn(false);
 		Mockito.when(usersService.update(previousUser.getId(), beforeUpdateUser)).thenReturn(null);
+		
 		mockMvc.perform(MockMvcRequestBuilders
 						.put("/users/{id}", previousUser.getId())
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(TestUtils.toJson(beforeUpdateUser)))
 				.andExpect(MockMvcResultMatchers.status().isNotFound());
+		
 		Mockito.verify(usersService, Mockito.times(1)).isExist(beforeUpdateUser);
 		Mockito.verify(usersService, Mockito.times(1)).update(previousUser.getId(), beforeUpdateUser);
 		Mockito.verifyNoMoreInteractions(usersService);
@@ -209,11 +223,13 @@ public class UsersControllerTest {
 		User beforeUpdateUser = getUser2();
 		
 		Mockito.when(usersService.isExist(beforeUpdateUser)).thenReturn(true);
+		
 		mockMvc.perform(MockMvcRequestBuilders
 						.put("/users/{id}", previousUser.getId())
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(TestUtils.toJson(beforeUpdateUser)))
 				.andExpect(MockMvcResultMatchers.status().isConflict());
+		
 		Mockito.verify(usersService, Mockito.times(1)).isExist(beforeUpdateUser);
 		Mockito.verifyNoMoreInteractions(usersService);
 	}
@@ -224,9 +240,11 @@ public class UsersControllerTest {
 		
 		Mockito.when(usersService.findOne(user1.getId())).thenReturn(user1);
 		Mockito.doNothing().when(usersService).delete(user1.getId());
+		
 		mockMvc.perform(MockMvcRequestBuilders
 						.delete("/users/{id}", user1.getId()))
 				.andExpect(MockMvcResultMatchers.status().isNoContent());
+		
 		Mockito.verify(usersService, Mockito.times(1)).findOne(user1.getId());
 		Mockito.verify(usersService, Mockito.times(1)).delete(user1.getId());
 		Mockito.verifyNoMoreInteractions(usersService);
@@ -241,9 +259,11 @@ public class UsersControllerTest {
 		
 		Mockito.when(usersService.findOne(user1.getId())).thenReturn(null);
 		Mockito.doNothing().when(usersService).delete(user1.getId());
+		
 		mockMvc.perform(MockMvcRequestBuilders
 						.delete("/users/{id}", user1.getId()))
 				.andExpect(MockMvcResultMatchers.status().isNotFound());
+		
 		Mockito.verify(usersService, Mockito.times(1)).findOne(user1.getId());
 		Mockito.verifyNoMoreInteractions(usersService);
 	}
