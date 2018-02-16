@@ -1,23 +1,23 @@
 --procedure for droping table if exists
---CREATE OR REPLACE PROCEDURE drop_if_table_exists(table_name VARCHAR2) IS
---  counter NUMBER := 0;
---BEGIN
---  SELECT COUNT(*) INTO counter FROM user_tables WHERE table_name = UPPER(table_name);
---  IF counter > 0 THEN
---    EXECUTE IMMEDIATE 'DROP TABLE ' || table_name || ' CASCADE CONSTRAINTS';
---  END IF;
---END drop_if_table_exists;
-	
+CREATE OR REPLACE PROCEDURE drop_if_table_exists(table_name VARCHAR2) IS
+  counter NUMBER := 0;
+BEGIN
+  SELECT COUNT(*) INTO counter FROM user_tables WHERE table_name = UPPER(table_name);
+  IF counter > 0 THEN
+    EXECUTE IMMEDIATE 'DROP TABLE ' || table_name || ' CASCADE CONSTRAINTS';
+  END IF;
+END drop_if_table_exists;
+/
 --procedure for droping sequence if exists
---CREATE OR REPLACE PROCEDURE drop_if_sequence_exists(sequence_name VARCHAR2) IS
---  counter NUMBER := 0;
---BEGIN
---  SELECT COUNT(*) INTO counter FROM all_sequences WHERE sequence_name = UPPER(sequence_name);
---  IF counter > 0 THEN
---    EXECUTE IMMEDIATE 'DROP SEQUENCE ' || sequence_name;
---  END IF;
---END drop_if_sequence_exists;
-
+CREATE OR REPLACE PROCEDURE drop_if_sequence_exists(sequence_name VARCHAR2) IS
+  counter NUMBER := 0;
+BEGIN
+  SELECT COUNT(*) INTO counter FROM all_sequences WHERE sequence_name = UPPER(sequence_name);
+  IF counter > 0 THEN
+    EXECUTE IMMEDIATE 'DROP SEQUENCE ' || sequence_name;
+  END IF;
+END drop_if_sequence_exists;
+/
 EXEC drop_if_table_exists('categories');
 EXEC drop_if_table_exists('products');
 EXEC drop_if_table_exists('users');
