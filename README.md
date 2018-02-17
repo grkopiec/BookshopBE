@@ -1,10 +1,10 @@
 ## Project Bookshop
 
-This is repository with application that shows my experimentals creations of spring application. This is backend part of application, on *BookshopFE* repository is *angular* frontend. This project has been crated ratrer for learning purpouses.
+This is repository with application that shows my experimental creations of spring application. This is backend part of application, on *BookshopFE* repository is *angular* frontend. This project has been created rather for learning purposes.
 
 ## Description
 
-Project has typical tools for shop. It comunicates with frontend layer using spring *RESTful web service*. Aplication according with good practicles is dividing on 3 parts: web layer, service layer and repository layer. In repository layer is using *spring data* to perform operations on database. Service layer contains all utils method and proxy methods between web and repository layers. Of course inside project there are implemented as well tests that covers web and repository layers.
+Project has typical tools for shop. It communicates with frontend layer using spring *RESTful web service*. Application according with good practices is dividing on 3 parts: web layer, service layer and repository layer. In repository layer is using *spring data* to perform operations on database. Service layer contains all utils method and proxy methods between web and repository layers. Of course inside project there are implemented as well tests that covers web and repository layers.
 
 ## Motivation
 
@@ -12,7 +12,7 @@ My motivation to create this project is ability to learn.
 
 ## Code style
 
-Regarding best practicles I try use them in any aspect of project
+Regarding best practices I try use them in any aspect of project
 [![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/standard)
 
 ## Technology/Frameworks/Tools used
@@ -27,13 +27,13 @@ Regarding best practicles I try use them in any aspect of project
 
 ## On what I am currently working
 
-Currently I am working on provide features connected with loging and registering users.
+Currently I am working on provide features connected with logging and registering users.
 
 ## What next
 
-In feature I plan add to project new noSQL database for colecting data. I think also about migrate to *spring boot*. Besides it project stil do not contains elementary features like possibility of do purchases, administration tools and now I should focus on it ;)
+In feature I plan add to project new noSQL database for collecting data. I think also about migrate to *spring boot*. Besides it project still do not contains elementary features like possibility of do purchases, administration tools and now I should focus on it ;)
 
-## Instalation
+## Installation
 
 #### Tools to install
 
@@ -55,7 +55,7 @@ And install it for example like here [tomcat](https://www.ntu.edu.sg/home/ehchua
 
 Also need ide like [eclipse](https://spring.io/tools) and install it
 
-For easier display database structure is recomended to install [sql developer](http://www.oracle.com/technetwork/developer-tools/sql-developer/downloads/index.html)
+For easier display database structure is recommended to install [sql developer](http://www.oracle.com/technetwork/developer-tools/sql-developer/downloads/index.html)
 
 #### Prepare environment
 
@@ -67,13 +67,13 @@ git clone https://github.com/grkopiec/BookshopBE.git
 
 For properly displaying example images on frontend, copy from folder in cloned project *src/main/resources/libs/* folder *images* to user home folder(home/user_name/ in linux, users/user_name/ in windows)
 
-Next open eclipse and import cloned project to workspace, after it create server for application, best way is indicate for it in current instaled location on disc. When server is created configure run configurations for tomcat by adding below line to vm arguments(it is also possible change this variable in envaironment variables and directly in java code)
+Next open eclipse and import cloned project to workspace, after it create server for application, best way is indicate for it in current installed location on disc. When server is created configure run configurations for tomcat by adding below line to vm arguments(it is also possible change this variable in environment variables and directly in java code)
 
 ```code
 -Dspring.profiles.active=development
 ```
 
-After configure ide is time to setup database, first create new one, open command protompt and input
+After configure ide is time to setup database, first create new one, open command prompt and input
 
 ```code
 sqlplus sys as sysdba
