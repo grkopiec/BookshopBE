@@ -1,6 +1,7 @@
 package pl.bookshop.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -23,7 +24,7 @@ public class CategoriesServiceImpl implements CategoriesService {
 
 	@Override
 	public Category findOne(Long id) {
-		return categoriesRepository.findOne(id);
+		return categoriesRepository.findById(id).orElse(null);
 	}
 
 	@Override
@@ -46,17 +47,18 @@ public class CategoriesServiceImpl implements CategoriesService {
 
 	@Override
 	public Category update(Long id, Category category) {
-		Category updatingCategory = categoriesRepository.findOne(id);
+		Optional<Category> updatingCategory = categoriesRepository.findById(id);
 		
-		if (updatingCategory == null) {
-			return null;
-		}
-		category.setId(id);
-		return categoriesRepository.save(category);
+		return updatingCategory
+				.map(o -> {
+					category.setId(id);
+					return categoriesRepository.save(category);
+				})
+				.orElse(null);
 	}
 
 	@Override
 	public void delete(Long id) {
-		categoriesRepository.delete(id);
+		categoriesRepository.deleteById(id);
 	}
 }

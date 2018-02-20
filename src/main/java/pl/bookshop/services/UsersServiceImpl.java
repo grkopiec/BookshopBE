@@ -1,6 +1,7 @@
 package pl.bookshop.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -26,7 +27,7 @@ public class UsersServiceImpl implements UsersService {
 
 	@Override
 	public User findOne(Long id) {
-		return usersRepository.findOne(id);
+		return usersRepository.findById(id).orElse(null);
 	}
 
 	@Override
@@ -52,17 +53,18 @@ public class UsersServiceImpl implements UsersService {
 
 	@Override
 	public User update(Long id, User user) {
-		User updatingUser = usersRepository.findOne(id);
+		Optional<User> updatingUser = usersRepository.findById(id);
 		
-		if (updatingUser == null) {
-			return null;
-		}
-		user.setId(id);
-		return usersRepository.save(user);
+		return updatingUser
+				.map(o -> {
+					user.setId(id);
+					return usersRepository.save(user);
+				})
+				.orElse(null);
 	}
 
 	@Override
 	public void delete(Long id) {
-		usersRepository.delete(id);
+		usersRepository.deleteById(id);
 	}
 }

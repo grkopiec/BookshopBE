@@ -18,7 +18,7 @@
         <h2.version>1.4.196</h2.version>
         <bonecp.version>0.8.0.RELEASE</bonecp.version>
 		
-		<spring.version>5.0.4.RELEASE</spring.version>
+		<spring.version>5.0.3.RELEASE</spring.version>
 		<spring-data.version>2.0.4.RELEASE</spring-data.version>
 		<spring-security.version>5.0.2.RELEASE</spring-security.version>
 		<web-token.version>0.9.0</web-token.version>
@@ -120,7 +120,6 @@
 		    <artifactId>spring-security-web</artifactId>
 		    <version>${spring-security.version}</version>
 		</dependency>
-		
 		<dependency>
 		    <groupId>org.springframework.security</groupId>
 		    <artifactId>spring-security-config</artifactId>
