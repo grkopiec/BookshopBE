@@ -24,15 +24,15 @@ import org.springframework.transaction.PlatformTransactionManager;
 @Configuration
 @ComponentScan(basePackages = {"pl.bookshop.configuration.database", "pl.bookshop.configuration.security", "pl.bookshop.services", "pl.bookshop.components"})
 public class RootConfiguration {
-	@Value("${driverClassName}")
+	@Value("${oracle.driverClassName}")
 	private String driverClassName;
-	@Value("${url}")
+	@Value("${oracle.url}")
 	private String url;
-	@Value("${username}")
+	@Value("${oracle.username}")
 	private String username;
-	@Value("${password}")
+	@Value("${oracle.password}")
 	private String password;
-	@Value("${showSql}")
+	@Value("${oracle.showSql}")
 	private Boolean showSql;
 	
 	@Profile("development")
