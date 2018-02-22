@@ -1,7 +1,9 @@
 package pl.bookshop.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -10,7 +12,10 @@ import org.springframework.stereotype.Service;
 
 import pl.bookshop.components.UserUtils;
 import pl.bookshop.domains.User;
+import pl.bookshop.domainsmongo.UserDetails;
+import pl.bookshop.mvc.controllers.objects.UserData;
 import pl.bookshop.repositories.UsersRepository;
+import pl.bookshop.repositoriesmongo.UsersDetailsRepository;
 
 @Service
 @Transactional
@@ -18,11 +23,25 @@ public class UsersServiceImpl implements UsersService {
 	@Autowired
 	private UsersRepository usersRepository;
 	@Autowired
+	private UsersDetailsRepository usersDetailsRepository;
+	@Autowired
 	private UserUtils userUtils;
 
 	@Override
-	public List<User> findAll() {
-		return usersRepository.findAll();
+	public List<UserData> findAll() {
+		List<User> users = usersRepository.findAll();
+		List<Long> usersIds = users.stream().map(User::getId).collect(Collectors.toList());
+		List<UserDetails> usersDetails = usersDetailsRepository.findByUserIdIn(usersIds);
+		
+		List<UserData> usersData = new ArrayList<>();
+		for (int i = 0; i < users.size(); i++) {
+			UserData userData = new UserData();
+			userData.setUser(users.get(i));
+			userData.setUserDetails(usersDetails.get(i));
+			usersData.add(userData);
+		}
+		
+		return usersData;
 	}
 
 	@Override

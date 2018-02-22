@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import pl.bookshop.domains.User;
+import pl.bookshop.mvc.controllers.objects.UserData;
 import pl.bookshop.services.UsersService;
 
 @RestController
@@ -21,13 +22,13 @@ public class UsersController {
 	private UsersService usersService;
 	
 	@RequestMapping
-	public ResponseEntity<List<User>> findAll() {
-		List<User> users = usersService.findAll();
+	public ResponseEntity<List<UserData>> findAll() {
+		List<UserData> users = usersService.findAll();
 		
 		if (users.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<List<User>>(users, HttpStatus.OK);
+		return new ResponseEntity<List<UserData>>(users, HttpStatus.OK);
 	}
 	
 	@RequestMapping(path = "/{id}")

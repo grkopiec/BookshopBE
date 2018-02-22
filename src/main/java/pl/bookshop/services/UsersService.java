@@ -3,9 +3,10 @@ package pl.bookshop.services;
 import java.util.List;
 
 import pl.bookshop.domains.User;
+import pl.bookshop.mvc.controllers.objects.UserData;
 
 public interface UsersService {
-	public List<User> findAll();
+	public List<UserData> findAll();
 	public User findOne(Long id);
 	public User findByUsername(String name);
 	
