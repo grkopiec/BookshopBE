@@ -45,8 +45,8 @@ public class UsersServiceImpl implements UsersService {
 	}
 
 	@Override
-	public User findOne(Long id) {
-		return usersRepository.findById(id).orElse(null);
+	public UserDetails findOne(Long id) {
+		return usersDetailsRepository.findByUserId(id).orElse(null);
 	}
 
 	@Override
@@ -55,29 +55,36 @@ public class UsersServiceImpl implements UsersService {
 	}
 
 	@Override
-	public Boolean isExist(User user) {
-		if (usersRepository.findByUsername(user.getUsername()) == null) {
+	public Boolean isExist(UserData userData) {
+		String username = userData.getUser().getUsername();
+		if (usersRepository.findByUsername(username) == null) {
 			return false;
 		}
 		return true;
 	}
 
 	@Override
-	public void create(User user) {
-		String password = user.getPassword();
+	public void create(UserData userData) {
+		String password = userData.getUser().getPassword();
 		String encodedPassword = userUtils.encodePassword(password);
-		user.setPassword(encodedPassword);
-		usersRepository.save(user);
+		userData.getUser().setPassword(encodedPassword);
+		User user = userData.getUser();
+		user = usersRepository.save(user);
+		
+		userData.getUserDetails().setUserId(user.getId());
+		UserDetails userDetails = userData.getUserDetails();
+		usersDetailsRepository.save(userDetails);
 	}
 
 	@Override
-	public User update(Long id, User user) {
-		Optional<User> updatingUser = usersRepository.findById(id);
+	public UserDetails update(Long id, UserData userData) {
+		Optional<UserDetails> updatingUserDetails = usersDetailsRepository.findByUserId(id);
 		
-		return updatingUser
+		return updatingUserDetails
 				.map(o -> {
-					user.setId(id);
-					return usersRepository.save(user);
+					UserDetails userDetails = userData.getUserDetails();
+					userDetails.setUserId(id);
+					return usersDetailsRepository.save(userDetails);
 				})
 				.orElse(null);
 	}
@@ -85,5 +92,6 @@ public class UsersServiceImpl implements UsersService {
 	@Override
 	public void delete(Long id) {
 		usersRepository.deleteById(id);
+		usersDetailsRepository.deleteByUserId(id);
 	}
 }

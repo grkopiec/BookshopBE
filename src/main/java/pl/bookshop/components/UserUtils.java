@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import pl.bookshop.domains.User;
 import pl.bookshop.mvc.controllers.objects.AuthenticationRequest;
+import pl.bookshop.mvc.controllers.objects.UserData;
 
 @Component
 public class UserUtils {
@@ -22,13 +23,16 @@ public class UserUtils {
 		return adminUser;
 	}
 	
-	public User createNormalUser(AuthenticationRequest authenticationRequest) {
-		User normalUser = new User();
-		normalUser.setUsername(authenticationRequest.getUsername());
-		normalUser.setPassword(authenticationRequest.getPassword());
+	public UserData createNormalUser(AuthenticationRequest authenticationRequest) {
+		User user = new User();
+		user.setUsername(authenticationRequest.getUsername());
+		user.setPassword(authenticationRequest.getPassword());
 		List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_USER");
-		normalUser.setAuthorities(authorities);
-		return normalUser;
+		user.setAuthorities(authorities);
+		
+		UserData userData = new UserData();
+		userData.setUser(user);
+		return userData;
 	}
 	
 	public String encodePassword(String password) {

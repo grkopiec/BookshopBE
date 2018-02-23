@@ -23,6 +23,7 @@ import pl.bookshop.components.UserUtils;
 import pl.bookshop.domains.User;
 import pl.bookshop.mvc.controllers.objects.AuthenticationRequest;
 import pl.bookshop.mvc.controllers.objects.AuthenticationResponse;
+import pl.bookshop.mvc.controllers.objects.UserData;
 import pl.bookshop.services.UsersService;
 import pl.bookshop.utils.StringUtils;
 
@@ -42,11 +43,11 @@ public class AuthenticationController {
     
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<AuthenticationResponse> register(@RequestBody AuthenticationRequest authenticationRequest) {
-    	User user = userUtils.createNormalUser(authenticationRequest);
-		if (usersService.isExist(user) == true) {
+    	UserData userData = userUtils.createNormalUser(authenticationRequest);
+		if (usersService.isExist(userData) == true) {
 			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
-    	usersService.create(user);
+    	usersService.create(userData);
     	
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                 authenticationRequest.getUsername(),

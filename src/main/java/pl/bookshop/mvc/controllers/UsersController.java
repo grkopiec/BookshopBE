@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import pl.bookshop.domains.User;
+import pl.bookshop.domainsmongo.UserDetails;
 import pl.bookshop.mvc.controllers.objects.UserData;
 import pl.bookshop.services.UsersService;
 
@@ -23,50 +23,50 @@ public class UsersController {
 	
 	@RequestMapping
 	public ResponseEntity<List<UserData>> findAll() {
-		List<UserData> users = usersService.findAll();
+		List<UserData> usersData = usersService.findAll();
 		
-		if (users.isEmpty()) {
+		if (usersData.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<List<UserData>>(users, HttpStatus.OK);
+		return new ResponseEntity<List<UserData>>(usersData, HttpStatus.OK);
 	}
 	
 	@RequestMapping(path = "/{id}")
-	public ResponseEntity<User> findOne(@PathVariable Long id) {
-		User user = usersService.findOne(id);
+	public ResponseEntity<UserDetails> findOne(@PathVariable Long id) {
+		UserDetails userDetails = usersService.findOne(id);
 		
-		if (user == null) {
+		if (userDetails == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<>(user, HttpStatus.OK);
+		return new ResponseEntity<>(userDetails, HttpStatus.OK);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> create(@RequestBody User user) {
-		if (usersService.isExist(user) == true) {
+	public ResponseEntity<Void> create(@RequestBody UserData userData) {
+		if (usersService.isExist(userData) == true) {
 			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
-		usersService.create(user);
+		usersService.create(userData);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
 	@RequestMapping(path = "/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User user) {
-		if (usersService.isExist(user) == true) {
+	public ResponseEntity<UserDetails> update(@PathVariable Long id, @RequestBody UserData userData) {
+		if (usersService.isExist(userData) == true) {
 			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
 		
-		User updatedUser = usersService.update(id, user);
+		UserDetails updatedUserDetails = usersService.update(id, userData);
 		
-		if (updatedUser == null) {
+		if (updatedUserDetails == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+		return new ResponseEntity<>(updatedUserDetails, HttpStatus.OK);
 	}
 	
 	@RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
-		User user = usersService.findOne(id);
+		UserDetails user = usersService.findOne(id);
 		
 		if (user == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
