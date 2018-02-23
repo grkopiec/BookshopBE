@@ -2,8 +2,6 @@ package pl.bookshop.mvc.controllers.objects;
 
 import java.util.Objects;
 
-import pl.bookshop.domains.User;
-
 public class AuthenticationRequest {
     private String username;
     private String password;
