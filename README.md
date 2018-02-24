@@ -23,6 +23,7 @@ Regarding best practices I try use them in any aspect of project
 - [maven](https://maven.apache.org/): tool using for manage dependencies and building project
 - [tomcat](http://tomcat.apache.org/): server on which I run application
 - [oracle express edition](http://www.oracle.com/technetwork/database/database-technologies/express-edition/overview/index.html): database that containing data used in application
+- [mongodb](https://www.mongodb.com/): database that persist part of application data
 - [eclipse](https://www.eclipse.org/): ide that I use to developing
 
 ## On what I am currently working
@@ -47,9 +48,11 @@ And install it [maven](https://maven.apache.org/install.html)
 
 Next step is download [oracle express 11g](http://www.oracle.com/technetwork/database/database-technologies/express-edition/downloads/index.html)
 
+After it download and install [mongodb](https://docs.mongodb.com/manual/installation/)
+
 And install [for windows](https://www.thegeekstuff.com/2008/10/oracle-11g-step-by-step-installation-guide-with-screenshots/) of [for linux](https://askubuntu.com/questions/566734/how-to-install-oracle-11gr2-on-ubuntu-14-04) remember to keep default database port on 1521 and change listener port on different than 8080(because on it should running tomcat)
 
-Download [bomcat 8 or above](https://tomcat.apache.org/download-80.cgi)
+Download [tomcat 8 or above](https://tomcat.apache.org/download-80.cgi)
 
 And install it for example like here [tomcat](https://www.ntu.edu.sg/home/ehchua/programming/howto/Tomcat_HowTo.html)
 
@@ -121,6 +124,68 @@ For correctly project working it is required oracle driver in local repository t
 
 ```code
 mvn install:install-file -Dfile=ojdbc6.jar -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=11.2.0 -Dpackaging=jar
+```
+
+After it is required to configure mongodb
+
+First start service in command prompt
+
+```code
+service mongodb start
+```
+
+And to create administrator user start mongodb shell by command
+
+```code
+mongo
+```
+
+After run shell go to admin database
+
+```code
+use admin
+```
+
+And create admin user
+
+```code
+db.createUser(
+  {
+    user: "admin",
+    pwd: "admin",
+    roles: [ { role: "userAdminAnyDatabase", db: "admin" } ]
+  }
+)
+```
+
+Next create new database and select to it
+
+```code
+use bookshop
+```
+
+After created database create user to who own it
+
+```code
+db.createUser(
+  {
+    user: "bookshop",
+    pwd: "admin",
+    roles: [ { role: "readWrite", db: "bookshop" } ]
+  }
+)
+```
+
+After it create new collection in bookshop database by importing it from file, to do it move to in terminal to project catalog and run this command
+
+```code
+mongoimport --db bookshop --file src/main/resources/sql/usersDetails.json
+```
+
+Now by run this command enable authentication for mongodb(configuration file can be in difference directories in various operating systems)
+
+```code
+mongod --auth --config /etc/mongodb.conf
 ```
 
 #### Run project
