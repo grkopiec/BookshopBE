@@ -1,5 +1,8 @@
 package pl.bookshop.configuration.database;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
@@ -7,6 +10,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.mongodb.MongoClient;
+import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 
 import pl.bookshop.domainsmongo.UserDetails;
@@ -21,6 +25,10 @@ public class SpringDataMongoConfiguration extends AbstractMongoConfiguration {
 	private String host;
 	@Value("${mongo.port}")
 	private Integer port;
+	@Value("${mongo.username}")
+	private String username;
+	@Value("${mongo.password}")
+	private String password;
 	
 	@Override
 	protected String getDatabaseName() {
@@ -30,8 +38,13 @@ public class SpringDataMongoConfiguration extends AbstractMongoConfiguration {
 	@Override
 	public MongoClient mongoClient() {
 		ServerAddress serverAddress = new ServerAddress(host, port);
-		MongoClient mongoClient = new MongoClient(serverAddress);
-		//MongoCredential.createCredential("bookshop", "bookshop", password)
+		
+		char[] passwordArray = password.toCharArray();
+		MongoCredential mongoCredential = MongoCredential.createCredential(username, databaseName, passwordArray);
+		List<MongoCredential> mongoCredentials = new ArrayList<>();
+		mongoCredentials.add(mongoCredential);
+		
+		MongoClient mongoClient = new MongoClient(serverAddress, mongoCredentials);
 		return mongoClient;
 	}
 }
