@@ -83,6 +83,7 @@ public class UsersServiceImpl implements UsersService {
 		return updatingUserDetails
 				.map(o -> {
 					UserDetails userDetails = userData.getUserDetails();
+					userDetails.setId(o.getId());
 					userDetails.setUserId(id);
 					return usersDetailsRepository.save(userDetails);
 				})
