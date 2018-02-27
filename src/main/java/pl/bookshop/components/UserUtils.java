@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import pl.bookshop.domains.User;
+import pl.bookshop.domainsmongo.UserDetails;
 import pl.bookshop.mvc.controllers.objects.AuthenticationRequest;
 import pl.bookshop.mvc.controllers.objects.UserData;
 
@@ -30,8 +31,11 @@ public class UserUtils {
 		List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_USER");
 		user.setAuthorities(authorities);
 		
+		UserDetails userDetails = new UserDetails();
+		
 		UserData userData = new UserData();
 		userData.setUser(user);
+		userData.setUserDetails(userDetails);
 		return userData;
 	}
 	
