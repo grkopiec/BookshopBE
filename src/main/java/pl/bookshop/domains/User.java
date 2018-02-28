@@ -10,9 +10,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -28,8 +29,10 @@ import pl.bookshop.hibernate.CollectionStringConverter;
 public class User implements UserDetails {
 	private static final long serialVersionUID = -7633438667478513077L;
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "usersSequence")
-	@SequenceGenerator(name = "usersSequence", sequenceName = "users_sequence")
+	@GenericGenerator(name = "userIdGenerator", strategy = "sequence", parameters = {
+			@Parameter(name = "sequence_name", value = "USERS_SEQUENCE")
+	})
+	@GeneratedValue(generator = "userIdGenerator", strategy = GenerationType.SEQUENCE)
 	private Long id;
 	private String username;
 	private String password;
