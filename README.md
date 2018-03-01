@@ -179,7 +179,7 @@ db.createUser(
 After it create new collection in bookshop database by importing it from file, to do it move to in terminal to project catalog and run this command
 
 ```code
-mongoimport --db bookshop --file src/main/resources/sql/usersDetails.json
+mongoimport --db bookshop --collection usersDetails --file src/main/resources/sql/usersDetails.json
 ```
 
 Now by run this command enable authentication for mongodb(configuration file can be in difference directories in various operating systems)
