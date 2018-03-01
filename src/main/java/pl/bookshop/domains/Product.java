@@ -6,19 +6,24 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+
+import pl.bookshop.utils.StringUtils;
 
 @Entity	
 @Table(name = "products")
 public class Product {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "productsSequence")
-	@SequenceGenerator(name = "productsSequence", sequenceName = "products_sequence")
+	@GenericGenerator(name = StringUtils.PRODUCTS_SEQUENCE_GENERATOR, strategy = "sequence", parameters = {
+			@Parameter(name = "sequence_name", value = StringUtils.PRODUCTS_SEQUENCE)
+	})
+	@GeneratedValue(generator = StringUtils.PRODUCTS_SEQUENCE_GENERATOR)
 	private Long id;
 	private String name;
 	private String producer;

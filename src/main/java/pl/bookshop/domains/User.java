@@ -8,7 +8,6 @@ import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -23,16 +22,17 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import pl.bookshop.converters.AuthoritiesDeserializer;
 import pl.bookshop.converters.AuthoritiesSerializer;
 import pl.bookshop.hibernate.CollectionStringConverter;
+import pl.bookshop.utils.StringUtils;
 
 @Entity	
 @Table(name = "users")
 public class User implements UserDetails {
 	private static final long serialVersionUID = -7633438667478513077L;
 	@Id
-	@GenericGenerator(name = "userIdGenerator", strategy = "sequence", parameters = {
-			@Parameter(name = "sequence_name", value = "USERS_SEQUENCE")
+	@GenericGenerator(name = StringUtils.USERS_SEQUENCE_GENERATOR, strategy = "sequence", parameters = {
+			@Parameter(name = "sequence_name", value = StringUtils.USERS_SEQUENCE)
 	})
-	@GeneratedValue(generator = "userIdGenerator", strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(generator = StringUtils.USERS_SEQUENCE_GENERATOR)
 	private Long id;
 	private String username;
 	private String password;

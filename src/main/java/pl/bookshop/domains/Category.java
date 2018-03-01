@@ -5,20 +5,25 @@ import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import pl.bookshop.utils.StringUtils;
 
 @Entity
 @Table(name = "categories")
 public class Category {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO, generator = "categoriesSequence")
-	@SequenceGenerator(name = "categoriesSequence", sequenceName = "categories_sequence")
+	@GenericGenerator(name = StringUtils.CATEGORIES_SEQUENCE_GENERATOR, strategy = "sequence", parameters = {
+			@Parameter(name = "sequence_name", value = StringUtils.CATEGORIES_SEQUENCE)
+	})
+	@GeneratedValue(generator = StringUtils.CATEGORIES_SEQUENCE_GENERATOR)
 	private Long id;
 	private String name;
 	@OneToMany(mappedBy = "category")
