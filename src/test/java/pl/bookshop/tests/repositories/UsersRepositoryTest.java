@@ -18,8 +18,8 @@ import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 
 import pl.bookhoop.tests.context.PersistanceContext;
-import pl.bookshop.domains.User;
-import pl.bookshop.repositories.UsersRepository;
+import pl.bookshop.domains.jpa.User;
+import pl.bookshop.repositories.jpa.UsersRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {PersistanceContext.class})

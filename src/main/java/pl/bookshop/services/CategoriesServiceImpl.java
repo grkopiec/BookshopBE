@@ -8,8 +8,8 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import pl.bookshop.domains.Category;
-import pl.bookshop.repositories.CategoriesRepository;
+import pl.bookshop.domains.jpa.Category;
+import pl.bookshop.repositories.jpa.CategoriesRepository;
 
 @Service
 @Transactional

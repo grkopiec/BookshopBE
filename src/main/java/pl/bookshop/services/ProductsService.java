@@ -3,7 +3,7 @@ package pl.bookshop.services;
 import java.util.List;
 
 import pl.bookshop.criteria.ProductsCriteria;
-import pl.bookshop.domains.Product;
+import pl.bookshop.domains.jpa.Product;
 
 public interface ProductsService {
 	public List<Product> findAll();

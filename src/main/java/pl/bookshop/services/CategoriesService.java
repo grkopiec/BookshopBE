@@ -2,7 +2,7 @@ package pl.bookshop.services;
 
 import java.util.List;
 
-import pl.bookshop.domains.Category;
+import pl.bookshop.domains.jpa.Category;
 
 public interface CategoriesService {
 	public List<Category> findAll();

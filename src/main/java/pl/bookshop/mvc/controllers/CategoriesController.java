@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import pl.bookshop.domains.Category;
+import pl.bookshop.domains.jpa.Category;
 import pl.bookshop.services.CategoriesService;
 
 @RestController

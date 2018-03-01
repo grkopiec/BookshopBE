@@ -1,4 +1,4 @@
-package pl.bookshop.repositories;
+package pl.bookshop.repositories.jpa;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +16,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import pl.bookshop.criteria.ProductsCriteria;
-import pl.bookshop.domains.Category;
-import pl.bookshop.domains.Product;
+import pl.bookshop.domains.jpa.Category;
+import pl.bookshop.domains.jpa.Product;
 import pl.bookshop.enums.OrderBy;
 
 @Repository

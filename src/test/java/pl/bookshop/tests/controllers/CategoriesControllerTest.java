@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import pl.bookshop.domains.Category;
+import pl.bookshop.domains.jpa.Category;
 import pl.bookshop.mvc.controllers.CategoriesController;
 import pl.bookshop.services.CategoriesService;
 import pl.bookshop.tests.utils.TestUtils;

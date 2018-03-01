@@ -20,10 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import pl.bookshop.components.TokenUtils;
 import pl.bookshop.components.UserUtils;
-import pl.bookshop.domains.User;
-import pl.bookshop.mvc.controllers.objects.AuthenticationRequest;
-import pl.bookshop.mvc.controllers.objects.AuthenticationResponse;
-import pl.bookshop.mvc.controllers.objects.UserData;
+import pl.bookshop.domains.jpa.User;
+import pl.bookshop.mvc.objects.AuthenticationRequest;
+import pl.bookshop.mvc.objects.AuthenticationResponse;
+import pl.bookshop.mvc.objects.UserData;
 import pl.bookshop.services.UsersService;
 import pl.bookshop.utils.StringUtils;
 

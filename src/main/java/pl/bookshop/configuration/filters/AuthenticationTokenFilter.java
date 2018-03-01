@@ -15,7 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import pl.bookshop.components.TokenUtils;
-import pl.bookshop.domains.User;
+import pl.bookshop.domains.jpa.User;
 import pl.bookshop.services.UsersService;
 import pl.bookshop.utils.StringUtils;
 

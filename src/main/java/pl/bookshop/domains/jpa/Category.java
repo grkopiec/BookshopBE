@@ -1,4 +1,4 @@
-package pl.bookshop.domains;
+package pl.bookshop.domains.jpa;
 
 import java.util.List;
 import java.util.Objects;

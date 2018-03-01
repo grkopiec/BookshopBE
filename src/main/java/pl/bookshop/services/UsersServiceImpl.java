@@ -11,11 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import pl.bookshop.components.UserUtils;
-import pl.bookshop.domains.User;
+import pl.bookshop.domains.jpa.User;
 import pl.bookshop.domainsmongo.UserDetails;
-import pl.bookshop.mvc.controllers.objects.UserData;
-import pl.bookshop.repositories.UsersRepository;
-import pl.bookshop.repositoriesmongo.UsersDetailsRepository;
+import pl.bookshop.mvc.objects.UserData;
+import pl.bookshop.repositories.jpa.UsersRepository;
+import pl.bookshop.repositories.mongo.UsersDetailsRepository;
 
 @Service
 @Transactional

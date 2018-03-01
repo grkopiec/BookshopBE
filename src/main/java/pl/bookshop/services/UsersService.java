@@ -2,9 +2,9 @@ package pl.bookshop.services;
 
 import java.util.List;
 
-import pl.bookshop.domains.User;
+import pl.bookshop.domains.jpa.User;
 import pl.bookshop.domainsmongo.UserDetails;
-import pl.bookshop.mvc.controllers.objects.UserData;
+import pl.bookshop.mvc.objects.UserData;
 
 public interface UsersService {
 	public List<UserData> findAll();

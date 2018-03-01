@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import pl.bookshop.criteria.ProductsCriteria;
-import pl.bookshop.domains.Product;
-import pl.bookshop.repositories.ProductsRepository;
+import pl.bookshop.domains.jpa.Product;
+import pl.bookshop.repositories.jpa.ProductsRepository;
 
 @Service
 @Transactional

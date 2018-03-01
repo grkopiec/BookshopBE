@@ -1,4 +1,4 @@
-package pl.bookshop.repositoriesmongo;
+package pl.bookshop.repositories.mongo;
 
 import java.util.List;
 import java.util.Optional;

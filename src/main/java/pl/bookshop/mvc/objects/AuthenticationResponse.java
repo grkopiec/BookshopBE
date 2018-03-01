@@ -1,4 +1,4 @@
-package pl.bookshop.mvc.controllers.objects;
+package pl.bookshop.mvc.objects;
 
 import java.util.ArrayList;
 import java.util.Collection;

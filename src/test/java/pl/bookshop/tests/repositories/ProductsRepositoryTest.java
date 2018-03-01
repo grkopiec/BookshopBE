@@ -21,9 +21,9 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 
 import pl.bookhoop.tests.context.PersistanceContext;
 import pl.bookshop.criteria.ProductsCriteria;
-import pl.bookshop.domains.Product;
+import pl.bookshop.domains.jpa.Product;
 import pl.bookshop.enums.OrderBy;
-import pl.bookshop.repositories.ProductsRepository;
+import pl.bookshop.repositories.jpa.ProductsRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {PersistanceContext.class})

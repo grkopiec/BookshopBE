@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import pl.bookshop.domains.User;
+import pl.bookshop.domains.jpa.User;
 
 @Component
 public class TokenUtils {

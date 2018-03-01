@@ -1,9 +1,9 @@
-package pl.bookshop.repositories;
+package pl.bookshop.repositories.jpa;
 
 import java.util.List;
 
 import pl.bookshop.criteria.ProductsCriteria;
-import pl.bookshop.domains.Product;
+import pl.bookshop.domains.jpa.Product;
 
 public interface ProductsRepositoryCustom {
 	/**

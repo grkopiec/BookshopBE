@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import pl.bookshop.criteria.ProductsCriteria;
-import pl.bookshop.domains.Product;
+import pl.bookshop.domains.jpa.Product;
 import pl.bookshop.services.ProductsService;
 
 @RestController

@@ -1,8 +1,8 @@
-package pl.bookshop.mvc.controllers.objects;
+package pl.bookshop.mvc.objects;
 
 import java.util.Objects;
 
-import pl.bookshop.domains.User;
+import pl.bookshop.domains.jpa.User;
 import pl.bookshop.domainsmongo.UserDetails;
 
 public class UserData {

@@ -8,10 +8,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import pl.bookshop.domains.User;
+import pl.bookshop.domains.jpa.User;
 import pl.bookshop.domainsmongo.UserDetails;
-import pl.bookshop.mvc.controllers.objects.AuthenticationRequest;
-import pl.bookshop.mvc.controllers.objects.UserData;
+import pl.bookshop.mvc.objects.AuthenticationRequest;
+import pl.bookshop.mvc.objects.UserData;
 
 @Component
 public class UserUtils {
