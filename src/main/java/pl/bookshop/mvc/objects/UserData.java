@@ -3,7 +3,7 @@ package pl.bookshop.mvc.objects;
 import java.util.Objects;
 
 import pl.bookshop.domains.jpa.User;
-import pl.bookshop.domainsmongo.UserDetails;
+import pl.bookshop.domains.mongo.UserDetails;
 
 public class UserData {
 	private User user;

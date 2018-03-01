@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import pl.bookshop.domainsmongo.UserDetails;
+import pl.bookshop.domains.mongo.UserDetails;
 import pl.bookshop.mvc.objects.UserData;
 import pl.bookshop.services.UsersService;
 

@@ -1,4 +1,4 @@
-package pl.bookshop.domainsmongo;
+package pl.bookshop.domains.mongo;
 
 import java.util.Objects;
 

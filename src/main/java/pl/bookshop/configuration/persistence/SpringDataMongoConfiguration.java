@@ -1,4 +1,4 @@
-package pl.bookshop.configuration.database;
+package pl.bookshop.configuration.persistence;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +13,10 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 
-import pl.bookshop.domainsmongo.UserDetails;
+import pl.bookshop.domains.mongo.UserDetails;
 
 @Configuration
-@EnableMongoRepositories(basePackageClasses = UserDetails.class, basePackages = "pl.bookshop.repositoriesmongo")
+@EnableMongoRepositories(basePackageClasses = UserDetails.class, basePackages = "pl.bookshop.repositories.mongo")
 @EnableTransactionManagement
 public class SpringDataMongoConfiguration extends AbstractMongoConfiguration {
 	@Value("${mongo.databaseName}")

@@ -9,7 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import pl.bookshop.domains.jpa.User;
-import pl.bookshop.domainsmongo.UserDetails;
+import pl.bookshop.domains.mongo.UserDetails;
 import pl.bookshop.mvc.objects.AuthenticationRequest;
 import pl.bookshop.mvc.objects.UserData;
 

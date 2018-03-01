@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import pl.bookshop.components.UserUtils;
 import pl.bookshop.domains.jpa.User;
-import pl.bookshop.domainsmongo.UserDetails;
+import pl.bookshop.domains.mongo.UserDetails;
 import pl.bookshop.mvc.objects.UserData;
 import pl.bookshop.repositories.jpa.UsersRepository;
 import pl.bookshop.repositories.mongo.UsersDetailsRepository;
