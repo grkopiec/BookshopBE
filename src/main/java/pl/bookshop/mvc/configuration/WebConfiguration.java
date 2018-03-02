@@ -6,7 +6,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import pl.bookshop.utils.StringUtils;
+import pl.bookshop.utils.Constants;
 
 @Configuration
 @EnableWebMvc
@@ -14,6 +14,6 @@ import pl.bookshop.utils.StringUtils;
 public class WebConfiguration implements WebMvcConfigurer {
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/resources/**").addResourceLocations(StringUtils.resourceLocation);
+		registry.addResourceHandler("/resources/**").addResourceLocations(Constants.resourceLocation);
 	}
 }

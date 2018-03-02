@@ -22,17 +22,17 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import pl.bookshop.converters.AuthoritiesDeserializer;
 import pl.bookshop.converters.AuthoritiesSerializer;
 import pl.bookshop.hibernate.CollectionStringConverter;
-import pl.bookshop.utils.StringUtils;
+import pl.bookshop.utils.Constants;
 
 @Entity	
 @Table(name = "users")
 public class User implements UserDetails {
 	private static final long serialVersionUID = -7633438667478513077L;
 	@Id
-	@GenericGenerator(name = StringUtils.USERS_SEQUENCE_GENERATOR, strategy = "sequence", parameters = {
-			@Parameter(name = "sequence_name", value = StringUtils.USERS_SEQUENCE)
+	@GenericGenerator(name = Constants.USERS_SEQUENCE_GENERATOR, strategy = "sequence", parameters = {
+			@Parameter(name = "sequence_name", value = Constants.USERS_SEQUENCE)
 	})
-	@GeneratedValue(generator = StringUtils.USERS_SEQUENCE_GENERATOR)
+	@GeneratedValue(generator = Constants.USERS_SEQUENCE_GENERATOR)
 	private Long id;
 	private String username;
 	private String password;

@@ -14,16 +14,16 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
-import pl.bookshop.utils.StringUtils;
+import pl.bookshop.utils.Constants;
 
 @Entity	
 @Table(name = "products")
 public class Product {
 	@Id
-	@GenericGenerator(name = StringUtils.PRODUCTS_SEQUENCE_GENERATOR, strategy = "sequence", parameters = {
-			@Parameter(name = "sequence_name", value = StringUtils.PRODUCTS_SEQUENCE)
+	@GenericGenerator(name = Constants.PRODUCTS_SEQUENCE_GENERATOR, strategy = "sequence", parameters = {
+			@Parameter(name = "sequence_name", value = Constants.PRODUCTS_SEQUENCE)
 	})
-	@GeneratedValue(generator = StringUtils.PRODUCTS_SEQUENCE_GENERATOR)
+	@GeneratedValue(generator = Constants.PRODUCTS_SEQUENCE_GENERATOR)
 	private Long id;
 	private String name;
 	private String producer;

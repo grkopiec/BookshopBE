@@ -25,7 +25,7 @@ import pl.bookshop.mvc.objects.AuthenticationRequest;
 import pl.bookshop.mvc.objects.AuthenticationResponse;
 import pl.bookshop.mvc.objects.UserData;
 import pl.bookshop.services.UsersService;
-import pl.bookshop.utils.StringUtils;
+import pl.bookshop.utils.Constants;
 
 @RestController
 @RequestMapping(path = "/auth")
@@ -89,8 +89,8 @@ public class AuthenticationController {
 
     @RequestMapping(value = "/refresh")
     public ResponseEntity<AuthenticationResponse> refresh(HttpServletRequest request) {
-        String token = request.getHeader(StringUtils.AUTHORIZATION_HEADER);
-        token = token.substring(StringUtils.TOKEN_HEADER_STARTS_WITH.length());
+        String token = request.getHeader(Constants.AUTHORIZATION_HEADER);
+        token = token.substring(Constants.TOKEN_HEADER_STARTS_WITH.length());
         String username = tokenUtils.getUsernameFromToken(token);
         User user = (User) userDetailsService.loadUserByUsername(username);
         

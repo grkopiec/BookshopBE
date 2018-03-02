@@ -14,16 +14,16 @@ import org.hibernate.annotations.Parameter;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import pl.bookshop.utils.StringUtils;
+import pl.bookshop.utils.Constants;
 
 @Entity
 @Table(name = "categories")
 public class Category {
 	@Id
-	@GenericGenerator(name = StringUtils.CATEGORIES_SEQUENCE_GENERATOR, strategy = "sequence", parameters = {
-			@Parameter(name = "sequence_name", value = StringUtils.CATEGORIES_SEQUENCE)
+	@GenericGenerator(name = Constants.CATEGORIES_SEQUENCE_GENERATOR, strategy = "sequence", parameters = {
+			@Parameter(name = "sequence_name", value = Constants.CATEGORIES_SEQUENCE)
 	})
-	@GeneratedValue(generator = StringUtils.CATEGORIES_SEQUENCE_GENERATOR)
+	@GeneratedValue(generator = Constants.CATEGORIES_SEQUENCE_GENERATOR)
 	private Long id;
 	private String name;
 	@OneToMany(mappedBy = "category")

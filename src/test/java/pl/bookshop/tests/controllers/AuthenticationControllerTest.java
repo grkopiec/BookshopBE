@@ -34,7 +34,7 @@ import pl.bookshop.mvc.objects.AuthenticationRequest;
 import pl.bookshop.mvc.objects.AuthenticationResponse;
 import pl.bookshop.services.UsersService;
 import pl.bookshop.tests.utils.TestUtils;
-import pl.bookshop.utils.StringUtils;
+import pl.bookshop.utils.Constants;
 
 public class AuthenticationControllerTest {
 	private MockMvc mockMvc;
@@ -219,7 +219,7 @@ public class AuthenticationControllerTest {
     	
 		mockMvc.perform(MockMvcRequestBuilders
 						.get("/auth/refresh")
-						.header(StringUtils.AUTHORIZATION_HEADER, StringUtils.TOKEN_HEADER_STARTS_WITH + token))
+						.header(Constants.AUTHORIZATION_HEADER, Constants.TOKEN_HEADER_STARTS_WITH + token))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.jsonPath("$.token", Matchers.is(authenticationResponse.getToken())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.username", Matchers.is(authenticationResponse.getUsername())))
@@ -250,7 +250,7 @@ public class AuthenticationControllerTest {
     	
 		mockMvc.perform(MockMvcRequestBuilders
 						.get("/auth/refresh")
-						.header(StringUtils.AUTHORIZATION_HEADER, StringUtils.TOKEN_HEADER_STARTS_WITH + token))
+						.header(Constants.AUTHORIZATION_HEADER, Constants.TOKEN_HEADER_STARTS_WITH + token))
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		
 		Mockito.verify(tokenUtils, Mockito.times(1)).getUsernameFromToken(token);

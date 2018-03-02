@@ -17,16 +17,16 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import pl.bookshop.components.TokenUtils;
 import pl.bookshop.domains.jpa.User;
 import pl.bookshop.services.UsersService;
-import pl.bookshop.utils.StringUtils;
+import pl.bookshop.utils.Constants;
 
 public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        String authToken = httpRequest.getHeader(StringUtils.AUTHORIZATION_HEADER);
+        String authToken = httpRequest.getHeader(Constants.AUTHORIZATION_HEADER);
         
-        if (authToken != null && authToken.startsWith(StringUtils.TOKEN_HEADER_STARTS_WITH)) {
-        	authToken = authToken.substring(StringUtils.TOKEN_HEADER_STARTS_WITH.length());
+        if (authToken != null && authToken.startsWith(Constants.TOKEN_HEADER_STARTS_WITH)) {
+        	authToken = authToken.substring(Constants.TOKEN_HEADER_STARTS_WITH.length());
             TokenUtils tokenUtils = WebApplicationContextUtils
                     .getRequiredWebApplicationContext(this.getServletContext())
                     .getBean(TokenUtils.class);	
