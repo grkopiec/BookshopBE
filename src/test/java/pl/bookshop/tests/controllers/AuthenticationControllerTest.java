@@ -3,6 +3,7 @@ package pl.bookshop.tests.controllers;
 import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.RandomUtils;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,6 +33,7 @@ import pl.bookshop.domains.jpa.User;
 import pl.bookshop.mvc.controllers.AuthenticationController;
 import pl.bookshop.mvc.objects.AuthenticationRequest;
 import pl.bookshop.mvc.objects.AuthenticationResponse;
+import pl.bookshop.mvc.objects.UserData;
 import pl.bookshop.services.UsersService;
 import pl.bookshop.tests.utils.TestUtils;
 import pl.bookshop.utils.Constants;
@@ -40,7 +42,7 @@ public class AuthenticationControllerTest {
 	private MockMvc mockMvc;
 	
 	@Captor
-	private ArgumentCaptor<UsernamePasswordAuthenticationToken> UsernamePasswordAuthenticationTokenCaptor;
+	private ArgumentCaptor<UsernamePasswordAuthenticationToken> usernamePasswordAuthenticationTokenCaptor;
 	@Captor
 	private ArgumentCaptor<Authentication> authenticationCaptor;
 	
@@ -66,19 +68,18 @@ public class AuthenticationControllerTest {
 				.build();
     }
     
-    
     @Test
     public void test_register_success() throws Exception {
     	AuthenticationRequest authenticationRequest = getAuthenticationRequest();
-    	User user = getUser();
     	UserDetails userDetails = getUserDetails();
+    	UserData userData = getUserData();
     	String token = getToken();
     	AuthenticationResponse authenticationResponse = getAuthenticationResponse(userDetails, token);
     	
-    	Mockito.when(userUtils.createNormalUser(authenticationRequest)).thenReturn(user);
-    	Mockito.when(usersService.isExist(user)).thenReturn(false);
-    	Mockito.doNothing().when(usersService).create(user);
-    	Mockito.when(authenticationManager.authenticate(UsernamePasswordAuthenticationTokenCaptor.capture()))
+    	Mockito.when(userUtils.createNormalUser(authenticationRequest)).thenReturn(userData);
+    	Mockito.when(usersService.isExist(userData)).thenReturn(false);
+    	Mockito.doNothing().when(usersService).create(userData);
+    	Mockito.when(authenticationManager.authenticate(usernamePasswordAuthenticationTokenCaptor.capture()))
     			.thenReturn(authenticationCaptor.capture());
     	Mockito.when(userDetailsService.loadUserByUsername(authenticationRequest.getUsername())).thenReturn(userDetails);
     	Mockito.when(tokenUtils.generateToken(userDetails)).thenReturn(token);
@@ -93,9 +94,9 @@ public class AuthenticationControllerTest {
 				.andExpect(MockMvcResultMatchers.jsonPath("$.roles", Matchers.is(authenticationResponse.getRoles())));
 		
 		Mockito.verify(userUtils, Mockito.times(1)).createNormalUser(authenticationRequest);
-		Mockito.verify(usersService, Mockito.times(1)).isExist(user);
-		Mockito.verify(usersService, Mockito.times(1)).create(user);
-		Mockito.verify(authenticationManager, Mockito.times(1)).authenticate(UsernamePasswordAuthenticationTokenCaptor.capture());
+		Mockito.verify(usersService, Mockito.times(1)).isExist(userData);
+		Mockito.verify(usersService, Mockito.times(1)).create(userData);
+		Mockito.verify(authenticationManager, Mockito.times(1)).authenticate(usernamePasswordAuthenticationTokenCaptor.capture());
 		Mockito.verify(userDetailsService, Mockito.times(1)).loadUserByUsername(authenticationRequest.getUsername());
 		Mockito.verify(tokenUtils, Mockito.times(1)).generateToken(userDetails);
 		Mockito.verifyNoMoreInteractions(userUtils);
@@ -111,10 +112,10 @@ public class AuthenticationControllerTest {
     @Test
     public void test_register_fail() throws Exception {
     	AuthenticationRequest authenticationRequest = getAuthenticationRequest();
-    	User user = getUser();
+    	UserData userData = getUserData();
     	
-    	Mockito.when(userUtils.createNormalUser(authenticationRequest)).thenReturn(user);
-    	Mockito.when(usersService.isExist(user)).thenReturn(true);
+    	Mockito.when(userUtils.createNormalUser(authenticationRequest)).thenReturn(userData);
+    	Mockito.when(usersService.isExist(userData)).thenReturn(true);
     	
 		mockMvc.perform(MockMvcRequestBuilders
 						.post("/auth/register")
@@ -123,7 +124,7 @@ public class AuthenticationControllerTest {
 				.andExpect(MockMvcResultMatchers.status().isConflict());
 		
 		Mockito.verify(userUtils, Mockito.times(1)).createNormalUser(authenticationRequest);
-		Mockito.verify(usersService, Mockito.times(1)).isExist(user);
+		Mockito.verify(usersService, Mockito.times(1)).isExist(userData);
 		Mockito.verifyNoMoreInteractions(userUtils);
 		Mockito.verifyNoMoreInteractions(usersService);
 		Mockito.verifyNoMoreInteractions(authenticationManager);
@@ -139,7 +140,7 @@ public class AuthenticationControllerTest {
     	AuthenticationResponse authenticationResponse = getAuthenticationResponse(userDetails, token);
     	
     	Mockito.when(userDetailsService.loadUserByUsername(authenticationRequest.getUsername())).thenReturn(userDetails);
-    	Mockito.when(authenticationManager.authenticate(UsernamePasswordAuthenticationTokenCaptor.capture()))
+    	Mockito.when(authenticationManager.authenticate(usernamePasswordAuthenticationTokenCaptor.capture()))
     			.thenReturn(authenticationCaptor.capture());
     	Mockito.when(tokenUtils.generateToken(userDetails)).thenReturn(token);
     	
@@ -153,7 +154,7 @@ public class AuthenticationControllerTest {
 				.andExpect(MockMvcResultMatchers.jsonPath("$.roles", Matchers.is(authenticationResponse.getRoles())));
 		
 		Mockito.verify(userDetailsService, Mockito.times(1)).loadUserByUsername(authenticationRequest.getUsername());
-		Mockito.verify(authenticationManager, Mockito.times(1)).authenticate(UsernamePasswordAuthenticationTokenCaptor.capture());
+		Mockito.verify(authenticationManager, Mockito.times(1)).authenticate(usernamePasswordAuthenticationTokenCaptor.capture());
 		Mockito.verify(tokenUtils, Mockito.times(1)).generateToken(userDetails);
 		Mockito.verifyNoMoreInteractions(userUtils);
 		Mockito.verifyNoMoreInteractions(usersService);
@@ -190,7 +191,7 @@ public class AuthenticationControllerTest {
     	UserDetails userDetails = getUserDetails();
     	
     	Mockito.when(userDetailsService.loadUserByUsername(authenticationRequest.getUsername())).thenReturn(userDetails);
-    	Mockito.when(authenticationManager.authenticate(UsernamePasswordAuthenticationTokenCaptor.capture()))
+    	Mockito.when(authenticationManager.authenticate(usernamePasswordAuthenticationTokenCaptor.capture()))
     			.thenThrow(BadCredentialsException.class);
     	
 		mockMvc.perform(MockMvcRequestBuilders
@@ -200,7 +201,7 @@ public class AuthenticationControllerTest {
 				.andExpect(MockMvcResultMatchers.status().isUnauthorized());
 		
 		Mockito.verify(userDetailsService, Mockito.times(1)).loadUserByUsername(authenticationRequest.getUsername());
-		Mockito.verify(authenticationManager, Mockito.times(1)).authenticate(UsernamePasswordAuthenticationTokenCaptor.capture());
+		Mockito.verify(authenticationManager, Mockito.times(1)).authenticate(usernamePasswordAuthenticationTokenCaptor.capture());
 		Mockito.verifyNoMoreInteractions(userDetailsService);
 		Mockito.verifyNoMoreInteractions(authenticationManager);
     }
@@ -281,7 +282,7 @@ public class AuthenticationControllerTest {
 	
 	private UserDetails getUserDetails() {
 		User user = new User();
-		user.setId(2L);
+		user.setId(RandomUtils.nextLong(0, 100));
 		user.setUsername(RandomStringUtils.randomAlphabetic(10));
 		user.setPassword(RandomStringUtils.randomAlphabetic(15));
 		user.setLastPasswordReset(null);
@@ -293,6 +294,22 @@ public class AuthenticationControllerTest {
 		user.setEnabled(true);
 		UserDetails userDetails = user;
 		return userDetails;
+	}
+	
+	private pl.bookshop.domains.mongo.UserDetails getCustomUserDetails() {
+		pl.bookshop.domains.mongo.UserDetails userDetails = new pl.bookshop.domains.mongo.UserDetails();
+		userDetails.setId(RandomStringUtils.randomAlphabetic(20));
+		userDetails.setUserId(RandomUtils.nextLong(0, 100));
+		userDetails.setName(RandomStringUtils.random(30));
+		userDetails.setSurname(RandomStringUtils.random(50));
+		return userDetails;
+	}
+	
+	private UserData getUserData() {
+		UserData userData = new UserData();
+		userData.setUser(getUser());
+		userData.setUserDetails(getCustomUserDetails());
+		return userData;
 	}
 	
 	private String getToken() {

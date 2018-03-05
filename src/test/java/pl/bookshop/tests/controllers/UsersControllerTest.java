@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.RandomUtils;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +22,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import pl.bookshop.domains.jpa.User;
+import pl.bookshop.domains.mongo.UserDetails;
 import pl.bookshop.mvc.controllers.UsersController;
+import pl.bookshop.mvc.objects.UserData;
 import pl.bookshop.services.UsersService;
 import pl.bookshop.tests.utils.TestUtils;
 
@@ -44,34 +47,42 @@ public class UsersControllerTest {
 	
 	@Test
 	public void test_findAll_success() throws Exception {
-		List<User> users = Arrays.asList(getUser1(), getUser2());
-		List<String> authorities1 = users.get(0).getAuthorities().stream().map(n -> n.getAuthority()).collect(Collectors.toList());
-		List<String> authorities2 = users.get(1).getAuthorities().stream().map(n -> n.getAuthority()).collect(Collectors.toList());
+		List<UserData> usersData = Arrays.asList(getUserData0(), getUserData1());
+		List<String> authorities0 = usersData.get(0).getUser().getAuthorities().stream().map(n -> n.getAuthority()).collect(Collectors.toList());
+		List<String> authorities1 = usersData.get(1).getUser().getAuthorities().stream().map(n -> n.getAuthority()).collect(Collectors.toList());
 		
-		Mockito.when(usersService.findAll()).thenReturn(users);
+		Mockito.when(usersService.findAll()).thenReturn(usersData);
 		
 		mockMvc.perform(MockMvcRequestBuilders.get("/users"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
 				.andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(2)))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[0].id", Matchers.is(users.get(0).getId().intValue())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[0].username", Matchers.is(users.get(0).getUsername())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[0].password", Matchers.is(users.get(0).getPassword())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[0].lastPasswordReset", Matchers.is(users.get(0).getLastPasswordReset())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[0].authorities", Matchers.is(authorities1)))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[0].accountNonExpired", Matchers.is(users.get(0).isAccountNonExpired())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[0].accountNonLocked", Matchers.is(users.get(0).isAccountNonLocked())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[0].credentialsNonExpired", Matchers.is(users.get(0).isCredentialsNonExpired())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[0].enabled", Matchers.is(users.get(0).isEnabled())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[1].id", Matchers.is(users.get(1).getId().intValue())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[1].username", Matchers.is(users.get(1).getUsername())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[1].password", Matchers.is(users.get(1).getPassword())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[1].lastPasswordReset", Matchers.is(users.get(1).getLastPasswordReset())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[1].authorities", Matchers.is(authorities2)))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[1].accountNonExpired", Matchers.is(users.get(1).isAccountNonExpired())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[1].accountNonLocked", Matchers.is(users.get(1).isAccountNonLocked())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[1].credentialsNonExpired", Matchers.is(users.get(1).isCredentialsNonExpired())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[1].enabled", Matchers.is(users.get(1).isEnabled())));
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].user.id", Matchers.is(usersData.get(0).getUser().getId().intValue())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].user.username", Matchers.is(usersData.get(0).getUser().getUsername())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].user.password", Matchers.is(usersData.get(0).getUser().getPassword())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].user.lastPasswordReset", Matchers.is(usersData.get(0).getUser().getLastPasswordReset())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].user.authorities", Matchers.is(authorities0)))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].user.accountNonExpired", Matchers.is(usersData.get(0).getUser().isAccountNonExpired())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].user.accountNonLocked", Matchers.is(usersData.get(0).getUser().isAccountNonLocked())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].user.credentialsNonExpired", Matchers.is(usersData.get(0).getUser().isCredentialsNonExpired())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].user.enabled", Matchers.is(usersData.get(0).getUser().isEnabled())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].userDetails.id", Matchers.is(usersData.get(0).getUserDetails().getId())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].userDetails.userId", Matchers.is(usersData.get(0).getUserDetails().getUserId().intValue())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].userDetails.name", Matchers.is(usersData.get(0).getUserDetails().getName())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].userDetails.surname", Matchers.is(usersData.get(0).getUserDetails().getSurname())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].user.id", Matchers.is(usersData.get(1).getUser().getId().intValue())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].user.username", Matchers.is(usersData.get(1).getUser().getUsername())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].user.password", Matchers.is(usersData.get(1).getUser().getPassword())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].user.lastPasswordReset", Matchers.is(usersData.get(1).getUser().getLastPasswordReset())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].user.authorities", Matchers.is(authorities1)))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].user.accountNonExpired", Matchers.is(usersData.get(1).getUser().isAccountNonExpired())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].user.accountNonLocked", Matchers.is(usersData.get(1).getUser().isAccountNonLocked())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].user.credentialsNonExpired", Matchers.is(usersData.get(1).getUser().isCredentialsNonExpired())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].user.enabled", Matchers.is(usersData.get(1).getUser().isEnabled())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].userDetails.id", Matchers.is(usersData.get(1).getUserDetails().getId())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].userDetails.userId", Matchers.is(usersData.get(1).getUserDetails().getUserId().intValue())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].userDetails.name", Matchers.is(usersData.get(1).getUserDetails().getName())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].userDetails.surname", Matchers.is(usersData.get(1).getUserDetails().getSurname())));
 		
 		Mockito.verify(usersService, Mockito.times(1)).findAll();
 		Mockito.verifyNoMoreInteractions(usersService);
@@ -79,25 +90,19 @@ public class UsersControllerTest {
 	
 	@Test
 	public void test_findOne_success() throws Exception {
-		User user1 = getUser1();
-		List<String> authorities = user1.getAuthorities().stream().map(n -> n.getAuthority()).collect(Collectors.toList());
+		UserDetails userDetails = getUserDetails0();
 		
-		Mockito.when(usersService.findOne(user1.getId())).thenReturn(user1);
+		Mockito.when(usersService.findOne(userDetails.getUserId())).thenReturn(userDetails);
 		
-		mockMvc.perform(MockMvcRequestBuilders.get("/users/{id}", user1.getId()))
+		mockMvc.perform(MockMvcRequestBuilders.get("/users/{id}", userDetails.getUserId()))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(user1.getId().intValue())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.username", Matchers.is(user1.getUsername())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.password", Matchers.is(user1.getPassword())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.lastPasswordReset", Matchers.is(user1.getLastPasswordReset())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.authorities", Matchers.is(authorities)))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.accountNonExpired", Matchers.is(user1.isAccountNonExpired())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.accountNonLocked", Matchers.is(user1.isAccountNonLocked())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.credentialsNonExpired", Matchers.is(user1.isCredentialsNonExpired())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.enabled", Matchers.is(user1.isEnabled())));
+				.andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(userDetails.getId())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.userId", Matchers.is(userDetails.getUserId().intValue())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(userDetails.getName())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.surname", Matchers.is(userDetails.getSurname())));
 		
-		Mockito.verify(usersService, Mockito.times(1)).findOne(1L);
+		Mockito.verify(usersService, Mockito.times(1)).findOne(userDetails.getUserId());
 		Mockito.verifyNoMoreInteractions(usersService);
 	}
 	
@@ -106,32 +111,32 @@ public class UsersControllerTest {
 	 */
 	@Test
 	public void test_findOne_fail() throws Exception {
-		User user1 = getUser1();
+		UserDetails userDetails = getUserDetails0();
 		
-		Mockito.when(usersService.findOne(1L)).thenReturn(null);
+		Mockito.when(usersService.findOne(userDetails.getUserId())).thenReturn(null);
 		
-		mockMvc.perform(MockMvcRequestBuilders.get("/users/{id}", user1.getId()))
+		mockMvc.perform(MockMvcRequestBuilders.get("/users/{id}", userDetails.getUserId()))
 				.andExpect(MockMvcResultMatchers.status().isNotFound());
 		
-		Mockito.verify(usersService, Mockito.times(1)).findOne(1L);
+		Mockito.verify(usersService, Mockito.times(1)).findOne(userDetails.getUserId());
 		Mockito.verifyNoMoreInteractions(usersService);
 	}
 	
 	@Test
 	public void test_create_success() throws Exception {
-		User user1 = getUser1();
+		UserData userData = getUserData0();
 
-		Mockito.when(usersService.isExist(user1)).thenReturn(false);
-		Mockito.doNothing().when(usersService).create(user1);
+		Mockito.when(usersService.isExist(userData)).thenReturn(false);
+		Mockito.doNothing().when(usersService).create(userData);
 		
 		mockMvc.perform(MockMvcRequestBuilders
 						.post("/users")
 						.contentType(MediaType.APPLICATION_JSON)
-						.content(TestUtils.toJson(user1)))
+						.content(TestUtils.toJson(userData)))
 				.andExpect(MockMvcResultMatchers.status().isCreated());
 		
-		Mockito.verify(usersService, Mockito.times(1)).isExist(user1);
-		Mockito.verify(usersService, Mockito.times(1)).create(user1);
+		Mockito.verify(usersService, Mockito.times(1)).isExist(userData);
+		Mockito.verify(usersService, Mockito.times(1)).create(userData);
 		Mockito.verifyNoMoreInteractions(usersService);
 	}
 	
@@ -141,17 +146,17 @@ public class UsersControllerTest {
 	 */
 	@Test
 	public void test_create_fail() throws Exception {
-		User user1 = getUser1();
+		UserData userData = getUserData0();
 		
-		Mockito.when(usersService.isExist(user1)).thenReturn(true);
+		Mockito.when(usersService.isExist(userData)).thenReturn(true);
 		
 		mockMvc.perform(MockMvcRequestBuilders
 						.post("/users")
 						.contentType(MediaType.APPLICATION_JSON)
-						.content(TestUtils.toJson(user1)))
+						.content(TestUtils.toJson(userData)))
 				.andExpect(MockMvcResultMatchers.status().isConflict());
 		
-		Mockito.verify(usersService, Mockito.times(1)).isExist(user1);
+		Mockito.verify(usersService, Mockito.times(1)).isExist(userData);
 		Mockito.verifyNoMoreInteractions(usersService);
 	}
 	
@@ -162,31 +167,23 @@ public class UsersControllerTest {
 	 */
 	@Test
 	public void test_update_success() throws Exception {
-		User previousUser = getUser1();
-		User beforeUpdateUser = getUser2();
-		User afterUpdateUser = getUser2();
-		List<String> authorities = afterUpdateUser.getAuthorities().stream().map(n -> n.getAuthority()).collect(Collectors.toList());
+		UserData previousUserData = getUserData0();
+		UserDetails afterUpdateUserDetails = getUserDetails0();
 
-		Mockito.when(usersService.isExist(beforeUpdateUser)).thenReturn(false);
-		Mockito.when(usersService.update(previousUser.getId(), beforeUpdateUser)).thenReturn(afterUpdateUser);
+		Mockito.when(usersService.isExist(previousUserData)).thenReturn(false);
+		Mockito.when(usersService.update(previousUserData.getUser().getId(), previousUserData)).thenReturn(afterUpdateUserDetails);
 		
 		mockMvc.perform(MockMvcRequestBuilders
-						.put("/users/{id}", previousUser.getId())
+						.put("/users/{id}", previousUserData.getUser().getId())
 						.contentType(MediaType.APPLICATION_JSON)
-						.content(TestUtils.toJson(beforeUpdateUser)))
-				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(afterUpdateUser.getId().intValue())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.username", Matchers.is(afterUpdateUser.getUsername())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.password", Matchers.is(afterUpdateUser.getPassword())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.lastPasswordReset", Matchers.is(afterUpdateUser.getLastPasswordReset())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.authorities", Matchers.is(authorities)))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.accountNonExpired", Matchers.is(afterUpdateUser.isAccountNonExpired())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.accountNonLocked", Matchers.is(afterUpdateUser.isAccountNonLocked())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.credentialsNonExpired", Matchers.is(afterUpdateUser.isCredentialsNonExpired())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.enabled", Matchers.is(afterUpdateUser.isEnabled())));
+						.content(TestUtils.toJson(previousUserData)))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(afterUpdateUserDetails.getId())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.userId", Matchers.is(afterUpdateUserDetails.getUserId().intValue())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(afterUpdateUserDetails.getName())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.surname", Matchers.is(afterUpdateUserDetails.getSurname())));
 		
-		Mockito.verify(usersService, Mockito.times(1)).isExist(beforeUpdateUser);
-		Mockito.verify(usersService, Mockito.times(1)).update(previousUser.getId(), beforeUpdateUser);
+		Mockito.verify(usersService, Mockito.times(1)).isExist(previousUserData);
+		Mockito.verify(usersService, Mockito.times(1)).update(previousUserData.getUser().getId(), previousUserData);
 		Mockito.verifyNoMoreInteractions(usersService);
 	}
 	
@@ -196,20 +193,19 @@ public class UsersControllerTest {
 	 */
 	@Test
 	public void test_update_fail() throws Exception {
-		User previousUser = getUser1();
-		User beforeUpdateUser = getUser2();
+		UserData previousUserData = getUserData0();
 		
-		Mockito.when(usersService.isExist(beforeUpdateUser)).thenReturn(false);
-		Mockito.when(usersService.update(previousUser.getId(), beforeUpdateUser)).thenReturn(null);
+		Mockito.when(usersService.isExist(previousUserData)).thenReturn(false);
+		Mockito.when(usersService.update(previousUserData.getUser().getId(), previousUserData)).thenReturn(null);
 		
 		mockMvc.perform(MockMvcRequestBuilders
-						.put("/users/{id}", previousUser.getId())
+						.put("/users/{id}", previousUserData.getUser().getId())
 						.contentType(MediaType.APPLICATION_JSON)
-						.content(TestUtils.toJson(beforeUpdateUser)))
+						.content(TestUtils.toJson(previousUserData)))
 				.andExpect(MockMvcResultMatchers.status().isNotFound());
 		
-		Mockito.verify(usersService, Mockito.times(1)).isExist(beforeUpdateUser);
-		Mockito.verify(usersService, Mockito.times(1)).update(previousUser.getId(), beforeUpdateUser);
+		Mockito.verify(usersService, Mockito.times(1)).isExist(previousUserData);
+		Mockito.verify(usersService, Mockito.times(1)).update(previousUserData.getUser().getId(), previousUserData);
 		Mockito.verifyNoMoreInteractions(usersService);
 	}
 	
@@ -219,34 +215,34 @@ public class UsersControllerTest {
 	 */
 	@Test
 	public void test_update_nameColisionFail() throws Exception {
-		User previousUser = getUser1();
-		User beforeUpdateUser = getUser2();
+		UserData previousUserData = getUserData0();
 		
-		Mockito.when(usersService.isExist(beforeUpdateUser)).thenReturn(true);
+		Mockito.when(usersService.isExist(previousUserData)).thenReturn(true);
 		
 		mockMvc.perform(MockMvcRequestBuilders
-						.put("/users/{id}", previousUser.getId())
+						.put("/users/{id}", previousUserData.getUser().getId())
 						.contentType(MediaType.APPLICATION_JSON)
-						.content(TestUtils.toJson(beforeUpdateUser)))
+						.content(TestUtils.toJson(previousUserData)))
 				.andExpect(MockMvcResultMatchers.status().isConflict());
 		
-		Mockito.verify(usersService, Mockito.times(1)).isExist(beforeUpdateUser);
+		Mockito.verify(usersService, Mockito.times(1)).isExist(previousUserData);
 		Mockito.verifyNoMoreInteractions(usersService);
 	}
 	
 	@Test
 	public void test_delete_success() throws Exception {
-		User user1 = getUser1();
+		UserData userData = getUserData0();
+		UserDetails userDetails = getUserDetails0();
 		
-		Mockito.when(usersService.findOne(user1.getId())).thenReturn(user1);
-		Mockito.doNothing().when(usersService).delete(user1.getId());
+		Mockito.when(usersService.findOne(userData.getUser().getId())).thenReturn(userDetails);
+		Mockito.doNothing().when(usersService).delete(userData.getUser().getId());
 		
 		mockMvc.perform(MockMvcRequestBuilders
-						.delete("/users/{id}", user1.getId()))
+						.delete("/users/{id}", userData.getUser().getId()))
 				.andExpect(MockMvcResultMatchers.status().isNoContent());
 		
-		Mockito.verify(usersService, Mockito.times(1)).findOne(user1.getId());
-		Mockito.verify(usersService, Mockito.times(1)).delete(user1.getId());
+		Mockito.verify(usersService, Mockito.times(1)).findOne(userData.getUser().getId());
+		Mockito.verify(usersService, Mockito.times(1)).delete(userData.getUser().getId());
 		Mockito.verifyNoMoreInteractions(usersService);
 	}
 	
@@ -255,26 +251,57 @@ public class UsersControllerTest {
 	 */
 	@Test
 	public void test_delete_fail() throws Exception {
-		User user1 = getUser1();
+		UserData userData = getUserData0();
 		
-		Mockito.when(usersService.findOne(user1.getId())).thenReturn(null);
-		Mockito.doNothing().when(usersService).delete(user1.getId());
+		Mockito.when(usersService.findOne(userData.getUser().getId())).thenReturn(null);
+		Mockito.doNothing().when(usersService).delete(userData.getUser().getId());
 		
 		mockMvc.perform(MockMvcRequestBuilders
-						.delete("/users/{id}", user1.getId()))
+						.delete("/users/{id}", userData.getUser().getId()))
 				.andExpect(MockMvcResultMatchers.status().isNotFound());
 		
-		Mockito.verify(usersService, Mockito.times(1)).findOne(user1.getId());
+		Mockito.verify(usersService, Mockito.times(1)).findOne(userData.getUser().getId());
 		Mockito.verifyNoMoreInteractions(usersService);
+	}
+	
+	private User getUser0() {
+		User user0 = new User();
+		user0.setId(RandomUtils.nextLong(0, 100));
+		user0.setUsername(RandomStringUtils.randomAlphabetic(10));
+		user0.setPassword(RandomStringUtils.randomAlphabetic(15));
+		user0.setLastPasswordReset(null);
+		List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_ADMIN", "ROLE_USER");
+		user0.setAuthorities(authorities);
+		user0.setAccountNonExpired(true);
+		user0.setAccountNonLocked(true);
+		user0.setCredentialsNonExpired(true);
+		user0.setEnabled(true);
+		return user0;
+	}
+	
+	private UserDetails getUserDetails0() {
+		UserDetails userDetails0 = new UserDetails();
+		userDetails0.setId(RandomStringUtils.randomAlphabetic(20));
+		userDetails0.setUserId(getUser0().getId());
+		userDetails0.setName(RandomStringUtils.random(30));
+		userDetails0.setSurname(RandomStringUtils.random(50));
+		return userDetails0;
+	}
+	
+	private UserData getUserData0() {
+		UserData userData0 = new UserData();
+		userData0.setUser(getUser0());
+		userData0.setUserDetails(getUserDetails0());
+		return userData0;
 	}
 	
 	private User getUser1() {
 		User user1 = new User();
-		user1.setId(1L);
+		user1.setId(RandomUtils.nextLong(0, 100));
 		user1.setUsername(RandomStringUtils.randomAlphabetic(10));
 		user1.setPassword(RandomStringUtils.randomAlphabetic(15));
 		user1.setLastPasswordReset(null);
-		List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_ADMIN", "ROLE_USER");
+		List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_USER");
 		user1.setAuthorities(authorities);
 		user1.setAccountNonExpired(true);
 		user1.setAccountNonLocked(true);
@@ -283,18 +310,19 @@ public class UsersControllerTest {
 		return user1;
 	}
 	
-	private User getUser2() {
-		User user2 = new User();
-		user2.setId(2L);
-		user2.setUsername(RandomStringUtils.randomAlphabetic(10));
-		user2.setPassword(RandomStringUtils.randomAlphabetic(15));
-		user2.setLastPasswordReset(null);
-		List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_USER");
-		user2.setAuthorities(authorities);
-		user2.setAccountNonExpired(true);
-		user2.setAccountNonLocked(true);
-		user2.setCredentialsNonExpired(true);
-		user2.setEnabled(true);
-		return user2;
+	private UserDetails getUserDetails1() {
+		UserDetails userDetails1 = new UserDetails();
+		userDetails1.setId(RandomStringUtils.randomAlphabetic(20));
+		userDetails1.setUserId(getUser1().getId());
+		userDetails1.setName(RandomStringUtils.random(30));
+		userDetails1.setSurname(RandomStringUtils.random(50));
+		return userDetails1;
+	}
+	
+	private UserData getUserData1() {
+		UserData userData1 = new UserData();
+		userData1.setUser(getUser1());
+		userData1.setUserDetails(getUserDetails1());
+		return userData1;
 	}
 }
