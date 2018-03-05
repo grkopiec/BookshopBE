@@ -31,7 +31,7 @@ import pl.bookshop.repositories.jpa.ProductsRepository;
         TransactionalTestExecutionListener.class, DbUnitTestExecutionListener.class})
 @Transactional
 @ActiveProfiles(profiles = "test")
-@DatabaseSetup("classpath:test/dataset.xml")
+@DatabaseSetup("classpath:dataset.xml")
 public class ProductsRepositoryTest {
 	@Autowired
 	private ProductsRepository productsRepository;

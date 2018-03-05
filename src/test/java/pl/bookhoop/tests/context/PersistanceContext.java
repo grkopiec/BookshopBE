@@ -71,7 +71,7 @@ public class PersistanceContext {
 		LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
 		localContainerEntityManagerFactoryBean.setDataSource(dataSource);
 		localContainerEntityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
-		localContainerEntityManagerFactoryBean.setPackagesToScan("pl.bookshop.domains");
+		localContainerEntityManagerFactoryBean.setPackagesToScan("pl.bookshop.domains.jpa");
 		return localContainerEntityManagerFactoryBean;
 	}
 	

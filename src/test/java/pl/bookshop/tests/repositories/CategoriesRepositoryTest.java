@@ -27,7 +27,7 @@ import pl.bookshop.repositories.jpa.CategoriesRepository;
         TransactionalTestExecutionListener.class, DbUnitTestExecutionListener.class})
 @Transactional
 @ActiveProfiles(profiles = "test")
-@DatabaseSetup("classpath:test/dataset.xml")
+@DatabaseSetup("classpath:dataset.xml")
 public class CategoriesRepositoryTest {
 	@Autowired
 	private CategoriesRepository categoriesRepository;
