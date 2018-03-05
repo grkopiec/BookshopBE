@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableJpaRepositories(basePackages = "pl.bookshop.repositories.jpa")
 @EnableTransactionManagement
-public class SpringDataConfiguration {
+public class SpringDataJPAConfiguration {
 	@Value("${oracle.driverClassName}")
 	private String driverClassName;
 	@Value("${oracle.url}")
