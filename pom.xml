@@ -17,6 +17,8 @@
 		<jsonpath.version>2.4.0</jsonpath.version>
         <h2.version>1.4.196</h2.version>
         <bonecp.version>0.8.0.RELEASE</bonecp.version>
+        <fongo.version>2.1.1</fongo.version>
+        <nosqlunit-mongodb.version>0.14.0</nosqlunit-mongodb.version>
 		
 		<spring.version>5.0.3.RELEASE</spring.version>
 		<spring-data.version>2.0.4.RELEASE</spring-data.version>
@@ -102,7 +104,21 @@
             <version>${bonecp.version}</version>
             <scope>test</scope>
         </dependency>
+        
+		<dependency>
+		    <groupId>com.github.fakemongo</groupId>
+		    <artifactId>fongo</artifactId>
+		    <version>${fongo.version}</version>
+		    <scope>test</scope>
+		</dependency>
 		
+		<dependency>
+		    <groupId>com.lordofthejars</groupId>
+		    <artifactId>nosqlunit-mongodb</artifactId>
+		    <version>${nosqlunit-mongodb.version}</version>
+		    <scope>test</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
