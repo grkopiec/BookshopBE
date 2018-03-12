@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import pl.bookshop.components.UserUtils;
 import pl.bookshop.domains.mongo.UserDetails;
 import pl.bookshop.mvc.objects.UserData;
 import pl.bookshop.services.UsersService;
@@ -20,6 +21,8 @@ import pl.bookshop.services.UsersService;
 public class UsersController {
 	@Autowired
 	private UsersService usersService;
+	@Autowired
+	private UserUtils userUtils;
 	
 	@RequestMapping
 	public ResponseEntity<List<UserData>> findAll() {
@@ -41,11 +44,13 @@ public class UsersController {
 		return new ResponseEntity<>(userDetails, HttpStatus.OK);
 	}
 	
-	@RequestMapping(method = RequestMethod.POST)
+	@RequestMapping(path = "/admin", method = RequestMethod.POST)
 	public ResponseEntity<Void> create(@RequestBody UserData userData) {
 		if (usersService.isExist(userData) == true) {
 			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
+		
+		userUtils.makeAdminUser(userData);
 		usersService.create(userData);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}

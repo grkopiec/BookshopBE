@@ -15,13 +15,9 @@ import pl.bookshop.mvc.objects.UserData;
 
 @Component
 public class UserUtils {
-	public User createAdminUser(AuthenticationRequest authenticationRequest) {
-		User adminUser = new User();
-		adminUser.setUsername(authenticationRequest.getUsername());
-		adminUser.setPassword(authenticationRequest.getPassword());
+	public void makeAdminUser(UserData userData) {
 		List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_ADMIN", "ROLE_USER");
-		adminUser.setAuthorities(authorities);
-		return adminUser;
+		userData.getUser().setAuthorities(authorities);
 	}
 	
 	public UserData createNormalUser(AuthenticationRequest authenticationRequest) {
