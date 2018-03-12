@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import pl.bookshop.components.UserUtils;
 import pl.bookshop.domains.jpa.User;
 import pl.bookshop.domains.mongo.UserDetails;
 import pl.bookshop.mvc.controllers.UsersController;
@@ -33,6 +34,8 @@ public class UsersControllerTest {
 	
 	@Mock
 	private UsersService usersService;
+	@Mock
+	private UserUtils userUtils;
 	
 	@InjectMocks
 	private UsersController usersController;
@@ -127,15 +130,17 @@ public class UsersControllerTest {
 		UserData userData = getUserData0();
 
 		Mockito.when(usersService.isExist(userData)).thenReturn(false);
+		Mockito.doNothing().when(userUtils).makeAdminUser(userData);
 		Mockito.doNothing().when(usersService).create(userData);
 		
 		mockMvc.perform(MockMvcRequestBuilders
-						.post("/users")
+						.post("/users/admin")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(TestUtils.toJson(userData)))
 				.andExpect(MockMvcResultMatchers.status().isCreated());
 		
 		Mockito.verify(usersService, Mockito.times(1)).isExist(userData);
+		Mockito.verify(userUtils, Mockito.times(1)).makeAdminUser(userData);
 		Mockito.verify(usersService, Mockito.times(1)).create(userData);
 		Mockito.verifyNoMoreInteractions(usersService);
 	}
@@ -151,7 +156,7 @@ public class UsersControllerTest {
 		Mockito.when(usersService.isExist(userData)).thenReturn(true);
 		
 		mockMvc.perform(MockMvcRequestBuilders
-						.post("/users")
+						.post("/users/admin")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(TestUtils.toJson(userData)))
 				.andExpect(MockMvcResultMatchers.status().isConflict());

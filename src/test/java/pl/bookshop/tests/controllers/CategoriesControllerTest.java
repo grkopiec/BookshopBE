@@ -225,7 +225,6 @@ public class CategoriesControllerTest {
 		Category category1 = getCategory1();
 		
 		Mockito.when(categoriesService.findOne(category1.getId())).thenReturn(null);
-		Mockito.doNothing().when(categoriesService).delete(category1.getId());
 		
 		mockMvc.perform(MockMvcRequestBuilders
 						.delete("/categories/{id}", category1.getId()))
