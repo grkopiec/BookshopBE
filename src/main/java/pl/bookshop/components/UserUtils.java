@@ -8,9 +8,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import pl.bookshop.domains.jpa.User;
-import pl.bookshop.domains.mongo.UserDetails;
-import pl.bookshop.mvc.objects.AuthenticationRequest;
 import pl.bookshop.mvc.objects.UserData;
 
 @Component
@@ -20,19 +17,9 @@ public class UserUtils {
 		userData.getUser().setAuthorities(authorities);
 	}
 	
-	public UserData createNormalUser(AuthenticationRequest authenticationRequest) {
-		User user = new User();
-		user.setUsername(authenticationRequest.getUsername());
-		user.setPassword(authenticationRequest.getPassword());
+	public void makeNormalUser(UserData userData) {
 		List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_USER");
-		user.setAuthorities(authorities);
-		
-		UserDetails userDetails = new UserDetails();
-		
-		UserData userData = new UserData();
-		userData.setUser(user);
-		userData.setUserDetails(userDetails);
-		return userData;
+		userData.getUser().setAuthorities(authorities);
 	}
 	
 	public String encodePassword(String password) {

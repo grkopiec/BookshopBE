@@ -42,21 +42,20 @@ public class AuthenticationController {
     private UsersService usersService;
     
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody AuthenticationRequest authenticationRequest) {
-    	UserData userData = userUtils.createNormalUser(authenticationRequest);
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody UserData userData) {
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                userData.getUser().getUsername(), userData.getUser().getPassword());
+    	
+    	userUtils.makeNormalUser(userData);
 		if (usersService.isExist(userData) == true) {
 			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
     	usersService.create(userData);
     	
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                authenticationRequest.getUsername(),
-                authenticationRequest.getPassword()
-        );
         Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         
-        UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+        UserDetails userDetails = userDetailsService.loadUserByUsername(userData.getUser().getUsername());
         String token = tokenUtils.generateToken(userDetails);
         AuthenticationResponse authenticationResponse = new AuthenticationResponse(token, userDetails.getUsername(), userDetails.getAuthorities());
         return new ResponseEntity<>(authenticationResponse, HttpStatus.OK);
