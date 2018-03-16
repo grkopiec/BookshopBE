@@ -70,34 +70,33 @@ public class AuthenticationControllerTest {
     
     @Test
     public void test_register_success() throws Exception {
-    	AuthenticationRequest authenticationRequest = getAuthenticationRequest();
     	UserDetails userDetails = getUserDetails();
     	UserData userData = getUserData();
     	String token = getToken();
     	AuthenticationResponse authenticationResponse = getAuthenticationResponse(userDetails, token);
     	
-    	Mockito.when(userUtils.createNormalUser(authenticationRequest)).thenReturn(userData);
+    	Mockito.doNothing().when(userUtils).makeNormalUser(userData);
     	Mockito.when(usersService.isExist(userData)).thenReturn(false);
     	Mockito.doNothing().when(usersService).create(userData);
     	Mockito.when(authenticationManager.authenticate(usernamePasswordAuthenticationTokenCaptor.capture()))
     			.thenReturn(authenticationCaptor.capture());
-    	Mockito.when(userDetailsService.loadUserByUsername(authenticationRequest.getUsername())).thenReturn(userDetails);
+    	Mockito.when(userDetailsService.loadUserByUsername(userData.getUser().getUsername())).thenReturn(userDetails);
     	Mockito.when(tokenUtils.generateToken(userDetails)).thenReturn(token);
     	
 		mockMvc.perform(MockMvcRequestBuilders
 						.post("/auth/register")
 						.contentType(MediaType.APPLICATION_JSON)
-						.content(TestUtils.toJson(authenticationRequest)))
+						.content(TestUtils.toJson(userData)))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.jsonPath("$.token", Matchers.is(authenticationResponse.getToken())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.username", Matchers.is(authenticationResponse.getUsername())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.roles", Matchers.is(authenticationResponse.getRoles())));
 		
-		Mockito.verify(userUtils, Mockito.times(1)).createNormalUser(authenticationRequest);
+		Mockito.verify(userUtils, Mockito.times(1)).makeNormalUser(userData);
 		Mockito.verify(usersService, Mockito.times(1)).isExist(userData);
 		Mockito.verify(usersService, Mockito.times(1)).create(userData);
 		Mockito.verify(authenticationManager, Mockito.times(1)).authenticate(usernamePasswordAuthenticationTokenCaptor.capture());
-		Mockito.verify(userDetailsService, Mockito.times(1)).loadUserByUsername(authenticationRequest.getUsername());
+		Mockito.verify(userDetailsService, Mockito.times(1)).loadUserByUsername(userData.getUser().getUsername());
 		Mockito.verify(tokenUtils, Mockito.times(1)).generateToken(userDetails);
 		Mockito.verifyNoMoreInteractions(userUtils);
 		Mockito.verifyNoMoreInteractions(usersService);
@@ -111,19 +110,18 @@ public class AuthenticationControllerTest {
 	 */
     @Test
     public void test_register_fail() throws Exception {
-    	AuthenticationRequest authenticationRequest = getAuthenticationRequest();
     	UserData userData = getUserData();
     	
-    	Mockito.when(userUtils.createNormalUser(authenticationRequest)).thenReturn(userData);
+    	Mockito.doNothing().when(userUtils).makeNormalUser(userData);
     	Mockito.when(usersService.isExist(userData)).thenReturn(true);
     	
 		mockMvc.perform(MockMvcRequestBuilders
 						.post("/auth/register")
 						.contentType(MediaType.APPLICATION_JSON)
-						.content(TestUtils.toJson(authenticationRequest)))
+						.content(TestUtils.toJson(userData)))
 				.andExpect(MockMvcResultMatchers.status().isConflict());
 		
-		Mockito.verify(userUtils, Mockito.times(1)).createNormalUser(authenticationRequest);
+		Mockito.verify(userUtils, Mockito.times(1)).makeNormalUser(userData);
 		Mockito.verify(usersService, Mockito.times(1)).isExist(userData);
 		Mockito.verifyNoMoreInteractions(userUtils);
 		Mockito.verifyNoMoreInteractions(usersService);
@@ -277,6 +275,10 @@ public class AuthenticationControllerTest {
 		user.setPassword(RandomStringUtils.randomAlphabetic(15));
 		List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_USER");
 		user.setAuthorities(authorities);
+		user.setAccountNonExpired(true);
+		user.setAccountNonLocked(true);
+		user.setCredentialsNonExpired(true);
+		user.setEnabled(true);
 		return user;
 	}
 	
@@ -302,6 +304,12 @@ public class AuthenticationControllerTest {
 		userDetails.setUserId(RandomUtils.nextLong(0, 100));
 		userDetails.setName(RandomStringUtils.random(30));
 		userDetails.setSurname(RandomStringUtils.random(50));
+		userDetails.setEmail(RandomStringUtils.random(50));
+		userDetails.setPhone(RandomStringUtils.random(10));
+		userDetails.setCity(RandomStringUtils.random(20));
+		userDetails.setStreet(RandomStringUtils.random(40));
+		userDetails.setState(RandomStringUtils.random(20));
+		userDetails.setZipCode(RandomStringUtils.random(5));
 		return userDetails;
 	}
 	

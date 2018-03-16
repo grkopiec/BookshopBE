@@ -73,6 +73,12 @@ public class UsersControllerTest {
 				.andExpect(MockMvcResultMatchers.jsonPath("$[0].userDetails.userId", Matchers.is(usersData.get(0).getUserDetails().getUserId().intValue())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[0].userDetails.name", Matchers.is(usersData.get(0).getUserDetails().getName())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[0].userDetails.surname", Matchers.is(usersData.get(0).getUserDetails().getSurname())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].userDetails.email", Matchers.is(usersData.get(0).getUserDetails().getEmail())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].userDetails.phone", Matchers.is(usersData.get(0).getUserDetails().getPhone())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].userDetails.city", Matchers.is(usersData.get(0).getUserDetails().getCity())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].userDetails.street", Matchers.is(usersData.get(0).getUserDetails().getStreet())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].userDetails.state", Matchers.is(usersData.get(0).getUserDetails().getState())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].userDetails.zipCode", Matchers.is(usersData.get(0).getUserDetails().getZipCode())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[1].user.id", Matchers.is(usersData.get(1).getUser().getId().intValue())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[1].user.username", Matchers.is(usersData.get(1).getUser().getUsername())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[1].user.password", Matchers.is(usersData.get(1).getUser().getPassword())))
@@ -85,7 +91,13 @@ public class UsersControllerTest {
 				.andExpect(MockMvcResultMatchers.jsonPath("$[1].userDetails.id", Matchers.is(usersData.get(1).getUserDetails().getId())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[1].userDetails.userId", Matchers.is(usersData.get(1).getUserDetails().getUserId().intValue())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[1].userDetails.name", Matchers.is(usersData.get(1).getUserDetails().getName())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$[1].userDetails.surname", Matchers.is(usersData.get(1).getUserDetails().getSurname())));
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].userDetails.surname", Matchers.is(usersData.get(1).getUserDetails().getSurname())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].userDetails.email", Matchers.is(usersData.get(1).getUserDetails().getEmail())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].userDetails.phone", Matchers.is(usersData.get(1).getUserDetails().getPhone())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].userDetails.city", Matchers.is(usersData.get(1).getUserDetails().getCity())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].userDetails.street", Matchers.is(usersData.get(1).getUserDetails().getStreet())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].userDetails.state", Matchers.is(usersData.get(1).getUserDetails().getState())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].userDetails.zipCode", Matchers.is(usersData.get(1).getUserDetails().getZipCode())));
 		
 		Mockito.verify(usersService, Mockito.times(1)).findAll();
 		Mockito.verifyNoMoreInteractions(usersService);
@@ -126,7 +138,7 @@ public class UsersControllerTest {
 	}
 	
 	@Test
-	public void test_create_success() throws Exception {
+	public void test_createAdmin_success() throws Exception {
 		UserData userData = getUserData0();
 
 		Mockito.when(usersService.isExist(userData)).thenReturn(false);
@@ -150,7 +162,7 @@ public class UsersControllerTest {
 	 * Should occur 409 code error, passed user already exists
 	 */
 	@Test
-	public void test_create_fail() throws Exception {
+	public void test_createAdmin_fail() throws Exception {
 		UserData userData = getUserData0();
 		
 		Mockito.when(usersService.isExist(userData)).thenReturn(true);
@@ -290,6 +302,12 @@ public class UsersControllerTest {
 		userDetails0.setUserId(getUser0().getId());
 		userDetails0.setName(RandomStringUtils.random(30));
 		userDetails0.setSurname(RandomStringUtils.random(50));
+		userDetails0.setEmail(RandomStringUtils.random(50));
+		userDetails0.setPhone(RandomStringUtils.random(10));
+		userDetails0.setCity(RandomStringUtils.random(20));
+		userDetails0.setStreet(RandomStringUtils.random(40));
+		userDetails0.setState(RandomStringUtils.random(20));
+		userDetails0.setZipCode(RandomStringUtils.random(5));
 		return userDetails0;
 	}
 	
@@ -321,6 +339,12 @@ public class UsersControllerTest {
 		userDetails1.setUserId(getUser1().getId());
 		userDetails1.setName(RandomStringUtils.random(30));
 		userDetails1.setSurname(RandomStringUtils.random(50));
+		userDetails1.setEmail(RandomStringUtils.random(50));
+		userDetails1.setPhone(RandomStringUtils.random(10));
+		userDetails1.setCity(RandomStringUtils.random(20));
+		userDetails1.setStreet(RandomStringUtils.random(40));
+		userDetails1.setState(RandomStringUtils.random(20));
+		userDetails1.setZipCode(RandomStringUtils.random(5));
 		return userDetails1;
 	}
 	
