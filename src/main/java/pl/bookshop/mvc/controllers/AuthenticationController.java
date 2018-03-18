@@ -11,7 +11,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,9 +54,9 @@ public class AuthenticationController {
         Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         
-        UserDetails userDetails = userDetailsService.loadUserByUsername(userData.getUser().getUsername());
-        String token = tokenUtils.generateToken(userDetails);
-        AuthenticationResponse authenticationResponse = new AuthenticationResponse(token, userDetails.getUsername(), userDetails.getAuthorities());
+        User user = (User) userDetailsService.loadUserByUsername(userData.getUser().getUsername());
+        String token = tokenUtils.generateToken(user);
+        AuthenticationResponse authenticationResponse = new AuthenticationResponse(token, user.getId(), user.getUsername(), user.getAuthorities());
         return new ResponseEntity<>(authenticationResponse, HttpStatus.OK);
     }
     
@@ -68,8 +67,8 @@ public class AuthenticationController {
                 authenticationRequest.getUsername(),
                 authenticationRequest.getPassword()
         );
-        UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-        if (userDetails == null) {
+        User user = (User) userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+        if (user == null) {
         	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Authentication authentication;
@@ -79,10 +78,10 @@ public class AuthenticationController {
         	return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         
-        String token = tokenUtils.generateToken(userDetails);
+        String token = tokenUtils.generateToken(user);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         
-        AuthenticationResponse authenticationResponse = new AuthenticationResponse(token, userDetails.getUsername(), userDetails.getAuthorities());
+        AuthenticationResponse authenticationResponse = new AuthenticationResponse(token, user.getId(), user.getUsername(), user.getAuthorities());
         return new ResponseEntity<>(authenticationResponse, HttpStatus.OK);
     }
 
@@ -95,7 +94,7 @@ public class AuthenticationController {
         
         if (tokenUtils.canTokenBeRefreshed(token, user.getLastPasswordReset())) {
             String refreshedToken = tokenUtils.refreshToken(token);
-            AuthenticationResponse response = new AuthenticationResponse(refreshedToken, user.getUsername(), user.getAuthorities());
+            AuthenticationResponse response = new AuthenticationResponse(refreshedToken, user.getId(), user.getUsername(), user.getAuthorities());
             return new ResponseEntity<AuthenticationResponse>(response, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

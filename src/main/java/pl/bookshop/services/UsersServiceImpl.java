@@ -77,12 +77,11 @@ public class UsersServiceImpl implements UsersService {
 	}
 
 	@Override
-	public UserDetails update(Long id, UserData userData) {
+	public UserDetails update(Long id, UserDetails userDetails) {
 		Optional<UserDetails> updatingUserDetails = usersDetailsRepository.findByUserId(id);
 		
 		return updatingUserDetails
 				.map(o -> {
-					UserDetails userDetails = userData.getUserDetails();
 					userDetails.setId(o.getId());
 					userDetails.setUserId(id);
 					return usersDetailsRepository.save(userDetails);

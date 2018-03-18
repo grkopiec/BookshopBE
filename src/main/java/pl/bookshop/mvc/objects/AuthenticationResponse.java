@@ -10,13 +10,15 @@ import org.springframework.security.core.authority.AuthorityUtils;
 
 public class AuthenticationResponse {
 	private String token;
+	private Long userId;
 	private String username;
 	private List<String> roles;
 	
 	public AuthenticationResponse() {}
 
-	public AuthenticationResponse(String token, String username, Collection<? extends GrantedAuthority> roles) {
+	public AuthenticationResponse(String token, Long userId, String username, Collection<? extends GrantedAuthority> roles) {
 		this.token = token;
+		this.userId = userId;
 		this.username = username;
 		Set<String> authorities = AuthorityUtils.authorityListToSet(roles);
 		this.roles = new ArrayList<>(authorities);
@@ -28,6 +30,14 @@ public class AuthenticationResponse {
 
 	public void setToken(String token) {
 		this.token = token;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 	public String getUsername() {

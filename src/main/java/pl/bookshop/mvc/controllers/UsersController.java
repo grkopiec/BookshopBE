@@ -61,12 +61,8 @@ public class UsersController {
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(path = "/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<UserDetails> update(@PathVariable Long id, @RequestBody UserData userData) {
-		if (usersService.isExist(userData) == true) {
-			return new ResponseEntity<>(HttpStatus.CONFLICT);
-		}
-		
-		UserDetails updatedUserDetails = usersService.update(id, userData);
+	public ResponseEntity<UserDetails> update(@PathVariable Long id, @RequestBody UserDetails userDetails) {
+		UserDetails updatedUserDetails = usersService.update(id, userDetails);
 		
 		if (updatedUserDetails == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

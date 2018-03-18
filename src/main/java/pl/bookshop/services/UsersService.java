@@ -19,6 +19,6 @@ public interface UsersService {
 	 */
 	public Boolean isExist(UserData userData);
 	public void create(UserData UserData);
-	public UserDetails update(Long id, UserData userData);
+	public UserDetails update(Long id, UserDetails userDetails);
 	public void delete(Long id);
 }
