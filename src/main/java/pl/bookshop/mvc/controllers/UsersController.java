@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,7 @@ public class UsersController {
 	@Autowired
 	private UserUtils userUtils;
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping
 	public ResponseEntity<List<UserData>> findAll() {
 		List<UserData> usersData = usersService.findAll();
@@ -34,6 +36,7 @@ public class UsersController {
 		return new ResponseEntity<List<UserData>>(usersData, HttpStatus.OK);
 	}
 	
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(path = "/{id}")
 	public ResponseEntity<UserDetails> findOne(@PathVariable Long id) {
 		UserDetails userDetails = usersService.findOne(id);
@@ -44,6 +47,7 @@ public class UsersController {
 		return new ResponseEntity<>(userDetails, HttpStatus.OK);
 	}
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(path = "/admin", method = RequestMethod.POST)
 	public ResponseEntity<Void> create(@RequestBody UserData userData) {
 		if (usersService.isExist(userData) == true) {
@@ -55,6 +59,7 @@ public class UsersController {
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(path = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<UserDetails> update(@PathVariable Long id, @RequestBody UserData userData) {
 		if (usersService.isExist(userData) == true) {
@@ -69,6 +74,7 @@ public class UsersController {
 		return new ResponseEntity<>(updatedUserDetails, HttpStatus.OK);
 	}
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		UserDetails user = usersService.findOne(id);
