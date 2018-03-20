@@ -54,15 +54,19 @@ public class CategoriesController {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(path = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Category> update(@PathVariable Long id, @RequestBody Category category) {
-		if (categoriesService.isExist(category)) {
-			return new ResponseEntity<>(HttpStatus.CONFLICT);
+		Category updatingCategory = categoriesService.findOne(id);
+		
+		if (updatingCategory == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		
+		if (category.getName().equals(updatingCategory.getName()) == false) {
+			if (categoriesService.isExist(category)) {
+				return new ResponseEntity<>(HttpStatus.CONFLICT);
+			}
 		}
 		
 		Category updatedCategory = categoriesService.update(id, category);
-		
-		if (updatedCategory == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
 		return new ResponseEntity<>(updatedCategory, HttpStatus.OK);
 	}
 	

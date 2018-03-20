@@ -66,15 +66,19 @@ public class ProductsController {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(path = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Product> update(@PathVariable Long id, @RequestBody Product product) {
-		if (productsService.isExist(product) == true) {
-			return new ResponseEntity<>(HttpStatus.CONFLICT);
+		Product updatingProduct = productsService.findOne(id);
+		
+		if (updatingProduct == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		
+		if (product.getName().equals(updatingProduct.getName()) == false) {
+			if (productsService.isExist(product) == true) {
+				return new ResponseEntity<>(HttpStatus.CONFLICT);
+			}
 		}
 		
 		Product updatedProduct = productsService.update(id, product);
-		
-		if (updatedProduct == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
 		return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
 	}
 	

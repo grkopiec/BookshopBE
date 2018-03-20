@@ -1,7 +1,6 @@
 package pl.bookshop.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,14 +51,8 @@ public class ProductsServiceImpl implements ProductsService {
 	
 	@Override
 	public Product update(Long id, Product product) {
-		Optional<Product> updatingProduct = productsRepository.findById(id);
-		
-		return updatingProduct
-				.map(o -> {
-					product.setId(id);
-					return productsRepository.save(product);
-				})
-				.orElse(null);
+		product.setId(id);
+		return productsRepository.save(product);
 	}
 	
 	@Override

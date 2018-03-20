@@ -1,7 +1,6 @@
 package pl.bookshop.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -47,14 +46,8 @@ public class CategoriesServiceImpl implements CategoriesService {
 
 	@Override
 	public Category update(Long id, Category category) {
-		Optional<Category> updatingCategory = categoriesRepository.findById(id);
-		
-		return updatingCategory
-				.map(o -> {
-					category.setId(id);
-					return categoriesRepository.save(category);
-				})
-				.orElse(null);
+		category.setId(id);
+		return categoriesRepository.save(category);
 	}
 
 	@Override
