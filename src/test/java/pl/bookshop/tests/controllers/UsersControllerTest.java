@@ -115,7 +115,13 @@ public class UsersControllerTest {
 				.andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(userDetails.getId())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.userId", Matchers.is(userDetails.getUserId().intValue())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(userDetails.getName())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.surname", Matchers.is(userDetails.getSurname())));
+				.andExpect(MockMvcResultMatchers.jsonPath("$.surname", Matchers.is(userDetails.getSurname())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.email", Matchers.is(userDetails.getEmail())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.phone", Matchers.is(userDetails.getPhone())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.city", Matchers.is(userDetails.getCity())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.street", Matchers.is(userDetails.getStreet())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.state", Matchers.is(userDetails.getState())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.zipCode", Matchers.is(userDetails.getZipCode())));
 		
 		Mockito.verify(usersService, Mockito.times(1)).findOne(userDetails.getUserId());
 		Mockito.verifyNoMoreInteractions(usersService);
@@ -187,20 +193,24 @@ public class UsersControllerTest {
 		UserData previousUserData = getUserData0();
 		UserDetails afterUpdateUserDetails = getUserDetails0();
 
-		Mockito.when(usersService.isExist(previousUserData)).thenReturn(false);
-		Mockito.when(usersService.update(previousUserData.getUser().getId(), previousUserData)).thenReturn(afterUpdateUserDetails);
+		Mockito.when(usersService.update(previousUserData.getUser().getId(), previousUserData.getUserDetails())).thenReturn(afterUpdateUserDetails);
 		
 		mockMvc.perform(MockMvcRequestBuilders
 						.put("/users/{id}", previousUserData.getUser().getId())
 						.contentType(MediaType.APPLICATION_JSON)
-						.content(TestUtils.toJson(previousUserData)))
+						.content(TestUtils.toJson(previousUserData.getUserDetails())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(afterUpdateUserDetails.getId())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.userId", Matchers.is(afterUpdateUserDetails.getUserId().intValue())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(afterUpdateUserDetails.getName())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.surname", Matchers.is(afterUpdateUserDetails.getSurname())));
+				.andExpect(MockMvcResultMatchers.jsonPath("$.surname", Matchers.is(afterUpdateUserDetails.getSurname())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.email", Matchers.is(afterUpdateUserDetails.getEmail())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.phone", Matchers.is(afterUpdateUserDetails.getPhone())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.city", Matchers.is(afterUpdateUserDetails.getCity())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.street", Matchers.is(afterUpdateUserDetails.getStreet())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.state", Matchers.is(afterUpdateUserDetails.getState())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.zipCode", Matchers.is(afterUpdateUserDetails.getZipCode())));
 		
-		Mockito.verify(usersService, Mockito.times(1)).isExist(previousUserData);
-		Mockito.verify(usersService, Mockito.times(1)).update(previousUserData.getUser().getId(), previousUserData);
+		Mockito.verify(usersService, Mockito.times(1)).update(previousUserData.getUser().getId(), previousUserData.getUserDetails());
 		Mockito.verifyNoMoreInteractions(usersService);
 	}
 	
@@ -212,37 +222,15 @@ public class UsersControllerTest {
 	public void test_update_fail() throws Exception {
 		UserData previousUserData = getUserData0();
 		
-		Mockito.when(usersService.isExist(previousUserData)).thenReturn(false);
-		Mockito.when(usersService.update(previousUserData.getUser().getId(), previousUserData)).thenReturn(null);
+		Mockito.when(usersService.update(previousUserData.getUser().getId(), previousUserData.getUserDetails())).thenReturn(null);
 		
 		mockMvc.perform(MockMvcRequestBuilders
 						.put("/users/{id}", previousUserData.getUser().getId())
 						.contentType(MediaType.APPLICATION_JSON)
-						.content(TestUtils.toJson(previousUserData)))
+						.content(TestUtils.toJson(previousUserData.getUserDetails())))
 				.andExpect(MockMvcResultMatchers.status().isNotFound());
 		
-		Mockito.verify(usersService, Mockito.times(1)).isExist(previousUserData);
-		Mockito.verify(usersService, Mockito.times(1)).update(previousUserData.getUser().getId(), previousUserData);
-		Mockito.verifyNoMoreInteractions(usersService);
-	}
-	
-	/**
-	 * Should occur 409 code error, user name already exists
-	 * In this scenario object will not be change because user name already exists
-	 */
-	@Test
-	public void test_update_nameColisionFail() throws Exception {
-		UserData previousUserData = getUserData0();
-		
-		Mockito.when(usersService.isExist(previousUserData)).thenReturn(true);
-		
-		mockMvc.perform(MockMvcRequestBuilders
-						.put("/users/{id}", previousUserData.getUser().getId())
-						.contentType(MediaType.APPLICATION_JSON)
-						.content(TestUtils.toJson(previousUserData)))
-				.andExpect(MockMvcResultMatchers.status().isConflict());
-		
-		Mockito.verify(usersService, Mockito.times(1)).isExist(previousUserData);
+		Mockito.verify(usersService, Mockito.times(1)).update(previousUserData.getUser().getId(), previousUserData.getUserDetails());
 		Mockito.verifyNoMoreInteractions(usersService);
 	}
 	
