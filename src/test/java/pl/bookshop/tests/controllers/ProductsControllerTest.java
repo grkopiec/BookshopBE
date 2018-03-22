@@ -42,7 +42,7 @@ public class ProductsControllerTest {
 	
 	@Test
 	public void test_findAll_success() throws Exception {
-		List<Product> products = Arrays.asList(getProduct1(), getProduct2());
+		List<Product> products = Arrays.asList(getProduct0(), getProduct1());
 		
 		Mockito.when(productsService.findAll()).thenReturn(products);
 		
@@ -70,7 +70,7 @@ public class ProductsControllerTest {
 	
 	@Test
 	public void test_findOne_success() throws Exception {
-		Product product1 = getProduct1();
+		Product product1 = getProduct0();
 		
 		Mockito.when(productsService.findOne(product1.getId())).thenReturn(product1);
 		
@@ -94,7 +94,7 @@ public class ProductsControllerTest {
 	 */
 	@Test
 	public void test_findOne_fail() throws Exception {
-		Product product1 = getProduct1();
+		Product product1 = getProduct0();
 		
 		Mockito.when(productsService.findOne(1L)).thenReturn(null);
 		
@@ -107,7 +107,7 @@ public class ProductsControllerTest {
 	
 	@Test
 	public void test_create_success() throws Exception {
-		Product product1 = getProduct1();
+		Product product1 = getProduct0();
 		
 		Mockito.when(productsService.isExist(product1)).thenReturn(false);
 		Mockito.doNothing().when(productsService).create(product1);
@@ -129,7 +129,7 @@ public class ProductsControllerTest {
 	 */
 	@Test
 	public void test_create_fail() throws Exception {
-		Product product1 = getProduct1();
+		Product product1 = getProduct0();
 		
 		Mockito.when(productsService.isExist(product1)).thenReturn(true);
 		
@@ -145,83 +145,118 @@ public class ProductsControllerTest {
 	
 	/**
 	 * Scenario for this test is like this, first we are sending to PUT endpoint id exist object in database that will be replaced
-	 * and new object, next in service we are finding object in database to replace. In object we passed to endpoint we are changing
+	 * and new object, new object has different name than existing then we need check if such name already contains any product in
+	 * table of products. Next in service we are finding object in database to replace. In object we passed to endpoint we are changing
 	 * id on this that already contains exists object in database, and after it we replace object into new, but we left the same id
 	 */
 	@Test
-	public void test_update_success() throws Exception {
-		Product previousProduct = getProduct1();
-		Product beforeUpdateProduct = getProduct2();
-		Product afterUpdateProduct = getProduct2();
+	public void test_update_successWithDifferentNames() throws Exception {
+		Product product = getProduct0();
+		Product updatingProduct = getProduct1();
+		Product updatedProduct = getProduct2();
 		
-		Mockito.when(productsService.isExist(beforeUpdateProduct)).thenReturn(false);
-		Mockito.when(productsService.update(previousProduct.getId(), beforeUpdateProduct)).thenReturn(afterUpdateProduct);
+		Mockito.when(productsService.findOne(product.getId())).thenReturn(updatingProduct);
+		Mockito.when(productsService.isExist(product)).thenReturn(false);
+		Mockito.when(productsService.update(product.getId(), product)).thenReturn(updatedProduct);
 		
 		mockMvc.perform(MockMvcRequestBuilders
-						.put("/products/{id}", previousProduct.getId())
+						.put("/products/{id}", product.getId())
 						.contentType(MediaType.APPLICATION_JSON)
-						.content(TestUtils.toJson(beforeUpdateProduct)))
+						.content(TestUtils.toJson(product)))
 				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(afterUpdateProduct.getId().intValue())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(afterUpdateProduct.getName())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.producer", Matchers.is(afterUpdateProduct.getProducer())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.description", Matchers.is(afterUpdateProduct.getDescription())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.price", Matchers.is(afterUpdateProduct.getPrice())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.discount", Matchers.is(afterUpdateProduct.getDiscount())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.imagePath", Matchers.is(afterUpdateProduct.getImagePath())));
+				.andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(updatedProduct.getId().intValue())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(updatedProduct.getName())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.producer", Matchers.is(updatedProduct.getProducer())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.description", Matchers.is(updatedProduct.getDescription())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.price", Matchers.is(updatedProduct.getPrice())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.discount", Matchers.is(updatedProduct.getDiscount())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.imagePath", Matchers.is(updatedProduct.getImagePath())));
 		
-		Mockito.verify(productsService, Mockito.times(1)).isExist(beforeUpdateProduct);
-		Mockito.verify(productsService, Mockito.times(1)).update(previousProduct.getId(), beforeUpdateProduct);
+		Mockito.verify(productsService, Mockito.times(1)).findOne(product.getId());
+		Mockito.verify(productsService, Mockito.times(1)).isExist(product);
+		Mockito.verify(productsService, Mockito.times(1)).update(product.getId(), product);
 		Mockito.verifyNoMoreInteractions(productsService);
 	}
 	
 	/**
-	 * Should occur 404 code error, do not found user
-	 * In this scenario object will not be change because do not exist requested id
+	 * Scenario for this test is like this, first we are sending to PUT endpoint id exist object in database that will be replaced
+	 * and new object, new object has the same name as already existing product in table of products. Next in service we are finding
+	 * object in database to replace. In object we passed to endpoint we are changing id on this that already contains exists object
+	 * in database, and after it we replace object into new, but we left the same id
 	 */
 	@Test
-	public void test_update_fail() throws Exception {
-		Product previousProduct = getProduct1();
-		Product beforeUpdateProduct = getProduct2();
+	public void test_update_successWithSameNames() throws Exception {
+		Product product = getProduct0();
+		Product updatingProduct = getProduct1();
+		updatingProduct.setName(product.getName());
+		Product updatedProduct = getProduct2();
 		
-		Mockito.when(productsService.isExist(beforeUpdateProduct)).thenReturn(false);
-		Mockito.when(productsService.update(previousProduct.getId(), beforeUpdateProduct)).thenReturn(null);
+		Mockito.when(productsService.findOne(product.getId())).thenReturn(updatingProduct);
+		Mockito.when(productsService.update(product.getId(), product)).thenReturn(updatedProduct);
 		
 		mockMvc.perform(MockMvcRequestBuilders
-						.put("/products/{id}", previousProduct.getId())
+						.put("/products/{id}", product.getId())
 						.contentType(MediaType.APPLICATION_JSON)
-						.content(TestUtils.toJson(beforeUpdateProduct)))
-				.andExpect(MockMvcResultMatchers.status().isNotFound());
+						.content(TestUtils.toJson(product)))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(updatedProduct.getId().intValue())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(updatedProduct.getName())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.producer", Matchers.is(updatedProduct.getProducer())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.description", Matchers.is(updatedProduct.getDescription())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.price", Matchers.is(updatedProduct.getPrice())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.discount", Matchers.is(updatedProduct.getDiscount())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.imagePath", Matchers.is(updatedProduct.getImagePath())));
 		
-		Mockito.verify(productsService, Mockito.times(1)).isExist(beforeUpdateProduct);
-		Mockito.verify(productsService, Mockito.times(1)).update(previousProduct.getId(), beforeUpdateProduct);
+		Mockito.verify(productsService, Mockito.times(1)).findOne(product.getId());
+		Mockito.verify(productsService, Mockito.times(1)).update(product.getId(), product);
 		Mockito.verifyNoMoreInteractions(productsService);
 	}
 	
 	/**
-	 * Should occur 409 code error, product name already exists
-	 * In this scenario object will not be change because product name already exists
+	 * Should occur 404 code error, do not found user. In this scenario object will not be change because do not exist requested id
+	 */
+	@Test
+	public void test_update_doNotFindIdfail() throws Exception {
+		Product product = getProduct0();
+		
+		Mockito.when(productsService.findOne(product.getId())).thenReturn(null);
+		
+		mockMvc.perform(MockMvcRequestBuilders
+						.put("/products/{id}", product.getId())
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(TestUtils.toJson(product)))
+				.andExpect(MockMvcResultMatchers.status().isNotFound());
+		
+		Mockito.verify(productsService, Mockito.times(1)).findOne(product.getId());
+		Mockito.verifyNoMoreInteractions(productsService);
+	}
+	
+	/**
+	 * Should occur 409 code error, product name already exists. In this scenario object will not be change because product name
+	 * already exists
 	 */
 	@Test
 	public void test_update_nameColisionFail() throws Exception {
-		Product previousProduct = getProduct1();
-		Product beforeUpdateProduct = getProduct2();
+		Product product = getProduct0();
+		Product updatingProduct = getProduct1();
 		
-		Mockito.when(productsService.isExist(beforeUpdateProduct)).thenReturn(true);
+		Mockito.when(productsService.findOne(product.getId())).thenReturn(updatingProduct);
+		Mockito.when(productsService.isExist(product)).thenReturn(true);
 		
 		mockMvc.perform(MockMvcRequestBuilders
-						.put("/products/{id}", previousProduct.getId())
+						.put("/products/{id}", product.getId())
 						.contentType(MediaType.APPLICATION_JSON)
-						.content(TestUtils.toJson(beforeUpdateProduct)))
+						.content(TestUtils.toJson(product)))
 				.andExpect(MockMvcResultMatchers.status().isConflict());
 		
-		Mockito.verify(productsService, Mockito.times(1)).isExist(beforeUpdateProduct);
+		Mockito.verify(productsService, Mockito.times(1)).findOne(product.getId());
+		Mockito.verify(productsService, Mockito.times(1)).isExist(product);
 		Mockito.verifyNoMoreInteractions(productsService);
 	}
 	
 	@Test
 	public void test_delete_success() throws Exception {
-		Product product1 = getProduct1();
+		Product product1 = getProduct0();
 		
 		Mockito.when(productsService.findOne(product1.getId())).thenReturn(product1);
 		Mockito.doNothing().when(productsService).delete(product1.getId());
@@ -240,7 +275,7 @@ public class ProductsControllerTest {
 	 */
 	@Test
 	public void test_delete_fail() throws Exception {
-		Product product1 = getProduct1();
+		Product product1 = getProduct0();
 		
 		Mockito.when(productsService.findOne(product1.getId())).thenReturn(null);
 		Mockito.doNothing().when(productsService).delete(product1.getId());
@@ -253,14 +288,26 @@ public class ProductsControllerTest {
 		Mockito.verifyNoMoreInteractions(productsService);
 	}
 	
+	private Product getProduct0() {
+		Product product0 = new Product();
+		product0.setId(1L);
+		product0.setName(RandomStringUtils.randomAlphabetic(10));
+		product0.setProducer(RandomStringUtils.randomAlphabetic(15));
+		product0.setDescription(RandomStringUtils.randomAlphabetic(100));
+		product0.setPrice(RandomUtils.nextDouble(10, 20));
+		product0.setDiscount(RandomUtils.nextDouble(2, 4));
+		product0.setImagePath(RandomStringUtils.randomAlphabetic(60));
+		return product0;
+	}
+	
 	private Product getProduct1() {
 		Product product1 = new Product();
-		product1.setId(1L);
-		product1.setName(RandomStringUtils.randomAlphabetic(10));
-		product1.setProducer(RandomStringUtils.randomAlphabetic(15));
-		product1.setDescription(RandomStringUtils.randomAlphabetic(100));
-		product1.setPrice(RandomUtils.nextDouble(10, 20));
-		product1.setDiscount(RandomUtils.nextDouble(2, 4));
+		product1.setId(2L);
+		product1.setName(RandomStringUtils.randomAlphabetic(5));
+		product1.setProducer(RandomStringUtils.randomAlphabetic(10));
+		product1.setDescription(RandomStringUtils.randomAlphabetic(50));
+		product1.setPrice(RandomUtils.nextDouble(5, 15));
+		product1.setDiscount(RandomUtils.nextDouble(10, 15));
 		product1.setImagePath(RandomStringUtils.randomAlphabetic(60));
 		return product1;
 	}

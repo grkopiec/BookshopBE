@@ -73,7 +73,7 @@ public class ProductsController {
 		}
 		
 		if (product.getName().equals(updatingProduct.getName()) == false) {
-			if (productsService.isExist(product) == true) {
+			if (productsService.isExist(product)) {
 				return new ResponseEntity<>(HttpStatus.CONFLICT);
 			}
 		}
