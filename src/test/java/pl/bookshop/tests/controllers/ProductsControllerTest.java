@@ -70,22 +70,22 @@ public class ProductsControllerTest {
 	
 	@Test
 	public void test_findOne_success() throws Exception {
-		Product product1 = getProduct0();
+		Product product = getProduct0();
 		
-		Mockito.when(productsService.findOne(product1.getId())).thenReturn(product1);
+		Mockito.when(productsService.findOne(product.getId())).thenReturn(product);
 		
-		mockMvc.perform(MockMvcRequestBuilders.get("/products/{id}", product1.getId()))
+		mockMvc.perform(MockMvcRequestBuilders.get("/products/{id}", product.getId()))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(product1.getId().intValue())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(product1.getName())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.producer", Matchers.is(product1.getProducer())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.description", Matchers.is(product1.getDescription())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.price", Matchers.is(product1.getPrice())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.discount", Matchers.is(product1.getDiscount())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.imagePath", Matchers.is(product1.getImagePath())));
+				.andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(product.getId().intValue())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(product.getName())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.producer", Matchers.is(product.getProducer())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.description", Matchers.is(product.getDescription())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.price", Matchers.is(product.getPrice())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.discount", Matchers.is(product.getDiscount())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.imagePath", Matchers.is(product.getImagePath())));
 		
-		Mockito.verify(productsService, Mockito.times(1)).findOne(1L);
+		Mockito.verify(productsService, Mockito.times(1)).findOne(product.getId());
 		Mockito.verifyNoMoreInteractions(productsService);
 	}
 	
@@ -94,14 +94,14 @@ public class ProductsControllerTest {
 	 */
 	@Test
 	public void test_findOne_fail() throws Exception {
-		Product product1 = getProduct0();
+		Product product = getProduct0();
 		
-		Mockito.when(productsService.findOne(1L)).thenReturn(null);
+		Mockito.when(productsService.findOne(product.getId())).thenReturn(null);
 		
-		mockMvc.perform(MockMvcRequestBuilders.get("/products/{id}", product1.getId()))
+		mockMvc.perform(MockMvcRequestBuilders.get("/products/{id}", product.getId()))
 				.andExpect(MockMvcResultMatchers.status().isNotFound());
 		
-		Mockito.verify(productsService, Mockito.times(1)).findOne(1L);
+		Mockito.verify(productsService, Mockito.times(1)).findOne(product.getId());
 		Mockito.verifyNoMoreInteractions(productsService);
 	}
 	
@@ -290,7 +290,7 @@ public class ProductsControllerTest {
 	
 	private Product getProduct0() {
 		Product product0 = new Product();
-		product0.setId(1L);
+		product0.setId(RandomUtils.nextLong(0, 100));
 		product0.setName(RandomStringUtils.randomAlphabetic(10));
 		product0.setProducer(RandomStringUtils.randomAlphabetic(15));
 		product0.setDescription(RandomStringUtils.randomAlphabetic(100));
@@ -302,7 +302,7 @@ public class ProductsControllerTest {
 	
 	private Product getProduct1() {
 		Product product1 = new Product();
-		product1.setId(2L);
+		product1.setId(RandomUtils.nextLong(0, 100));
 		product1.setName(RandomStringUtils.randomAlphabetic(5));
 		product1.setProducer(RandomStringUtils.randomAlphabetic(10));
 		product1.setDescription(RandomStringUtils.randomAlphabetic(50));
@@ -314,7 +314,7 @@ public class ProductsControllerTest {
 	
 	private Product getProduct2() {
 		Product product2 = new Product();
-		product2.setId(2L);
+		product2.setId(RandomUtils.nextLong(0, 100));
 		product2.setName(RandomStringUtils.randomAlphabetic(5));
 		product2.setProducer(RandomStringUtils.randomAlphabetic(10));
 		product2.setDescription(RandomStringUtils.randomAlphabetic(50));

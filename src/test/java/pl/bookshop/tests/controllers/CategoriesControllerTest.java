@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.RandomUtils;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -60,17 +61,17 @@ public class CategoriesControllerTest {
 	
 	@Test
 	public void test_findOne_success() throws Exception {
-		Category category1 = getCategory0();
+		Category category = getCategory0();
 		
-		Mockito.when(categoriesService.findOne(category1.getId())).thenReturn(category1);
+		Mockito.when(categoriesService.findOne(category.getId())).thenReturn(category);
 		
-		mockMvc.perform(MockMvcRequestBuilders.get("/categories/{id}", category1.getId()))
+		mockMvc.perform(MockMvcRequestBuilders.get("/categories/{id}", category.getId()))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(category1.getId().intValue())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(category1.getName())));
+				.andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(category.getId().intValue())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(category.getName())));
 		
-		Mockito.verify(categoriesService, Mockito.times(1)).findOne(1L);
+		Mockito.verify(categoriesService, Mockito.times(1)).findOne(category.getId());
 		Mockito.verifyNoMoreInteractions(categoriesService);
 	}
 	
@@ -79,14 +80,14 @@ public class CategoriesControllerTest {
 	 */
 	@Test
 	public void test_findOne_fail() throws Exception {
-		Category category1 = getCategory0();
+		Category category = getCategory0();
 		
-		Mockito.when(categoriesService.findOne(1L)).thenReturn(null);
+		Mockito.when(categoriesService.findOne(category.getId())).thenReturn(null);
 		
-		mockMvc.perform(MockMvcRequestBuilders.get("/categories/{id}", category1.getId()))
+		mockMvc.perform(MockMvcRequestBuilders.get("/categories/{id}", category.getId()))
 				.andExpect(MockMvcResultMatchers.status().isNotFound());
 		
-		Mockito.verify(categoriesService, Mockito.times(1)).findOne(1L);
+		Mockito.verify(categoriesService, Mockito.times(1)).findOne(category.getId());
 		Mockito.verifyNoMoreInteractions(categoriesService);
 	}
 	
@@ -266,22 +267,22 @@ public class CategoriesControllerTest {
 	
 	private Category getCategory0() {
 		Category category0 = new Category();
-		category0.setId(1L);
-		category0.setName(RandomStringUtils.randomAlphabetic(10));
+		category0.setId(RandomUtils.nextLong(0, 100));
+		category0.setName(RandomStringUtils.randomAlphabetic(20));
 		return category0;
 	}
 	
 	private Category getCategory1() {
 		Category category1 = new Category();
-		category1.setId(2L);
-		category1.setName(RandomStringUtils.randomAlphabetic(5));
+		category1.setId(RandomUtils.nextLong(0, 100));
+		category1.setName(RandomStringUtils.randomAlphabetic(20));
 		return category1;
 	}
 	
 	private Category getCategory2() {
 		Category category2 = new Category();
-		category2.setId(2L);
-		category2.setName(RandomStringUtils.randomAlphabetic(5));
+		category2.setId(RandomUtils.nextLong(0, 100));
+		category2.setName(RandomStringUtils.randomAlphabetic(20));
 		return category2;
 	}
 }
