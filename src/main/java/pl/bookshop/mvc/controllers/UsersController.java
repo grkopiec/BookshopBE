@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import pl.bookshop.components.UserUtils;
+import pl.bookshop.domains.jpa.User;
 import pl.bookshop.domains.mongo.UserDetails;
 import pl.bookshop.mvc.objects.UserData;
 import pl.bookshop.services.UsersService;
@@ -38,7 +40,11 @@ public class UsersController {
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(path = "/{id}")
-	public ResponseEntity<UserDetails> findOne(@PathVariable Long id) {
+	public ResponseEntity<UserDetails> findOne(@PathVariable Long id, @AuthenticationPrincipal User authenticatedUser) {
+		if (authenticatedUser.getId() != id && userUtils.isAdmin(authenticatedUser) == false) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
+		
 		UserDetails userDetails = usersService.findOne(id);
 		
 		if (userDetails == null) {
@@ -61,7 +67,12 @@ public class UsersController {
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(path = "/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<UserDetails> update(@PathVariable Long id, @RequestBody UserDetails userDetails) {
+	public ResponseEntity<UserDetails> update(
+			@PathVariable Long id, @RequestBody UserDetails userDetails, @AuthenticationPrincipal User authenticatedUser) {
+		if (authenticatedUser.getId() != id && userUtils.isAdmin(authenticatedUser) == false) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
+		
 		UserDetails updatedUserDetails = usersService.update(id, userDetails);
 		
 		if (updatedUserDetails == null) {
