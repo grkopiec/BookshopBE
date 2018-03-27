@@ -2,6 +2,8 @@ package pl.bookshop.mvc.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +45,7 @@ public class CategoriesController {
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> create(@RequestBody Category category) {
+	public ResponseEntity<Void> create(@RequestBody @Valid Category category) {
 		if (categoriesService.isExist(category)) {
 			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
@@ -53,7 +55,7 @@ public class CategoriesController {
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(path = "/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<Category> update(@PathVariable Long id, @RequestBody Category category) {
+	public ResponseEntity<Category> update(@PathVariable Long id, @RequestBody @Valid Category category) {
 		Category updatingCategory = categoriesService.findOne(id);
 		
 		if (updatingCategory == null) {

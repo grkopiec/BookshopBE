@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
@@ -25,6 +27,8 @@ public class Category {
 	})
 	@GeneratedValue(generator = Constants.CATEGORIES_SEQUENCE_GENERATOR)
 	private Long id;
+	@NotNull
+	@Size(min = 2, max = 100)
 	private String name;
 	@OneToMany(mappedBy = "category")
 	@JsonIgnore
