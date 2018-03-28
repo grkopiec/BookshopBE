@@ -27,8 +27,8 @@ public class Category {
 	})
 	@GeneratedValue(generator = Constants.CATEGORIES_SEQUENCE_GENERATOR)
 	private Long id;
-	@NotNull
-	@Size(min = 2, max = 100)
+	@NotNull(message = "{category.name.notNull}")
+	@Size(min = 2, max = 100, message = "{category.name.size}")
 	private String name;
 	@OneToMany(mappedBy = "category")
 	@JsonIgnore
