@@ -2,6 +2,8 @@ package pl.bookshop.mvc.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,7 +57,7 @@ public class ProductsController {
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> create(@RequestBody Product product) {
+	public ResponseEntity<Void> create(@RequestBody @Valid Product product) {
 		if (productsService.isExist(product) == true) {
 			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
@@ -65,7 +67,7 @@ public class ProductsController {
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(path = "/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<Product> update(@PathVariable Long id, @RequestBody Product product) {
+	public ResponseEntity<Product> update(@PathVariable Long id, @RequestBody @Valid Product product) {
 		Product updatingProduct = productsService.findOne(id);
 		
 		if (updatingProduct == null) {

@@ -10,6 +10,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.Valid;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
@@ -25,15 +30,26 @@ public class Product {
 	})
 	@GeneratedValue(generator = Constants.PRODUCTS_SEQUENCE_GENERATOR)
 	private Long id;
+	@NotNull(message = "{product.name.notNull}")
+	@Size(min = 1, max = 100, message = "{product.name.size}")
 	private String name;
+	@NotNull(message = "{product.producer.notNull}")
+	@Size(min = 1, max = 100, message = "{product.producer.size}")
 	private String producer;
+	@Size(min = 1, max = 1000, message = "{product.description.size}")
 	private String description;
+	@NotNull(message = "{product.price.notNull}")
+	@PositiveOrZero(message = "{product.price.positiveOrZero}")
+	@Digits(integer = 6, fraction = 2, message = "{product.price.digits}")
 	private Double price;
+	@PositiveOrZero(message = "{product.discount.positiveOrZero}")
+	@Digits(integer = 6, fraction = 2, message = "{product.discount.digits}")
 	private Double discount;
 	@Column(name = "image_path")
 	private String imagePath;
 	@ManyToOne(cascade = CascadeType.DETACH)
 	@JoinColumn(name = "category_id	")
+	@Valid
 	private Category category;
 
 	public Long getId() {
