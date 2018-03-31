@@ -7,7 +7,7 @@ import javax.validation.constraints.Size;
 
 public class AuthenticationRequest {
 	@NotNull(message = "{authenticationRequest.username.notNull}")
-	@Size(min = 4, max = 30, message = "{authenticationRequest.username.size}")
+	@Size(min = 2, max = 30, message = "{authenticationRequest.username.size}")
     private String username;
 	@NotNull(message = "{authenticationRequest.password.notNull}")
 	@Size(min = 4, max = 30, message = "{authenticationRequest.password.size}")
