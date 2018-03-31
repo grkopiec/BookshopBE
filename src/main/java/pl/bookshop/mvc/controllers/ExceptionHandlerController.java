@@ -40,4 +40,3 @@ public class ExceptionHandlerController {
     	return new ResponseEntity<>(validationErrors, HttpStatus.BAD_REQUEST);
     }
 }
-

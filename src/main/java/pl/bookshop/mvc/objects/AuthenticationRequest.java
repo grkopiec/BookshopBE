@@ -2,8 +2,15 @@ package pl.bookshop.mvc.objects;
 
 import java.util.Objects;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class AuthenticationRequest {
+	@NotNull(message = "{authenticationRequest.username.notNull}")
+	@Size(min = 4, max = 30, message = "{authenticationRequest.username.size}")
     private String username;
+	@NotNull(message = "{authenticationRequest.password.notNull}")
+	@Size(min = 4, max = 30, message = "{authenticationRequest.password.size}")
     private String password;
 
     public AuthenticationRequest() {}
