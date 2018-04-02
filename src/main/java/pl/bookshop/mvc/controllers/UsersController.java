@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import pl.bookshop.components.UserUtils;
 import pl.bookshop.domains.jpa.User;
 import pl.bookshop.domains.mongo.UserDetails;
 import pl.bookshop.mvc.objects.UserData;
+import pl.bookshop.mvc.validation.AdminUser;
 import pl.bookshop.services.UsersService;
 
 @RestController
@@ -55,7 +57,7 @@ public class UsersController {
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(path = "/admin", method = RequestMethod.POST)
-	public ResponseEntity<Void> create(@RequestBody UserData userData) {
+	public ResponseEntity<Void> create(@RequestBody @Validated(AdminUser.class) UserData userData) {
 		if (usersService.isExist(userData) == true) {
 			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}

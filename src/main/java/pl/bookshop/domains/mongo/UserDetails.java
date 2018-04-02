@@ -2,15 +2,24 @@ package pl.bookshop.domains.mongo;
 
 import java.util.Objects;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import pl.bookshop.mvc.validation.AdminUser;
 
 @Document(collection = "usersDetails")
 public class UserDetails {
 	@Id
 	private String id;
 	private Long userId;
+	@NotNull(groups = AdminUser.class, message = "{userDetails.name.notNull}")
+	@Size(min = 2, max = 50, groups = AdminUser.class, message = "{userDetails.name.size}")
 	private String name;
+	@NotNull(groups = AdminUser.class, message = "{userDetails.surname.notNull}")
+	@Size(min = 2, max = 50, groups = AdminUser.class, message = "{userDetails.surname.size}")
 	private String surname;
 	private String email;
 	private String phone;
