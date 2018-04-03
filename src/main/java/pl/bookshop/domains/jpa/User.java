@@ -25,6 +25,7 @@ import pl.bookshop.converters.AuthoritiesDeserializer;
 import pl.bookshop.converters.AuthoritiesSerializer;
 import pl.bookshop.hibernate.CollectionStringConverter;
 import pl.bookshop.mvc.validation.AdminUser;
+import pl.bookshop.mvc.validation.NormalUser;
 import pl.bookshop.utils.Constants;
 
 @Entity	
@@ -37,11 +38,11 @@ public class User implements UserDetails {
 	})
 	@GeneratedValue(generator = Constants.USERS_SEQUENCE_GENERATOR)
 	private Long id;
-	@NotNull(groups = AdminUser.class, message = "{user.username.notNull}")
-	@Size(min = 2, max = 30, groups = AdminUser.class, message = "{user.username.size}")
+	@NotNull(groups = {AdminUser.class, NormalUser.class}, message = "{user.username.notNull}")
+	@Size(min = 2, max = 30, groups = {AdminUser.class, NormalUser.class}, message = "{user.username.size}")
 	private String username;
-	@NotNull(groups = AdminUser.class, message = "{user.password.notNull}")
-	@Size(min = 4, max = 30, groups = AdminUser.class, message = "{user.password.size}")
+	@NotNull(groups = {AdminUser.class, NormalUser.class}, message = "{user.password.notNull}")
+	@Size(min = 4, max = 30, groups = {AdminUser.class, NormalUser.class}, message = "{user.password.size}")
 	private String password;
 	@Column(name = "last_password_reset")
 	private Date lastPasswordReset;

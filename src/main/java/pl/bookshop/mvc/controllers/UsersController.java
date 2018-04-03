@@ -19,6 +19,7 @@ import pl.bookshop.domains.jpa.User;
 import pl.bookshop.domains.mongo.UserDetails;
 import pl.bookshop.mvc.objects.UserData;
 import pl.bookshop.mvc.validation.AdminUser;
+import pl.bookshop.mvc.validation.NormalUser;
 import pl.bookshop.services.UsersService;
 
 @RestController
@@ -70,7 +71,8 @@ public class UsersController {
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(path = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<UserDetails> update(
-			@PathVariable Long id, @RequestBody UserDetails userDetails, @AuthenticationPrincipal User authenticatedUser) {
+			@PathVariable Long id, @RequestBody @Validated(NormalUser.class) UserDetails userDetails,
+			@AuthenticationPrincipal User authenticatedUser) {
 		if (authenticatedUser.getId() != id && userUtils.isAdmin(authenticatedUser) == false) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}

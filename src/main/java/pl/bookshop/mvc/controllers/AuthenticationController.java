@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,6 +25,7 @@ import pl.bookshop.domains.jpa.User;
 import pl.bookshop.mvc.objects.AuthenticationRequest;
 import pl.bookshop.mvc.objects.AuthenticationResponse;
 import pl.bookshop.mvc.objects.UserData;
+import pl.bookshop.mvc.validation.NormalUser;
 import pl.bookshop.services.UsersService;
 import pl.bookshop.utils.Constants;
 
@@ -42,7 +44,7 @@ public class AuthenticationController {
     private UsersService usersService;
     
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody UserData userData) {
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody @Validated(NormalUser.class) UserData userData) {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                 userData.getUser().getUsername(), userData.getUser().getPassword());
     	
