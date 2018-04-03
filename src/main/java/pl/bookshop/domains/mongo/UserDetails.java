@@ -26,7 +26,7 @@ public class UserDetails {
 	private String surname;
 	@NotNull(groups = NormalUser.class, message = "{userDetails.email.notNull}")
 	@Size(min = 6, max = 70, groups = NormalUser.class, message = "{userDetails.email.size}")
-	@Email(regexp = "^[_a-z0-9]+(\\.[_a-z0-9]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,5})$",
+	@Email(regexp = "^[_a-z\\d]+(\\.[_a-z\\d]+)*@[-a-z\\d]+(\\.[-a-z\\d]+)*(\\.[a-z]{2,5})$",
 			groups = NormalUser.class, message = "{userDetails.email.email}")
 	private String email;
 	@NotNull(groups = NormalUser.class, message = "{userDetails.phone.notNull}")
