@@ -82,7 +82,7 @@ public class AuthenticationControllerTest {
     			.thenReturn(authenticationCaptor.capture());
     	Mockito.when(userDetailsService.loadUserByUsername(userData.getUser().getUsername())).thenReturn(userDetails);
     	Mockito.when(tokenUtils.generateToken(userDetails)).thenReturn(token);
-    	
+    	System.out.println(userData);
 		mockMvc.perform(MockMvcRequestBuilders
 						.post("/auth/register")
 						.contentType(MediaType.APPLICATION_JSON)
@@ -302,14 +302,15 @@ public class AuthenticationControllerTest {
 		pl.bookshop.domains.mongo.UserDetails userDetails = new pl.bookshop.domains.mongo.UserDetails();
 		userDetails.setId(RandomStringUtils.randomAlphabetic(20));
 		userDetails.setUserId(RandomUtils.nextLong(0, 100));
-		userDetails.setName(RandomStringUtils.random(30));
-		userDetails.setSurname(RandomStringUtils.random(50));
-		userDetails.setEmail(RandomStringUtils.random(50));
-		userDetails.setPhone(RandomStringUtils.random(10));
-		userDetails.setCity(RandomStringUtils.random(20));
-		userDetails.setStreet(RandomStringUtils.random(40));
-		userDetails.setState(RandomStringUtils.random(20));
-		userDetails.setZipCode(RandomStringUtils.random(5));
+		userDetails.setName(RandomStringUtils.randomAlphabetic(30));
+		userDetails.setSurname(RandomStringUtils.randomAlphabetic(50));
+		userDetails.setEmail(RandomStringUtils.randomAlphabetic(20).toLowerCase() + '@'
+				+ RandomStringUtils.randomAlphabetic(10).toLowerCase() + '.' + RandomStringUtils.randomAlphabetic(5).toLowerCase());
+		userDetails.setPhone(RandomStringUtils.randomNumeric(9));
+		userDetails.setCity(RandomStringUtils.randomAlphabetic(20));
+		userDetails.setStreet(RandomStringUtils.randomAlphabetic(40));
+		userDetails.setState(RandomStringUtils.randomAlphabetic(20));
+		userDetails.setZipCode(RandomStringUtils.randomAlphabetic(5));
 		return userDetails;
 	}
 	
@@ -321,7 +322,7 @@ public class AuthenticationControllerTest {
 	}
 	
 	private String getToken() {
-		String token = RandomStringUtils.randomAscii(40);
+		String token = RandomStringUtils.randomAlphabetic(40);
 		return token;
 	}
 	

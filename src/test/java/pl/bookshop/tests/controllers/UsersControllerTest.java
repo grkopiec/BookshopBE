@@ -288,14 +288,15 @@ public class UsersControllerTest {
 		UserDetails userDetails0 = new UserDetails();
 		userDetails0.setId(RandomStringUtils.randomAlphabetic(20));
 		userDetails0.setUserId(getUser0().getId());
-		userDetails0.setName(RandomStringUtils.random(30));
-		userDetails0.setSurname(RandomStringUtils.random(50));
-		userDetails0.setEmail(RandomStringUtils.random(50));
-		userDetails0.setPhone(RandomStringUtils.random(10));
-		userDetails0.setCity(RandomStringUtils.random(20));
-		userDetails0.setStreet(RandomStringUtils.random(40));
-		userDetails0.setState(RandomStringUtils.random(20));
-		userDetails0.setZipCode(RandomStringUtils.random(5));
+		userDetails0.setName(RandomStringUtils.randomAlphabetic(30));
+		userDetails0.setSurname(RandomStringUtils.randomAlphabetic(50));
+		userDetails0.setEmail(RandomStringUtils.randomAlphabetic(20).toLowerCase() + '@'
+				+ RandomStringUtils.randomAlphabetic(10).toLowerCase() + '.' + RandomStringUtils.randomAlphabetic(5).toLowerCase());
+		userDetails0.setPhone(RandomStringUtils.randomNumeric(9));
+		userDetails0.setCity(RandomStringUtils.randomAlphabetic(20));
+		userDetails0.setStreet(RandomStringUtils.randomAlphabetic(40));
+		userDetails0.setState(RandomStringUtils.randomAlphabetic(20));
+		userDetails0.setZipCode(RandomStringUtils.randomAlphabetic(5));
 		return userDetails0;
 	}
 	
@@ -325,14 +326,15 @@ public class UsersControllerTest {
 		UserDetails userDetails1 = new UserDetails();
 		userDetails1.setId(RandomStringUtils.randomAlphabetic(20));
 		userDetails1.setUserId(getUser1().getId());
-		userDetails1.setName(RandomStringUtils.random(30));
-		userDetails1.setSurname(RandomStringUtils.random(50));
-		userDetails1.setEmail(RandomStringUtils.random(50));
-		userDetails1.setPhone(RandomStringUtils.random(10));
-		userDetails1.setCity(RandomStringUtils.random(20));
-		userDetails1.setStreet(RandomStringUtils.random(40));
-		userDetails1.setState(RandomStringUtils.random(20));
-		userDetails1.setZipCode(RandomStringUtils.random(5));
+		userDetails1.setName(RandomStringUtils.randomAlphabetic(30));
+		userDetails1.setSurname(RandomStringUtils.randomAlphabetic(50));
+		userDetails1.setEmail(RandomStringUtils.randomAlphabetic(20).toLowerCase() + '@'
+				+ RandomStringUtils.randomAlphabetic(10).toLowerCase() + '.' + RandomStringUtils.randomAlphabetic(5).toLowerCase());
+		userDetails1.setPhone(RandomStringUtils.randomNumeric(9));
+		userDetails1.setCity(RandomStringUtils.randomAlphabetic(20));
+		userDetails1.setStreet(RandomStringUtils.randomAlphabetic(40));
+		userDetails1.setState(RandomStringUtils.randomAlphabetic(20));
+		userDetails1.setZipCode(RandomStringUtils.randomAlphabetic(5));
 		return userDetails1;
 	}
 	

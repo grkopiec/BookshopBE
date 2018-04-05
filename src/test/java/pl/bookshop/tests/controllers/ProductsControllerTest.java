@@ -294,8 +294,8 @@ public class ProductsControllerTest {
 		product0.setName(RandomStringUtils.randomAlphabetic(10));
 		product0.setProducer(RandomStringUtils.randomAlphabetic(15));
 		product0.setDescription(RandomStringUtils.randomAlphabetic(100));
-		product0.setPrice(RandomUtils.nextDouble(10, 20));
-		product0.setDiscount(RandomUtils.nextDouble(2, 4));
+		product0.setPrice(TestUtils.nextDoubleWithDecimalPlaces(1000, 10000, 2));
+		product0.setDiscount(TestUtils.nextDoubleWithDecimalPlaces(1000, 10000, 2));
 		product0.setImagePath(RandomStringUtils.randomAlphabetic(60));
 		return product0;
 	}
@@ -306,8 +306,8 @@ public class ProductsControllerTest {
 		product1.setName(RandomStringUtils.randomAlphabetic(5));
 		product1.setProducer(RandomStringUtils.randomAlphabetic(10));
 		product1.setDescription(RandomStringUtils.randomAlphabetic(50));
-		product1.setPrice(RandomUtils.nextDouble(5, 15));
-		product1.setDiscount(RandomUtils.nextDouble(10, 15));
+		product1.setPrice(TestUtils.nextDoubleWithDecimalPlaces(1000, 10000, 2));
+		product1.setDiscount(TestUtils.nextDoubleWithDecimalPlaces(1000, 10000, 2));
 		product1.setImagePath(RandomStringUtils.randomAlphabetic(60));
 		return product1;
 	}
@@ -318,8 +318,8 @@ public class ProductsControllerTest {
 		product2.setName(RandomStringUtils.randomAlphabetic(5));
 		product2.setProducer(RandomStringUtils.randomAlphabetic(10));
 		product2.setDescription(RandomStringUtils.randomAlphabetic(50));
-		product2.setPrice(RandomUtils.nextDouble(5, 15));
-		product2.setDiscount(RandomUtils.nextDouble(10, 15));
+		product2.setPrice(TestUtils.nextDoubleWithDecimalPlaces(1000, 10000, 2));
+		product2.setDiscount(TestUtils.nextDoubleWithDecimalPlaces(1000, 10000, 2));
 		product2.setImagePath(RandomStringUtils.randomAlphabetic(60));
 		return product2;
 	}
