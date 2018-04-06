@@ -25,7 +25,7 @@ public class CategoryValidationTest {
 	}
 	
 	@Test
-	public void test_categoryName_success() {
+	public void test_allFields_success() {
 		Category category = getValidCategory();
 		
 		Set<ConstraintViolation<Category>> constraintViolations = validator.validate(category);
@@ -47,7 +47,6 @@ public class CategoryValidationTest {
 	@Test
 	public void test_categoryName_whenIsTooShort() {
 		String name = RandomStringUtils.randomAlphabetic(1);
-		
 		Category category = getValidCategory();
 		category.setName(name);
 		
@@ -61,7 +60,6 @@ public class CategoryValidationTest {
 	@Test
 	public void test_categoryName_whenIsTooLong() {
 		String name = RandomStringUtils.randomAlphabetic(101);
-		
 		Category category = getValidCategory();
 		category.setName(name);
 		
@@ -72,7 +70,7 @@ public class CategoryValidationTest {
 		Assert.assertEquals("Passed category name: " + name + " size must be between 2 and 100", iterator.next().getMessage());
 	}
 	
-	public Category getValidCategory() {
+	private Category getValidCategory() {
 		Category category = new Category();
 		category.setName(RandomStringUtils.randomAlphabetic(20));
 		return category;
