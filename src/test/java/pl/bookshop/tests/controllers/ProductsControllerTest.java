@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import pl.bookshop.domains.jpa.Category;
 import pl.bookshop.domains.jpa.Product;
 import pl.bookshop.mvc.controllers.ProductsController;
 import pl.bookshop.services.ProductsService;
@@ -288,6 +289,13 @@ public class ProductsControllerTest {
 		Mockito.verifyNoMoreInteractions(productsService);
 	}
 	
+	private Category getCategory0() {
+		Category category0 = new Category();
+		category0.setId(RandomUtils.nextLong(0, 100));
+		category0.setName(RandomStringUtils.randomAlphabetic(20));
+		return category0;
+	}
+	
 	private Product getProduct0() {
 		Product product0 = new Product();
 		product0.setId(RandomUtils.nextLong(0, 100));
@@ -297,7 +305,15 @@ public class ProductsControllerTest {
 		product0.setPrice(TestUtils.nextDoubleWithDecimalPlaces(1000, 10000, 2));
 		product0.setDiscount(TestUtils.nextDoubleWithDecimalPlaces(1000, 10000, 2));
 		product0.setImagePath(RandomStringUtils.randomAlphabetic(60));
+		product0.setCategory(getCategory0());
 		return product0;
+	}
+	
+	private Category getCategory1() {
+		Category category1 = new Category();
+		category1.setId(RandomUtils.nextLong(0, 100));
+		category1.setName(RandomStringUtils.randomAlphabetic(20));
+		return category1;
 	}
 	
 	private Product getProduct1() {
@@ -309,7 +325,15 @@ public class ProductsControllerTest {
 		product1.setPrice(TestUtils.nextDoubleWithDecimalPlaces(1000, 10000, 2));
 		product1.setDiscount(TestUtils.nextDoubleWithDecimalPlaces(1000, 10000, 2));
 		product1.setImagePath(RandomStringUtils.randomAlphabetic(60));
+		product1.setCategory(getCategory1());
 		return product1;
+	}
+	
+	private Category getCategory2() {
+		Category category2 = new Category();
+		category2.setId(RandomUtils.nextLong(0, 100));
+		category2.setName(RandomStringUtils.randomAlphabetic(20));
+		return category2;
 	}
 	
 	private Product getProduct2() {
@@ -321,6 +345,7 @@ public class ProductsControllerTest {
 		product2.setPrice(TestUtils.nextDoubleWithDecimalPlaces(1000, 10000, 2));
 		product2.setDiscount(TestUtils.nextDoubleWithDecimalPlaces(1000, 10000, 2));
 		product2.setImagePath(RandomStringUtils.randomAlphabetic(60));
+		product2.setCategory(getCategory2());
 		return product2;
 	}
 }
