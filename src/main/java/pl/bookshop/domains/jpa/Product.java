@@ -50,6 +50,7 @@ public class Product {
 	@ManyToOne(cascade = CascadeType.DETACH)
 	@JoinColumn(name = "category_id	")
 	@Valid
+	@NotNull(message = "{product.category.notNull}")
 	private Category category;
 
 	public Long getId() {
