@@ -159,7 +159,7 @@ public class ProductValidationTest {
 	
 	@Test
 	public void test_productPrice_whenIsNotPositive() {
-		Double price = -1.12;
+		Double price = TestUtils.nextNegativeDoubleWithDecimalPlaces(-99, -10, 2);
 		Product product = getValidProduct();
 		product.setPrice(price);
 		
@@ -172,7 +172,7 @@ public class ProductValidationTest {
 	
 	@Test
 	public void test_productPrice_whenTooMuchNumbersBeforeComma() {
-		Double price = 1234567.12;
+		Double price = TestUtils.nextDoubleWithDecimalPlaces(1000000, 9999999, 3);
 		Product product = getValidProduct();
 		product.setPrice(price);
 		
@@ -187,10 +187,10 @@ public class ProductValidationTest {
 	
 	@Test
 	public void test_productPrice_whenTooMuchDecimalPlaces() {
-		Double price = 12345.123;
+		Double price = TestUtils.nextDoubleWithDecimalPlaces(100000, 999999, 3);
 		Product product = getValidProduct();
 		product.setPrice(price);
-		
+		System.out.println(price);
 		Set<ConstraintViolation<Product>> constraintViolations = validator.validate(product);
 		Assert.assertEquals(1, constraintViolations.size());
 		
@@ -211,7 +211,7 @@ public class ProductValidationTest {
 	
 	@Test
 	public void test_productDiscount_whenIsNotPositive() {
-		Double discount = -1.12;
+		Double discount = TestUtils.nextNegativeDoubleWithDecimalPlaces(-99, -10, 2);
 		Product product = getValidProduct();
 		product.setDiscount(discount);
 		
@@ -224,7 +224,7 @@ public class ProductValidationTest {
 	
 	@Test
 	public void test_productDiscount_whenTooMuchNumbersBeforeComma() {
-		Double discount = 1234567.12;
+		Double discount = TestUtils.nextDoubleWithDecimalPlaces(1000000, 9999999, 2);
 		Product product = getValidProduct();
 		product.setDiscount(discount);
 		
@@ -239,10 +239,10 @@ public class ProductValidationTest {
 	
 	@Test
 	public void test_productDiscount_whenTooMuchDecimalPlaces() {
-		Double discount = 12345.123;
+		Double discount = TestUtils.nextDoubleWithDecimalPlaces(100000, 999999, 3);
 		Product product = getValidProduct();
 		product.setDiscount(discount);
-		
+		System.out.println(discount);
 		Set<ConstraintViolation<Product>> constraintViolations = validator.validate(product);
 		Assert.assertEquals(1, constraintViolations.size());
 		
@@ -266,7 +266,7 @@ public class ProductValidationTest {
 	
 	@Test
 	public void test_productCategory_hasOneIncorrectField() {
-		String categoryName = "a";
+		String categoryName = RandomStringUtils.randomAlphabetic(1);
 		Product product = getValidProduct();
 		product.getCategory().setName(categoryName);
 		
