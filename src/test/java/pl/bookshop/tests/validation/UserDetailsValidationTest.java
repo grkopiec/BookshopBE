@@ -296,6 +296,260 @@ public class UserDetailsValidationTest {
 		Assert.assertEquals("User email is not valid", iterator.next().getMessage());
 	}
 	
+	@Test
+	public void test_normalUserDetailsPhone_whenIsNull() {
+		UserDetails userDetails = getValidNormalUserDetails();
+		userDetails.setPhone(null);
+		
+		Set<ConstraintViolation<UserDetails>> constraintViolations = validator.validate(userDetails, NormalUser.class);
+		Assert.assertEquals(1, constraintViolations.size());
+		
+		Iterator<ConstraintViolation<UserDetails>> iterator = constraintViolations.iterator();
+		Assert.assertEquals("User phone cannot be empty", iterator.next().getMessage());
+	}
+	
+	@Test
+	public void test_normalUserDetailsPhone_whenIsTooShort() {
+		String phone = RandomStringUtils.randomNumeric(8);
+		UserDetails userDetails = getValidNormalUserDetails();
+		userDetails.setPhone(phone);
+		
+		Set<ConstraintViolation<UserDetails>> constraintViolations = validator.validate(userDetails, NormalUser.class);
+		Assert.assertEquals(2, constraintViolations.size());
+		
+		Iterator<ConstraintViolation<UserDetails>> iterator = constraintViolations.iterator();
+		
+		List<String> occurErrors = new ArrayList<>();
+		occurErrors.add(iterator.next().getMessage());
+		occurErrors.add(iterator.next().getMessage());
+		
+		List<String> expectedErrors = new ArrayList<>();
+		expectedErrors.add("User phone is not valid");
+		expectedErrors.add("User phone: " + phone + " size must be between 9 and 15");
+		
+		Assert.assertTrue(occurErrors.contains(expectedErrors.get(0)));
+		Assert.assertTrue(occurErrors.contains(expectedErrors.get(1)));
+	}
+	
+	@Test
+	public void test_normalUserDetailsPhone_whenIsTooLong() {
+		String phone = RandomStringUtils.randomNumeric(16);
+		UserDetails userDetails = getValidNormalUserDetails();
+		userDetails.setPhone(phone);
+		
+		Set<ConstraintViolation<UserDetails>> constraintViolations = validator.validate(userDetails, NormalUser.class);
+		Assert.assertEquals(2, constraintViolations.size());
+		
+		Iterator<ConstraintViolation<UserDetails>> iterator = constraintViolations.iterator();
+		
+		List<String> occurErrors = new ArrayList<>();
+		occurErrors.add(iterator.next().getMessage());
+		occurErrors.add(iterator.next().getMessage());
+		
+		List<String> expectedErrors = new ArrayList<>();
+		expectedErrors.add("User phone is not valid");
+		expectedErrors.add("User phone: " + phone + " size must be between 9 and 15");
+		
+		Assert.assertTrue(occurErrors.contains(expectedErrors.get(0)));
+		Assert.assertTrue(occurErrors.contains(expectedErrors.get(1)));
+	}
+	
+	@Test
+	public void test_normalUserDetailsPhone_whenIsLongVersion() {
+		String phone = "+" + RandomStringUtils.randomNumeric(2) + " " + RandomStringUtils.randomNumeric(3) + "-" + RandomStringUtils.randomNumeric(3)
+				+ "-" + RandomStringUtils.randomNumeric(3);
+		UserDetails userDetails = getValidNormalUserDetails();
+		userDetails.setPhone(phone);
+		
+		Set<ConstraintViolation<UserDetails>> constraintViolations = validator.validate(userDetails, NormalUser.class);
+		Assert.assertEquals(0, constraintViolations.size());
+	}
+	
+	@Test
+	public void test_normalUserDetailsPhone_whenIsShortVersion() {
+		String phone = RandomStringUtils.randomNumeric(9);
+		UserDetails userDetails = getValidNormalUserDetails();
+		userDetails.setPhone(phone);
+		
+		Set<ConstraintViolation<UserDetails>> constraintViolations = validator.validate(userDetails, NormalUser.class);
+		Assert.assertEquals(0, constraintViolations.size());
+	}
+	
+	@Test
+	public void test_normalUserDetailsPhone_whenNotAllowedChar() {
+		String phone = RandomStringUtils.randomNumeric(3) + "-" + RandomStringUtils.randomNumeric(3) + "_" + RandomStringUtils.randomNumeric(3);
+		UserDetails userDetails = getValidNormalUserDetails();
+		userDetails.setPhone(phone);
+		
+		Set<ConstraintViolation<UserDetails>> constraintViolations = validator.validate(userDetails, NormalUser.class);
+		Assert.assertEquals(1, constraintViolations.size());
+		
+		Iterator<ConstraintViolation<UserDetails>> iterator = constraintViolations.iterator();
+		Assert.assertEquals("User phone is not valid", iterator.next().getMessage());
+	}
+	
+	@Test
+	public void test_normalUserDetailsPhone_whenNotEnoughtDigits() {
+		String phone = RandomStringUtils.randomNumeric(2) + "-" + RandomStringUtils.randomNumeric(3) + "-" + RandomStringUtils.randomNumeric(3);
+		UserDetails userDetails = getValidNormalUserDetails();
+		userDetails.setPhone(phone);
+		
+		Set<ConstraintViolation<UserDetails>> constraintViolations = validator.validate(userDetails, NormalUser.class);
+		Assert.assertEquals(1, constraintViolations.size());
+		
+		Iterator<ConstraintViolation<UserDetails>> iterator = constraintViolations.iterator();
+		Assert.assertEquals("User phone is not valid", iterator.next().getMessage());
+	}
+	
+	@Test
+	public void test_normalUserDetailsCity_whenIsNull() {
+		UserDetails userDetails = getValidNormalUserDetails();
+		userDetails.setCity(null);
+		
+		Set<ConstraintViolation<UserDetails>> constraintViolations = validator.validate(userDetails, NormalUser.class);
+		Assert.assertEquals(1, constraintViolations.size());
+		
+		Iterator<ConstraintViolation<UserDetails>> iterator = constraintViolations.iterator();
+		Assert.assertEquals("User city cannot be empty", iterator.next().getMessage());
+	}
+	
+	@Test
+	public void test_normalUserDetailsCity_whenIsTooShort() {
+		String city = RandomStringUtils.randomAlphabetic(1);
+		UserDetails userDetails = getValidNormalUserDetails();
+		userDetails.setCity(city);
+		
+		Set<ConstraintViolation<UserDetails>> constraintViolations = validator.validate(userDetails, NormalUser.class);
+		Assert.assertEquals(1, constraintViolations.size());
+		
+		Iterator<ConstraintViolation<UserDetails>> iterator = constraintViolations.iterator();
+		Assert.assertEquals("User city: " + city + " size must be between 2 and 40", iterator.next().getMessage());
+	}
+	
+	@Test
+	public void test_normalUserDetailsCity_whenIsTooLong() {
+		String city = RandomStringUtils.randomAlphabetic(41);
+		UserDetails userDetails = getValidNormalUserDetails();
+		userDetails.setCity(city);
+		
+		Set<ConstraintViolation<UserDetails>> constraintViolations = validator.validate(userDetails, NormalUser.class);
+		Assert.assertEquals(1, constraintViolations.size());
+		
+		Iterator<ConstraintViolation<UserDetails>> iterator = constraintViolations.iterator();
+		Assert.assertEquals("User city: " + city + " size must be between 2 and 40", iterator.next().getMessage());
+	}
+	
+	@Test
+	public void test_normalUserDetailsStreet_whenIsNull() {
+		UserDetails userDetails = getValidNormalUserDetails();
+		userDetails.setStreet(null);
+		
+		Set<ConstraintViolation<UserDetails>> constraintViolations = validator.validate(userDetails, NormalUser.class);
+		Assert.assertEquals(1, constraintViolations.size());
+		
+		Iterator<ConstraintViolation<UserDetails>> iterator = constraintViolations.iterator();
+		Assert.assertEquals("User street cannot be empty", iterator.next().getMessage());
+	}
+	
+	@Test
+	public void test_normalUserDetailsStreet_whenIsTooShort() {
+		String street = RandomStringUtils.randomAlphabetic(4);
+		UserDetails userDetails = getValidNormalUserDetails();
+		userDetails.setStreet(street);
+		
+		Set<ConstraintViolation<UserDetails>> constraintViolations = validator.validate(userDetails, NormalUser.class);
+		Assert.assertEquals(1, constraintViolations.size());
+		
+		Iterator<ConstraintViolation<UserDetails>> iterator = constraintViolations.iterator();
+		Assert.assertEquals("User street: " + street + " size must be between 5 and 50", iterator.next().getMessage());
+	}
+	
+	@Test
+	public void test_normalUserDetailsStreet_whenIsTooLong() {
+		String street = RandomStringUtils.randomAlphabetic(51);
+		UserDetails userDetails = getValidNormalUserDetails();
+		userDetails.setStreet(street);
+		
+		Set<ConstraintViolation<UserDetails>> constraintViolations = validator.validate(userDetails, NormalUser.class);
+		Assert.assertEquals(1, constraintViolations.size());
+		
+		Iterator<ConstraintViolation<UserDetails>> iterator = constraintViolations.iterator();
+		Assert.assertEquals("User street: " + street + " size must be between 5 and 50", iterator.next().getMessage());
+	}
+	
+	@Test
+	public void test_normalUserDetailsState_whenIsNull() {
+		UserDetails userDetails = getValidNormalUserDetails();
+		userDetails.setState(null);
+		
+		Set<ConstraintViolation<UserDetails>> constraintViolations = validator.validate(userDetails, NormalUser.class);
+		Assert.assertEquals(0, constraintViolations.size());
+	}
+	
+	@Test
+	public void test_normalUserDetailsState_whenIsTooShort() {
+		String state = RandomStringUtils.randomAlphabetic(1);
+		UserDetails userDetails = getValidNormalUserDetails();
+		userDetails.setState(state);
+		
+		Set<ConstraintViolation<UserDetails>> constraintViolations = validator.validate(userDetails, NormalUser.class);
+		Assert.assertEquals(1, constraintViolations.size());
+		
+		Iterator<ConstraintViolation<UserDetails>> iterator = constraintViolations.iterator();
+		Assert.assertEquals("User state: " + state + " size must be between 2 and 40", iterator.next().getMessage());
+	}
+	
+	@Test
+	public void test_normalUserDetailsState_whenIsTooLong() {
+		String state = RandomStringUtils.randomAlphabetic(41);
+		UserDetails userDetails = getValidNormalUserDetails();
+		userDetails.setState(state);
+		
+		Set<ConstraintViolation<UserDetails>> constraintViolations = validator.validate(userDetails, NormalUser.class);
+		Assert.assertEquals(1, constraintViolations.size());
+		
+		Iterator<ConstraintViolation<UserDetails>> iterator = constraintViolations.iterator();
+		Assert.assertEquals("User state: " + state + " size must be between 2 and 40", iterator.next().getMessage());
+	}
+	
+	@Test
+	public void test_normalUserDetailsZipCode_whenIsNull() {
+		UserDetails userDetails = getValidNormalUserDetails();
+		userDetails.setZipCode(null);
+		
+		Set<ConstraintViolation<UserDetails>> constraintViolations = validator.validate(userDetails, NormalUser.class);
+		Assert.assertEquals(1, constraintViolations.size());
+		
+		Iterator<ConstraintViolation<UserDetails>> iterator = constraintViolations.iterator();
+		Assert.assertEquals("User zip code cannot be empty", iterator.next().getMessage());
+	}
+	
+	@Test
+	public void test_normalUserDetailsZipCode_whenIsTooShort() {
+		String zipCode = RandomStringUtils.randomAlphabetic(4);
+		UserDetails userDetails = getValidNormalUserDetails();
+		userDetails.setZipCode(zipCode);
+		
+		Set<ConstraintViolation<UserDetails>> constraintViolations = validator.validate(userDetails, NormalUser.class);
+		Assert.assertEquals(1, constraintViolations.size());
+		
+		Iterator<ConstraintViolation<UserDetails>> iterator = constraintViolations.iterator();
+		Assert.assertEquals("User zip code: " + zipCode + " size must be between 5 and 7", iterator.next().getMessage());
+	}
+	
+	@Test
+	public void test_normalUserDetailsZipCode_whenIsTooLong() {
+		String zipCode = RandomStringUtils.randomAlphabetic(8);
+		UserDetails userDetails = getValidNormalUserDetails();
+		userDetails.setZipCode(zipCode);
+		
+		Set<ConstraintViolation<UserDetails>> constraintViolations = validator.validate(userDetails, NormalUser.class);
+		Assert.assertEquals(1, constraintViolations.size());
+		
+		Iterator<ConstraintViolation<UserDetails>> iterator = constraintViolations.iterator();
+		Assert.assertEquals("User zip code: " + zipCode + " size must be between 5 and 7", iterator.next().getMessage());
+	}
+	
 	private UserDetails getValidAdminUserDetails() {
 		UserDetails userDetails = new UserDetails();
 		userDetails.setName(RandomStringUtils.randomAlphabetic(30));
