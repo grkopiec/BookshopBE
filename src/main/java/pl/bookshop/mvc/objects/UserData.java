@@ -3,14 +3,19 @@ package pl.bookshop.mvc.objects;
 import java.util.Objects;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import pl.bookshop.domains.jpa.User;
 import pl.bookshop.domains.mongo.UserDetails;
+import pl.bookshop.mvc.validation.AdminUser;
+import pl.bookshop.mvc.validation.NormalUser;
 
 public class UserData {
 	@Valid
+	@NotNull(groups = {AdminUser.class, NormalUser.class}, message = "{userData.user.notNull}")
 	private User user;
 	@Valid
+	@NotNull(groups = {AdminUser.class, NormalUser.class}, message = "{userData.userDetails.notNull}")
 	private UserDetails userDetails;
 	
 	public User getUser() {
