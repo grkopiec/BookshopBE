@@ -28,6 +28,7 @@ public class UserDetailsValidationTest {
 		validator = validatorFactory.getValidator();
 	}
 	
+	@Test
 	public void test_adminUserDetailsAllFields_success() {
 		UserDetails userDetails = getValidAdminUserDetails();
 		
@@ -111,6 +112,7 @@ public class UserDetailsValidationTest {
 		Assert.assertEquals("User surname: " + surname + " size must be between 2 and 50", iterator.next().getMessage());
 	}
 	
+	@Test
 	public void test_normalUserDetailsAllFields_success() {
 		UserDetails userDetails = getValidNormalUserDetails();
 		
