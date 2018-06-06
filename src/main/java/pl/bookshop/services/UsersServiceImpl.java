@@ -90,6 +90,12 @@ public class UsersServiceImpl implements UsersService {
 	}
 
 	@Override
+	public void changePassword(Long id, String newPassword) {
+		String encodedPassword = userUtils.encodePassword(newPassword);
+		usersRepository.setPassword(id, encodedPassword);
+	}
+
+	@Override
 	public void delete(Long id) {
 		usersRepository.deleteById(id);
 		usersDetailsRepository.deleteByUserId(id);

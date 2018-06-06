@@ -38,4 +38,12 @@ public class UserUtils {
 				.findFirst();
 		return grantedAuthority.isPresent();
 	}
+	
+	public boolean isUser(User user) {
+		Collection<? extends GrantedAuthority> grantedAuthorities = user.getAuthorities();
+		Optional<? extends GrantedAuthority> grantedAuthority = grantedAuthorities.stream()
+				.filter(p -> p.getAuthority().equals("ROLE_USER"))
+				.findFirst();
+		return grantedAuthority.isPresent();
+	}
 }

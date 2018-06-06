@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.bookshop.components.UserUtils;
 import pl.bookshop.domains.jpa.User;
 import pl.bookshop.domains.mongo.UserDetails;
+import pl.bookshop.mvc.objects.NewPassword;
 import pl.bookshop.mvc.objects.UserData;
 import pl.bookshop.mvc.validation.AdminUser;
 import pl.bookshop.mvc.validation.NormalUser;
@@ -40,10 +41,11 @@ public class UsersController {
 		}
 		return new ResponseEntity<List<UserData>>(usersData, HttpStatus.OK);
 	}
-	
+	//TODO check is it for role_user
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(path = "/{id}")
 	public ResponseEntity<UserDetails> findOne(@PathVariable Long id, @AuthenticationPrincipal User authenticatedUser) {
+		//TODO check if should be || instead &&
 		if (authenticatedUser.getId() != id && userUtils.isAdmin(authenticatedUser) == false) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
@@ -83,6 +85,17 @@ public class UsersController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<>(updatedUserDetails, HttpStatus.OK);
+	}
+	//TODO new password cannot be the same like previous, provide validation on backend and frontend
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@RequestMapping(path = "/{id}", method = RequestMethod.PATCH)
+	public ResponseEntity<?> changePassword(
+			@PathVariable Long id, @RequestBody NewPassword newPassword, @AuthenticationPrincipal User authenticatedUser) {
+		if (authenticatedUser.getId() != id && userUtils.isUser(authenticatedUser) == false) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
+		usersService.changePassword(id, newPassword.getNewPassword());
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
