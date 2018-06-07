@@ -88,7 +88,7 @@ public class UsersController {
 	}
 	//TODO new password cannot be the same like previous, provide validation on backend and frontend
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(path = "/{id}", method = RequestMethod.PATCH)
+	@RequestMapping(path = "/change-password/{id}", method = RequestMethod.PATCH)
 	public ResponseEntity<?> changePassword(
 			@PathVariable Long id, @RequestBody NewPassword newPassword, @AuthenticationPrincipal User authenticatedUser) {
 		if (authenticatedUser.getId() != id && userUtils.isUser(authenticatedUser) == false) {
