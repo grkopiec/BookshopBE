@@ -11,6 +11,6 @@ import pl.bookshop.domains.jpa.User;
 public interface UsersRepository extends JpaRepository<User, Long> {
 	public User findByUsername(String username);
 	@Modifying
-	@Query("UPDATE User u SET u.password = ?1 WHERE u.id = ?2")
+	@Query("UPDATE User u SET u.password = ?2 WHERE u.id = ?1")
 	public void setPassword(Long id, String password);
 }
