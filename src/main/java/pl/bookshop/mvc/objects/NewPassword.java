@@ -3,16 +3,16 @@ package pl.bookshop.mvc.objects;
 import java.util.Objects;
 
 public class NewPassword {
-	private String oldPassword;
+	private String currentPassword;
 	private String newPassword;
-	private String newPasswordRepeat;
+	private String repeatNewPassword;
 
-	public String getOldPassword() {
-		return oldPassword;
+	public String getCurrentPassword() {
+		return currentPassword;
 	}
 
-	public void setOldPassword(String oldPassword) {
-		this.oldPassword = oldPassword;
+	public void setCurrentPassword(String currentPassword) {
+		this.currentPassword = currentPassword;
 	}
 
 	public String getNewPassword() {
@@ -23,17 +23,17 @@ public class NewPassword {
 		this.newPassword = newPassword;
 	}
 
-	public String getNewPasswordRepeat() {
-		return newPasswordRepeat;
+	public String getRepeatNewPassword() {
+		return repeatNewPassword;
 	}
 
-	public void setNewPasswordRepeat(String newPasswordRepeat) {
-		this.newPasswordRepeat = newPasswordRepeat;
+	public void setRepeatNewPassword(String repeatnewPassword) {
+		this.repeatNewPassword = repeatnewPassword;
 	}
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(oldPassword, newPassword, newPasswordRepeat);
+		return Objects.hash(currentPassword, newPassword, repeatNewPassword);
 	}
 	
 	@Override
@@ -49,7 +49,7 @@ public class NewPassword {
 		}
 		
 		NewPassword other = (NewPassword) obj;
-		return Objects.equals(this.oldPassword, other.oldPassword) && Objects.equals(this.newPassword, other.newPassword)
-				&& Objects.equals(this.newPasswordRepeat, newPasswordRepeat);
+		return Objects.equals(this.currentPassword, other.currentPassword) && Objects.equals(this.newPassword, other.newPassword)
+				&& Objects.equals(this.repeatNewPassword, repeatNewPassword);
 	}
 }
