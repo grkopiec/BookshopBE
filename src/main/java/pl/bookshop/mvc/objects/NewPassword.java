@@ -2,10 +2,16 @@ package pl.bookshop.mvc.objects;
 
 import java.util.Objects;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class NewPassword {
+	@NotNull(message = "{newPassword.currentPassword.notNull}")
+	@Size(min = 4, max = 30, message = "{newPassword.currentPassword.size}")
 	private String currentPassword;
+	@NotNull(message = "{newPassword.newPassword.notNull}")
+	@Size(min = 4, max = 30, message = "{newPassword.newPassword.size}")
 	private String newPassword;
-	private String repeatNewPassword;
 
 	public String getCurrentPassword() {
 		return currentPassword;
@@ -22,18 +28,15 @@ public class NewPassword {
 	public void setNewPassword(String newPassword) {
 		this.newPassword = newPassword;
 	}
-
-	public String getRepeatNewPassword() {
-		return repeatNewPassword;
-	}
-
-	public void setRepeatNewPassword(String repeatnewPassword) {
-		this.repeatNewPassword = repeatnewPassword;
-	}
 	
 	@Override
+	public String toString() {
+		return "NewPassword [currentPassword=" + currentPassword + ", newPassword=" + newPassword + "]";
+	}
+
+	@Override
 	public int hashCode() {
-		return Objects.hash(currentPassword, newPassword, repeatNewPassword);
+		return Objects.hash(currentPassword, newPassword);
 	}
 	
 	@Override
@@ -49,7 +52,6 @@ public class NewPassword {
 		}
 		
 		NewPassword other = (NewPassword) obj;
-		return Objects.equals(this.currentPassword, other.currentPassword) && Objects.equals(this.newPassword, other.newPassword)
-				&& Objects.equals(this.repeatNewPassword, repeatNewPassword);
+		return Objects.equals(this.currentPassword, other.currentPassword) && Objects.equals(this.newPassword, other.newPassword);
 	}
 }

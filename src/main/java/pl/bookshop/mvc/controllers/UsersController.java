@@ -2,6 +2,8 @@ package pl.bookshop.mvc.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -90,8 +92,8 @@ public class UsersController {
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(path = "/change-password/{id}", method = RequestMethod.PATCH)
 	public ResponseEntity<?> changePassword(
-			@PathVariable Long id, @RequestBody NewPassword newPassword, @AuthenticationPrincipal User authenticatedUser) {
-		if (authenticatedUser.getId() != id && userUtils.isUser(authenticatedUser) == false) {
+			@PathVariable Long id, @RequestBody @Valid NewPassword newPassword, @AuthenticationPrincipal User authenticatedUser) {
+		if (authenticatedUser.getId() != id) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		usersService.changePassword(id, newPassword.getNewPassword());
