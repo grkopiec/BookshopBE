@@ -21,8 +21,8 @@ import pl.bookshop.domains.jpa.User;
 import pl.bookshop.domains.mongo.UserDetails;
 import pl.bookshop.mvc.objects.NewPassword;
 import pl.bookshop.mvc.objects.UserData;
-import pl.bookshop.mvc.validation.AdminUser;
-import pl.bookshop.mvc.validation.NormalUser;
+import pl.bookshop.mvc.validation.groups.AdminUser;
+import pl.bookshop.mvc.validation.groups.NormalUser;
 import pl.bookshop.services.UsersService;
 
 @RestController
@@ -88,7 +88,6 @@ public class UsersController {
 		}
 		return new ResponseEntity<>(updatedUserDetails, HttpStatus.OK);
 	}
-	//TODO new password cannot be the same like previous, provide validation on backend and frontend
 	//TODO valid is current password correct
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(path = "/change-password/{id}", method = RequestMethod.PATCH)

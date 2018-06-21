@@ -5,7 +5,7 @@ import java.util.Objects;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import pl.bookshop.mvc.validation.DifferentFields;
+import pl.bookshop.mvc.validation.validators.DifferentFields;
 
 @DifferentFields(firstField = "currentPassword", secondField = "newPassword", message = "{newPassword.differentFields}")
 public class NewPassword {

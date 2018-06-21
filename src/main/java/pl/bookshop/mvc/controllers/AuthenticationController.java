@@ -25,7 +25,7 @@ import pl.bookshop.domains.jpa.User;
 import pl.bookshop.mvc.objects.AuthenticationRequest;
 import pl.bookshop.mvc.objects.AuthenticationResponse;
 import pl.bookshop.mvc.objects.UserData;
-import pl.bookshop.mvc.validation.NormalUser;
+import pl.bookshop.mvc.validation.groups.NormalUser;
 import pl.bookshop.services.UsersService;
 import pl.bookshop.utils.Constants;
 

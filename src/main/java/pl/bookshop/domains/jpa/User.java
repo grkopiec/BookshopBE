@@ -24,8 +24,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import pl.bookshop.converters.AuthoritiesDeserializer;
 import pl.bookshop.converters.AuthoritiesSerializer;
 import pl.bookshop.hibernate.CollectionStringConverter;
-import pl.bookshop.mvc.validation.AdminUser;
-import pl.bookshop.mvc.validation.NormalUser;
+import pl.bookshop.mvc.validation.groups.AdminUser;
+import pl.bookshop.mvc.validation.groups.NormalUser;
 import pl.bookshop.utils.Constants;
 
 @Entity	

@@ -10,8 +10,8 @@ import javax.validation.constraints.Size;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import pl.bookshop.mvc.validation.AdminUser;
-import pl.bookshop.mvc.validation.NormalUser;
+import pl.bookshop.mvc.validation.groups.AdminUser;
+import pl.bookshop.mvc.validation.groups.NormalUser;
 
 @Document(collection = "usersDetails")
 public class UserDetails {

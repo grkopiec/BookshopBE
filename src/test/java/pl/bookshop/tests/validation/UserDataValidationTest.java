@@ -16,8 +16,8 @@ import org.junit.Test;
 import pl.bookshop.domains.jpa.User;
 import pl.bookshop.domains.mongo.UserDetails;
 import pl.bookshop.mvc.objects.UserData;
-import pl.bookshop.mvc.validation.AdminUser;
-import pl.bookshop.mvc.validation.NormalUser;
+import pl.bookshop.mvc.validation.groups.AdminUser;
+import pl.bookshop.mvc.validation.groups.NormalUser;
 
 public class UserDataValidationTest {
 	private static Validator validator;

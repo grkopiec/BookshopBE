@@ -7,8 +7,8 @@ import javax.validation.constraints.NotNull;
 
 import pl.bookshop.domains.jpa.User;
 import pl.bookshop.domains.mongo.UserDetails;
-import pl.bookshop.mvc.validation.AdminUser;
-import pl.bookshop.mvc.validation.NormalUser;
+import pl.bookshop.mvc.validation.groups.AdminUser;
+import pl.bookshop.mvc.validation.groups.NormalUser;
 
 public class UserData {
 	@Valid

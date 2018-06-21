@@ -1,4 +1,4 @@
-package pl.bookshop.mvc.validation;
+package pl.bookshop.mvc.validation.validators;
 
 import java.lang.reflect.InvocationTargetException;
 
