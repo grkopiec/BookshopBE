@@ -5,6 +5,9 @@ import java.util.Objects;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import pl.bookshop.mvc.validation.DifferentFields;
+
+@DifferentFields(firstField = "currentPassword", secondField = "newPassword", message = "{newPassword.differentFields}")
 public class NewPassword {
 	@NotNull(message = "{newPassword.currentPassword.notNull}")
 	@Size(min = 4, max = 30, message = "{newPassword.currentPassword.size}")

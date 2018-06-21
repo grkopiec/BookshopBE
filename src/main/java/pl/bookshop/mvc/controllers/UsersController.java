@@ -89,6 +89,7 @@ public class UsersController {
 		return new ResponseEntity<>(updatedUserDetails, HttpStatus.OK);
 	}
 	//TODO new password cannot be the same like previous, provide validation on backend and frontend
+	//TODO valid is current password correct
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(path = "/change-password/{id}", method = RequestMethod.PATCH)
 	public ResponseEntity<?> changePassword(

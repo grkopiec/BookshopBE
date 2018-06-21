@@ -29,6 +29,7 @@
 		<hibernate-validator.version>6.0.9.Final</hibernate-validator.version>
 		<jackson.version>2.9.4</jackson.version>
 		<apache-commons.version>3.7</apache-commons.version>
+		<commons-beanutils.version>1.9.3</commons-beanutils.version>
 	</properties>
     
 	<dependencies>
@@ -192,6 +193,12 @@
 		    <groupId>org.apache.commons</groupId>
 		    <artifactId>commons-lang3</artifactId>
 		    <version>${apache-commons.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>${commons-beanutils.version}</version>
 		</dependency>
 		
 		<dependency>
