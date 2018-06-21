@@ -9,7 +9,7 @@ import javax.validation.ConstraintViolationException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -32,10 +32,10 @@ public class ExceptionHandlerController {
     public ResponseEntity<List<String>> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
 		List<String> validationErrors = new ArrayList<>();
 		
-		List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
-    	for (FieldError fieldError: fieldErrors) {
-    		String error = fieldError.getDefaultMessage();
-    		validationErrors.add(error);
+		List<ObjectError> errors = exception.getBindingResult().getAllErrors();
+    	for (ObjectError error: errors) {
+    		String validationError = error.getDefaultMessage();
+    		validationErrors.add(validationError);
     	}
     	return new ResponseEntity<>(validationErrors, HttpStatus.BAD_REQUEST);
     }
