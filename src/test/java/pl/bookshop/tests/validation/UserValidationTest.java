@@ -94,7 +94,7 @@ public class UserValidationTest {
 		Assert.assertEquals(1, constraintViolations.size());
 		
 		Iterator<ConstraintViolation<User>> iterator = constraintViolations.iterator();
-		Assert.assertEquals("User password: " + password + " size must be between 4 and 30", iterator.next().getMessage());
+		Assert.assertEquals("User password size must be between 4 and 30", iterator.next().getMessage());
 	}
 	
 	@Test
@@ -107,7 +107,7 @@ public class UserValidationTest {
 		Assert.assertEquals(1, constraintViolations.size());
 		
 		Iterator<ConstraintViolation<User>> iterator = constraintViolations.iterator();
-		Assert.assertEquals("User password: " + password + " size must be between 4 and 30", iterator.next().getMessage());
+		Assert.assertEquals("User password size must be between 4 and 30", iterator.next().getMessage());
 	}
 	
 	@Test
@@ -178,7 +178,7 @@ public class UserValidationTest {
 		Assert.assertEquals(1, constraintViolations.size());
 		
 		Iterator<ConstraintViolation<User>> iterator = constraintViolations.iterator();
-		Assert.assertEquals("User password: " + password + " size must be between 4 and 30", iterator.next().getMessage());
+		Assert.assertEquals("User password size must be between 4 and 30", iterator.next().getMessage());
 	}
 	
 	@Test
@@ -191,7 +191,7 @@ public class UserValidationTest {
 		Assert.assertEquals(1, constraintViolations.size());
 		
 		Iterator<ConstraintViolation<User>> iterator = constraintViolations.iterator();
-		Assert.assertEquals("User password: " + password + " size must be between 4 and 30", iterator.next().getMessage());
+		Assert.assertEquals("User password size must be between 4 and 30", iterator.next().getMessage());
 	}
 	
 	private User getValidAdminUser() {

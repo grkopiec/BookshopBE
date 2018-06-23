@@ -92,7 +92,7 @@ public class AuthenticationRequestValidationTest {
 		Assert.assertEquals(1, constraintViolations.size());
 		
 		Iterator<ConstraintViolation<AuthenticationRequest>> iterator = constraintViolations.iterator();
-		Assert.assertEquals("In authentication data password: " + password + " size must be between 4 and 30", iterator.next().getMessage());
+		Assert.assertEquals("In authentication data password size must be between 4 and 30", iterator.next().getMessage());
 	}
 	
 	@Test
@@ -105,7 +105,7 @@ public class AuthenticationRequestValidationTest {
 		Assert.assertEquals(1, constraintViolations.size());
 		
 		Iterator<ConstraintViolation<AuthenticationRequest>> iterator = constraintViolations.iterator();
-		Assert.assertEquals("In authentication data password: " + password + " size must be between 4 and 30", iterator.next().getMessage());
+		Assert.assertEquals("In authentication data password size must be between 4 and 30", iterator.next().getMessage());
 	}
 	
 	private AuthenticationRequest getValidAuthenticationRequest() {
