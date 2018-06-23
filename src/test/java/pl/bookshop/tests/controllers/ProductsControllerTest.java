@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.validation.Validator;
 
 import pl.bookshop.domains.jpa.Category;
 import pl.bookshop.domains.jpa.Product;
@@ -28,6 +29,8 @@ public class ProductsControllerTest {
 	private MockMvc mockMvc;
 	
 	@Mock
+	private Validator validator;
+	@Mock
 	private ProductsService productsService;
 	
 	@InjectMocks
@@ -38,6 +41,7 @@ public class ProductsControllerTest {
 		MockitoAnnotations.initMocks(this);
 		mockMvc = MockMvcBuilders
 				.standaloneSetup(productsController)
+				.setValidator(validator)
 				.build();
 	}
 	
@@ -49,7 +53,7 @@ public class ProductsControllerTest {
 		
 		mockMvc.perform(MockMvcRequestBuilders.get("/products"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
 				.andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(2)))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[0].id", Matchers.is(products.get(0).getId().intValue())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[0].name", Matchers.is(products.get(0).getName())))
@@ -77,7 +81,7 @@ public class ProductsControllerTest {
 		
 		mockMvc.perform(MockMvcRequestBuilders.get("/products/{id}", product.getId()))
 				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(product.getId().intValue())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(product.getName())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.producer", Matchers.is(product.getProducer())))
@@ -165,6 +169,7 @@ public class ProductsControllerTest {
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(TestUtils.toJson(product)))
 				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(updatedProduct.getId().intValue())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(updatedProduct.getName())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.producer", Matchers.is(updatedProduct.getProducer())))
@@ -200,6 +205,7 @@ public class ProductsControllerTest {
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(TestUtils.toJson(product)))
 				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(updatedProduct.getId().intValue())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(updatedProduct.getName())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.producer", Matchers.is(updatedProduct.getProducer())))

@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.validation.Validator;
 
 import pl.bookshop.domains.jpa.Category;
 import pl.bookshop.mvc.controllers.CategoriesController;
@@ -26,6 +27,8 @@ import pl.bookshop.tests.utils.TestUtils;
 public class CategoriesControllerTest {
 	private MockMvc mockMvc;
 	
+	@Mock
+	private Validator validator;
 	@Mock
 	private CategoriesService categoriesService;
 	
@@ -37,6 +40,7 @@ public class CategoriesControllerTest {
 		MockitoAnnotations.initMocks(this);
 		mockMvc = MockMvcBuilders
 				.standaloneSetup(categoriesController)
+				.setValidator(validator)
 				.build();
 	}
 	
@@ -48,7 +52,7 @@ public class CategoriesControllerTest {
 		
 		mockMvc.perform(MockMvcRequestBuilders.get("/categories"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
 				.andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(2)))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[0].id", Matchers.is(categories.get(0).getId().intValue())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[0].name", Matchers.is(categories.get(0).getName())))
@@ -67,7 +71,7 @@ public class CategoriesControllerTest {
 		
 		mockMvc.perform(MockMvcRequestBuilders.get("/categories/{id}", category.getId()))
 				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(category.getId().intValue())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(category.getName())));
 		
@@ -150,6 +154,7 @@ public class CategoriesControllerTest {
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(TestUtils.toJson(category)))
 				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(updatedCategory.getId().intValue())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(updatedCategory.getName())));
 		
@@ -180,6 +185,7 @@ public class CategoriesControllerTest {
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(TestUtils.toJson(category)))
 				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(updatedCategory.getId().intValue())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(updatedCategory.getName())));
 		

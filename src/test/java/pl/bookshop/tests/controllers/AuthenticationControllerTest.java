@@ -26,6 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.validation.Validator;
 
 import pl.bookshop.components.TokenUtils;
 import pl.bookshop.components.UserUtils;
@@ -46,6 +47,8 @@ public class AuthenticationControllerTest {
 	@Captor
 	private ArgumentCaptor<Authentication> authenticationCaptor;
 	
+	@Mock
+	private Validator validator;
     @Mock
     private AuthenticationManager authenticationManager;
     @Mock
@@ -65,6 +68,7 @@ public class AuthenticationControllerTest {
 		MockitoAnnotations.initMocks(this);
 		mockMvc = MockMvcBuilders
 				.standaloneSetup(authenticationController)
+				.setValidator(validator)
 				.build();
     }
     
@@ -82,12 +86,13 @@ public class AuthenticationControllerTest {
     			.thenReturn(authenticationCaptor.capture());
     	Mockito.when(userDetailsService.loadUserByUsername(userData.getUser().getUsername())).thenReturn(userDetails);
     	Mockito.when(tokenUtils.generateToken(userDetails)).thenReturn(token);
-    	System.out.println(userData);
+    	
 		mockMvc.perform(MockMvcRequestBuilders
 						.post("/auth/register")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(TestUtils.toJson(userData)))
 				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.token", Matchers.is(authenticationResponse.getToken())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.username", Matchers.is(authenticationResponse.getUsername())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.roles", Matchers.is(authenticationResponse.getRoles())));
@@ -147,6 +152,7 @@ public class AuthenticationControllerTest {
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(TestUtils.toJson(authenticationRequest)))
 				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.token", Matchers.is(authenticationResponse.getToken())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.username", Matchers.is(authenticationResponse.getUsername())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.roles", Matchers.is(authenticationResponse.getRoles())));
@@ -220,6 +226,7 @@ public class AuthenticationControllerTest {
 						.get("/auth/refresh")
 						.header(Constants.AUTHORIZATION_HEADER, Constants.TOKEN_HEADER_STARTS_WITH + token))
 				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.token", Matchers.is(authenticationResponse.getToken())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.username", Matchers.is(authenticationResponse.getUsername())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.roles", Matchers.is(authenticationResponse.getRoles())));

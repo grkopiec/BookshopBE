@@ -35,11 +35,11 @@ public class UsersControllerTest {
 	private MockMvc mockMvc;
 	
 	@Mock
+	private Validator validator;
+	@Mock
 	private UsersService usersService;
 	@Mock
 	private UserUtils userUtils;
-	@Mock
-	private Validator validator;
 	
 	@InjectMocks
 	private UsersController usersController;

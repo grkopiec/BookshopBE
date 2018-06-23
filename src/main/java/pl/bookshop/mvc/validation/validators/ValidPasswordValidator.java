@@ -10,10 +10,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 
 public class ValidPasswordValidator implements ConstraintValidator<ValidPassword, String> {
+	private String username;
+	
     @Autowired
     private AuthenticationManager authenticationManager;
-    
-    private String username;
 	
 	@Override
 	public void initialize(ValidPassword constraintAnnotation) {
