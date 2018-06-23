@@ -20,11 +20,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.validation.Validator;
 
 import pl.bookshop.components.UserUtils;
 import pl.bookshop.domains.jpa.User;
 import pl.bookshop.domains.mongo.UserDetails;
 import pl.bookshop.mvc.controllers.UsersController;
+import pl.bookshop.mvc.objects.NewPassword;
 import pl.bookshop.mvc.objects.UserData;
 import pl.bookshop.services.UsersService;
 import pl.bookshop.tests.utils.TestUtils;
@@ -36,6 +38,8 @@ public class UsersControllerTest {
 	private UsersService usersService;
 	@Mock
 	private UserUtils userUtils;
+	@Mock
+	private Validator validator;
 	
 	@InjectMocks
 	private UsersController usersController;
@@ -45,6 +49,7 @@ public class UsersControllerTest {
 		MockitoAnnotations.initMocks(this);
 		mockMvc = MockMvcBuilders
 				.standaloneSetup(usersController)
+				.setValidator(validator)
 				.build();
 	}
 	
@@ -58,7 +63,7 @@ public class UsersControllerTest {
 		
 		mockMvc.perform(MockMvcRequestBuilders.get("/users"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
 				.andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(2)))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[0].user.id", Matchers.is(usersData.get(0).getUser().getId().intValue())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$[0].user.username", Matchers.is(usersData.get(0).getUser().getUsername())))
@@ -111,7 +116,7 @@ public class UsersControllerTest {
 		
 		mockMvc.perform(MockMvcRequestBuilders.get("/users/{id}", userDetails.getUserId()))
 				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(userDetails.getId())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.userId", Matchers.is(userDetails.getUserId().intValue())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(userDetails.getName())))
@@ -199,6 +204,8 @@ public class UsersControllerTest {
 						.put("/users/{id}", previousUserData.getUser().getId())
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(TestUtils.toJson(previousUserData.getUserDetails())))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(afterUpdateUserDetails.getId())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.userId", Matchers.is(afterUpdateUserDetails.getUserId().intValue())))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(afterUpdateUserDetails.getName())))
@@ -231,6 +238,23 @@ public class UsersControllerTest {
 				.andExpect(MockMvcResultMatchers.status().isNotFound());
 		
 		Mockito.verify(usersService, Mockito.times(1)).update(previousUserData.getUser().getId(), previousUserData.getUserDetails());
+		Mockito.verifyNoMoreInteractions(usersService);
+	}
+	
+	@Test
+	public void test_changePassword_success() throws Exception {
+		Long userId = RandomUtils.nextLong(0, 100);
+		NewPassword newPassword = getNewPassword();
+		
+		Mockito.doNothing().when(usersService).changePassword(userId, newPassword.getNewPassword());
+		
+		mockMvc.perform(MockMvcRequestBuilders
+						.patch("/users/change-password/{id}", userId)
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(TestUtils.toJson(newPassword)))
+				.andExpect(MockMvcResultMatchers.status().isNoContent());
+		
+		Mockito.verify(usersService, Mockito.times(1)).changePassword(userId, newPassword.getNewPassword());
 		Mockito.verifyNoMoreInteractions(usersService);
 	}
 	
@@ -343,5 +367,12 @@ public class UsersControllerTest {
 		userData1.setUser(getUser1());
 		userData1.setUserDetails(getUserDetails1());
 		return userData1;
+	}
+	
+	private NewPassword getNewPassword() {
+		NewPassword newPassword = new NewPassword();
+		newPassword.setCurrentPassword(RandomStringUtils.randomAlphabetic(10));
+		newPassword.setNewPassword(RandomStringUtils.randomAlphabetic(20));
+		return newPassword;
 	}
 }

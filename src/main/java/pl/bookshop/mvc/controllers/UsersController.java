@@ -90,13 +90,14 @@ public class UsersController {
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(path = "/change-password/{id}", method = RequestMethod.PATCH)
-	public ResponseEntity<?> changePassword(
+	public ResponseEntity<Void> changePassword(
 			@PathVariable Long id, @RequestBody @Valid NewPassword newPassword, @AuthenticationPrincipal User authenticatedUser) {
 		if (authenticatedUser.getId() != id) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
+		
 		usersService.changePassword(id, newPassword.getNewPassword());
-		return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
