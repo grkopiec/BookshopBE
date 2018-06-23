@@ -67,9 +67,7 @@ public class AuthenticationController {
     public ResponseEntity<AuthenticationResponse> login(@RequestBody @Valid AuthenticationRequest authenticationRequest)
             throws AuthenticationException {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                authenticationRequest.getUsername(),
-                authenticationRequest.getPassword()
-        );
+                authenticationRequest.getUsername(), authenticationRequest.getPassword());
         User user = (User) userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         if (user == null) {
         	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
