@@ -43,12 +43,11 @@ public class UsersController {
 		}
 		return new ResponseEntity<List<UserData>>(usersData, HttpStatus.OK);
 	}
-	//TODO check is it for role_user
+	
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(path = "/{id}")
 	public ResponseEntity<UserDetails> findOne(@PathVariable Long id, @AuthenticationPrincipal User authenticatedUser) {
-		//TODO check if should be || instead &&
-		if (authenticatedUser.getId() != id && userUtils.isAdmin(authenticatedUser) == false) {
+		if (authenticatedUser.getId() != id) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
@@ -77,7 +76,7 @@ public class UsersController {
 	public ResponseEntity<UserDetails> update(
 			@PathVariable Long id, @RequestBody @Validated(NormalUser.class) UserDetails userDetails,
 			@AuthenticationPrincipal User authenticatedUser) {
-		if (authenticatedUser.getId() != id && userUtils.isAdmin(authenticatedUser) == false) {
+		if (authenticatedUser.getId() != id) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
@@ -88,7 +87,7 @@ public class UsersController {
 		}
 		return new ResponseEntity<>(updatedUserDetails, HttpStatus.OK);
 	}
-	//TODO valid is current password correct
+	
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(path = "/change-password/{id}", method = RequestMethod.PATCH)
 	public ResponseEntity<?> changePassword(
