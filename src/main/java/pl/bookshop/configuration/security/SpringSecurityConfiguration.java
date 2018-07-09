@@ -41,7 +41,6 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-
     @Bean
     public AuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
         AuthenticationTokenFilter authenticationTokenFilter = new AuthenticationTokenFilter();

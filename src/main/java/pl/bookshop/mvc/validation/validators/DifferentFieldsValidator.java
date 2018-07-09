@@ -41,6 +41,10 @@ public class DifferentFieldsValidator implements ConstraintValidator<DifferentFi
 					"Cannot find property " + this.firstField + " or property " + this.secondField + " in validating object", exception);
 		}
 		
+		if (firstField == null || secondField == null) {
+			return true;
+		}
+		
 		if (firstField.equals(secondField)) {
 			return false;
 		}

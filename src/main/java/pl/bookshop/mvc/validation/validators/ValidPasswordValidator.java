@@ -22,11 +22,15 @@ public class ValidPasswordValidator implements ConstraintValidator<ValidPassword
 
 	@Override
 	public boolean isValid(String password, ConstraintValidatorContext context) {
+		if (password == null) {
+			return true;
+		}
+		
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                 username, password);
         
         try {
-        	this.authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+        	authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         } catch (BadCredentialsException exception)	 {
         	return false;
         }

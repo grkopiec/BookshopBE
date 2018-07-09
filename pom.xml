@@ -71,6 +71,12 @@
 		    <version>${spring.version}</version>
 		    <scope>test</scope>
 		</dependency>
+		<dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-test</artifactId>
+		    <version>${spring-security.version}</version>
+		    <scope>test</scope>
+		</dependency>
 
 		<dependency>
 		    <groupId>com.github.springtestdbunit</groupId>
@@ -137,7 +143,6 @@
 			<artifactId>spring-data-mongodb</artifactId>
 			<version>${spring-data.version}</version>
 		</dependency>
-
 		
 		<dependency>
 		    <groupId>org.springframework.security</groupId>
