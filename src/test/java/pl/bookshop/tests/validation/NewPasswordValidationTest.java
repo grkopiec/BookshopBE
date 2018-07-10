@@ -69,6 +69,7 @@ public class NewPasswordValidationTest {
 	}
 	
 	@Test
+	@WithUserDetails("admin")
 	public void test_currentPassword_whenIsTooShort() {
 		NewPassword newPassword = getNewPassword();
 		newPassword.setCurrentPassword(RandomStringUtils.randomAlphabetic(3));
@@ -91,6 +92,7 @@ public class NewPasswordValidationTest {
 	}
 	
 	@Test
+	@WithUserDetails("admin")
 	public void test_currentPassword_whenIsTooLong() {
 		NewPassword newPassword = getNewPassword();
 		newPassword.setCurrentPassword(RandomStringUtils.randomAlphabetic(41));
@@ -113,6 +115,7 @@ public class NewPasswordValidationTest {
 	}
 	
 	@Test
+	@WithUserDetails("admin")
 	public void test_currentPassword_whenInvalidPassword() {
 		NewPassword newPassword = getNewPassword();
 		newPassword.setCurrentPassword(RandomStringUtils.randomAlphabetic(30));
@@ -122,6 +125,45 @@ public class NewPasswordValidationTest {
 		
 		Iterator<ConstraintViolation<NewPassword>> iterator = constraintViolations.iterator();
 		Assert.assertEquals("Current password is not correct", iterator.next().getMessage());
+	}
+	
+	@Test
+	@WithUserDetails("admin")
+	public void test_newPassword_whenIsNull() {
+		NewPassword newPassword = getNewPassword();
+		newPassword.setNewPassword(null);
+		
+		Set<ConstraintViolation<NewPassword>> constraintViolations = validator.validate(newPassword);
+		Assert.assertEquals(1, constraintViolations.size());
+		
+		Iterator<ConstraintViolation<NewPassword>> iterator = constraintViolations.iterator();
+		Assert.assertEquals("New password cannot be empty", iterator.next().getMessage());
+	}
+	
+	@Test
+	@WithUserDetails("admin")
+	public void test_newPassword_whenIsTooShort() {
+		NewPassword newPassword = getNewPassword();
+		newPassword.setNewPassword(RandomStringUtils.randomAlphabetic(3));
+		
+		Set<ConstraintViolation<NewPassword>> constraintViolations = validator.validate(newPassword);
+		Assert.assertEquals(1, constraintViolations.size());
+		
+		Iterator<ConstraintViolation<NewPassword>> iterator = constraintViolations.iterator();
+		Assert.assertEquals("New password size must be between 4 and 30", iterator.next().getMessage());
+	}
+	
+	@Test
+	@WithUserDetails("admin")
+	public void test_newPassword_whenIsTooLong() {
+		NewPassword newPassword = getNewPassword();
+		newPassword.setNewPassword(RandomStringUtils.randomAlphabetic(41));
+		
+		Set<ConstraintViolation<NewPassword>> constraintViolations = validator.validate(newPassword);
+		Assert.assertEquals(1, constraintViolations.size());
+		
+		Iterator<ConstraintViolation<NewPassword>> iterator = constraintViolations.iterator();
+		Assert.assertEquals("New password size must be between 4 and 30", iterator.next().getMessage());
 	}
 	
 	private NewPassword getNewPassword() {
