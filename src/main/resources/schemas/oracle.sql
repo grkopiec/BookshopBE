@@ -21,10 +21,12 @@ END drop_if_sequence_exists;
 EXEC drop_if_table_exists('categories');
 EXEC drop_if_table_exists('products');
 EXEC drop_if_table_exists('users');
+EXEC drop_if_table_exists('orders');
 
 EXEC drop_if_sequence_exists('products_sequence');
 EXEC drop_if_sequence_exists('categories_sequence');
 EXEC drop_if_sequence_exists('users_sequence');
+EXEC drop_if_sequence_exists('orders_sequence');
 
 CREATE SEQUENCE products_sequence
   MINVALUE 0
@@ -37,6 +39,11 @@ CREATE SEQUENCE categories_sequence
   INCREMENT BY 1;
   
 CREATE SEQUENCE users_sequence
+  MINVALUE 0
+  START WITH 0
+  INCREMENT BY 1;
+  
+CREATE SEQUENCE orders_sequence
   MINVALUE 0
   START WITH 0
   INCREMENT BY 1;
@@ -71,6 +78,14 @@ CREATE TABLE users (
 	credentials_non_expired NUMBER(1) NOT NULL,
 	enabled NUMBER(1) NOT NULL,
 	CONSTRAINT user_id_pk PRIMARY KEY (id)
+);
+
+CREATE TABLE orders (
+	id NUMBER,
+	user_id NOT NULL,
+	total_price NUMBER NOT NULL,
+	CONSTRAINT order_id_pk PRIMARY KEY (id),
+	CONSTRAINT user_id_fk FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 INSERT INTO categories (id, name) VALUES (categories_sequence.nextval, 'Books');
