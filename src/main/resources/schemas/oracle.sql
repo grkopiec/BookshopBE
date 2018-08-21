@@ -82,8 +82,8 @@ CREATE TABLE users (
 
 CREATE TABLE orders (
 	id NUMBER,
-	user_id NOT NULL,
-	total_price NUMBER NOT NULL,
+	total_price NUMBER(8,2) NOT NULL,
+	user_id,
 	CONSTRAINT order_id_pk PRIMARY KEY (id),
 	CONSTRAINT user_id_fk FOREIGN KEY (user_id) REFERENCES users(id)
 );

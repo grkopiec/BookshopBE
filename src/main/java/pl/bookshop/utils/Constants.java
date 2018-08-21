@@ -13,4 +13,6 @@ public class Constants {
 	public static final String PRODUCTS_SEQUENCE = "PRODUCTS_SEQUENCE";
 	public static final String USERS_SEQUENCE_GENERATOR = "userIdGenerator";
 	public static final String USERS_SEQUENCE = "USERS_SEQUENCE";
+	public static final String ORDERS_SEQUENCE_GENERATOR = "orderIdGenerator";
+	public static final String ORDERS_SEQUENCE = "ORDERS_SEQUENCE";
 }
