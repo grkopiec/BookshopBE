@@ -64,7 +64,7 @@ public class Order {
 
 	@Override
 	public String toString() {
-		return "Product [id=" + id + ", totalrice=" + totalPrice + "]";
+		return "Order [id=" + id + ", totalrice=" + totalPrice + "]";
 	}
 
 	@Override
