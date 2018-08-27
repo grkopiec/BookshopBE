@@ -21,7 +21,7 @@ import pl.bookshop.utils.Constants;
 
 @Entity	
 @Table(name = "orders")
-public class Orders {
+public class Order {
 	@Id
 	@GenericGenerator(name = Constants.ORDERS_SEQUENCE_GENERATOR, strategy = "sequence", parameters = {
 			@Parameter(name = "sequence_name", value = Constants.ORDERS_SEQUENCE)
@@ -84,7 +84,7 @@ public class Orders {
 			return false;
 		}
 		
-		Orders other = (Orders) obj;
+		Order other = (Order) obj;
 		return Objects.equals(this.totalPrice, other.totalPrice);
 	}
 }
