@@ -3,11 +3,12 @@ package pl.bookshop.domains.jpa;
 import java.util.Objects;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.Digits;
@@ -28,11 +29,12 @@ public class Order {
 	})
 	@GeneratedValue(generator = Constants.PRODUCTS_SEQUENCE_GENERATOR)
 	private Long id;
+	@Column(name = "total_price")
 	@NotNull(message = "{???}")
 	@PositiveOrZero(message = "{???}")
 	@Digits(integer = 6, fraction = 2, message = "{???}")
 	private Double totalPrice;
-	@OneToMany(cascade = CascadeType.DETACH)
+	@ManyToOne(cascade = CascadeType.DETACH)
 	@JoinColumn(name = "user_id")
 	@Valid
 	@NotNull(message = "{???}")
