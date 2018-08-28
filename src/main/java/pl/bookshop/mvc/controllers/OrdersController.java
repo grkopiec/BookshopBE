@@ -23,6 +23,7 @@ public class OrdersController {
 	@Autowired
 	private OrdersService ordersService;
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping
 	public ResponseEntity<List<Order>> findAll() {
 		List<Order> orders = ordersService.findAll();
@@ -33,6 +34,7 @@ public class OrdersController {
 		return new ResponseEntity<List<Order>>(orders, HttpStatus.OK);
 	}
 	
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(path = "/{id}")
 	public ResponseEntity<Order> findOne(@PathVariable Long id) {
 		Order order = ordersService.findOne(id);
