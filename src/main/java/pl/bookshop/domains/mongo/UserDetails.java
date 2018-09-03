@@ -12,7 +12,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import pl.bookshop.mvc.validation.groups.AdminUser;
 import pl.bookshop.mvc.validation.groups.NormalUser;
-
+//validation for userId
+//put userId as last property
 @Document(collection = "usersDetails")
 public class UserDetails {
 	@Id

@@ -30,7 +30,7 @@ import pl.bookshop.hibernate.CollectionStringConverter;
 import pl.bookshop.mvc.validation.groups.AdminUser;
 import pl.bookshop.mvc.validation.groups.NormalUser;
 import pl.bookshop.utils.Constants;
-
+//Add id to equals and hashCode here and for rest entities
 @Entity	
 @Table(name = "users")
 public class User implements UserDetails {
