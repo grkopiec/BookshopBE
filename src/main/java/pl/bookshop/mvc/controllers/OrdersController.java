@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import pl.bookshop.domains.jpa.Order;
+import pl.bookshop.domains.mongo.OrderItem;
+import pl.bookshop.mvc.objects.OrderData;
 import pl.bookshop.services.OrdersService;
 //TODO check if proper user call his own order
 @RestController
@@ -46,23 +48,17 @@ public class OrdersController {
 	}
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> create(@RequestBody @Valid Order order) {
-		ordersService.create(order);
-		return new ResponseEntity<>(HttpStatus.CREATED);
+	@RequestMapping(path = "/items/{id}")
+	public ResponseEntity<List<OrderItem>> findItems(@PathVariable Long id) {
+		//TODO find order items and return
+		return null;
 	}
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping(path = "/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<Order> update(@PathVariable Long id, @RequestBody @Valid Order order) {
-		Order updatingOrder = ordersService.findOne(id);
-		
-		if (updatingOrder == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-		
-		Order updatedOrder = ordersService.update(id, order);
-		return new ResponseEntity<>(updatedOrder, HttpStatus.OK);
+	@RequestMapping(method = RequestMethod.POST)
+	public ResponseEntity<Void> create(@RequestBody @Valid OrderData orderData) {
+		ordersService.create(orderData);
+		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")

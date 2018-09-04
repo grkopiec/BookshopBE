@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import pl.bookshop.domains.jpa.Order;
+import pl.bookshop.domains.mongo.OrderItem;
+import pl.bookshop.mvc.objects.OrderData;
 import pl.bookshop.repositories.jpa.OrdersRepository;
 
 @Service
@@ -27,15 +29,14 @@ public class OrdersServiceImpl implements OrdersService {
 	}
 
 	@Override
-	public void create(Order order) {
-		ordersRepository.save(order);
-		
+	public List<OrderItem> findItems(Long id) {
+		// TODO find order items and return
+		return null;
 	}
 
 	@Override
-	public Order update(Long id, Order order) {
-		order.setId(id);
-		return ordersRepository.save(order);
+	public void create(OrderData orderData) {
+		//TODO save order data
 	}
 
 	@Override
