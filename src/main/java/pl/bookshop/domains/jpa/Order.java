@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.Valid;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
@@ -36,7 +35,6 @@ public class Order {
 	private Double totalPrice;
 	@ManyToOne(cascade = CascadeType.DETACH)
 	@JoinColumn(name = "user_id")
-	@Valid
 	@NotNull(message = "{???}")
 	private User user;
 

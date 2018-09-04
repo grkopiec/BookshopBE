@@ -11,7 +11,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 //TODO validation for orderId and productId
 @Document(collection = "ordersItems")
-public class OrderItems {
+public class OrderItem {
 	@Id
 	private String id;
 	@NotNull(message = "{???}")
@@ -86,7 +86,7 @@ public class OrderItems {
 			return false;
 		}
 		
-		OrderItems other = (OrderItems) obj;
+		OrderItem other = (OrderItem) obj;
 		return Objects.equals(this.id, other.id) && Objects.equals(this.price, other.price) && Objects.equals(this.quantity, other.quantity)
 				&& Objects.equals(this.orderId, other.orderId) && Objects.equals(this.productId, other.productId);
 	}
