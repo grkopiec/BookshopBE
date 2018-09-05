@@ -11,15 +11,19 @@ import pl.bookshop.domains.jpa.Order;
 import pl.bookshop.domains.mongo.OrderItem;
 import pl.bookshop.mvc.objects.OrderData;
 import pl.bookshop.repositories.jpa.OrdersRepository;
+import pl.bookshop.repositories.mongo.OrderItemsRepository;
 
 @Service
 @Transactional
 public class OrdersServiceImpl implements OrdersService {
 	@Autowired
 	private OrdersRepository ordersRepository;
+	@Autowired
+	private OrderItemsRepository orderItemsRepository;
 
 	@Override
 	public List<Order> findAll() {
+		//TODO not finished
 		return ordersRepository.findAll();
 	}
 
@@ -30,17 +34,26 @@ public class OrdersServiceImpl implements OrdersService {
 
 	@Override
 	public List<OrderItem> findItems(Long id) {
-		// TODO find order items and return
-		return null;
+		return orderItemsRepository.findByOrderId(id);
 	}
 
 	@Override
 	public void create(OrderData orderData) {
-		//TODO save order data
+		Order orderToSave = orderData.getOrder();
+		final Order savedOrder = ordersRepository.save(orderToSave);
+		
+		List<OrderItem> orderItems = orderData.getOrderItems();
+		orderItems
+				.forEach(o -> {
+					String orderId = String.valueOf(savedOrder.getId());
+					o.setId(orderId);
+				});
+		orderItemsRepository.saveAll(orderItems);
 	}
 
 	@Override
 	public void delete(Long id) {
+		//TODO not finished;
 		ordersRepository.deleteById(id);
 	}
 }

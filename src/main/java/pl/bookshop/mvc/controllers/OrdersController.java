@@ -50,8 +50,12 @@ public class OrdersController {
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(path = "/items/{id}")
 	public ResponseEntity<List<OrderItem>> findItems(@PathVariable Long id) {
-		//TODO find order items and return
-		return null;
+		List<OrderItem> orderItems = ordersService.findItems(id);
+		
+		if (orderItems.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<>(orderItems, HttpStatus.OK);
 	}
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
