@@ -23,8 +23,8 @@ public class OrdersServiceImpl implements OrdersService {
 
 	@Override
 	public List<Order> findAll() {
-		//TODO not finished
 		return ordersRepository.findAll();
+		
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class OrdersServiceImpl implements OrdersService {
 
 	@Override
 	public void delete(Long id) {
-		//TODO not finished;
+		orderItemsRepository.deleteByOrderId(id);
 		ordersRepository.deleteById(id);
 	}
 }
