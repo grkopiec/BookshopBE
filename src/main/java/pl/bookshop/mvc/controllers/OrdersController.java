@@ -19,6 +19,7 @@ import pl.bookshop.domains.mongo.OrderItem;
 import pl.bookshop.mvc.objects.OrderData;
 import pl.bookshop.services.OrdersService;
 //TODO check if proper user call his own order
+//TODO references in table can be NOT NULL
 @RestController
 @RequestMapping(path = "/orders")
 public class OrdersController {

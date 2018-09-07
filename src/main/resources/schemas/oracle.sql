@@ -83,6 +83,9 @@ CREATE TABLE users (
 CREATE TABLE orders (
 	id NUMBER,
 	total_price NUMBER(8,2) NOT NULL,
+	status VARCHAR2(18) NOT NULL,
+	payment_method VARCHAR2(13) NOT NULL,
+	paid NUMBER(1) NOT NULL,
 	user_id,
 	CONSTRAINT order_id_pk PRIMARY KEY (id),
 	CONSTRAINT user_id_fk FOREIGN KEY (user_id) REFERENCES users(id)
@@ -110,3 +113,5 @@ INSERT INTO users (id, username, password, last_password_reset, authorities, acc
 	VALUES (users_sequence.nextval, 'admin', '$2a$10$JzNf.Zx0S1hT21jIaKNF.OKulAzg9kwm/Dsw9Keslcpb1oA2HnWU6', NULL, 'ROLE_ADMIN,ROLE_USER', 1, 1, 1, 1);
 INSERT INTO users (id, username, password, last_password_reset, authorities, account_non_expired, account_non_locked, credentials_non_expired, enabled)
 	VALUES (users_sequence.nextval, 'user', '$2a$10$JzNf.Zx0S1hT21jIaKNF.OKulAzg9kwm/Dsw9Keslcpb1oA2HnWU6', NULL, 'ROLE_USER', 1, 1, 1, 1);
+	
+--TODO add example orders

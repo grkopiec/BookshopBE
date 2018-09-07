@@ -5,6 +5,8 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -17,6 +19,8 @@ import javax.validation.constraints.PositiveOrZero;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
+import pl.bookshop.enums.OrderStatus;
+import pl.bookshop.enums.PaymentMethod;
 import pl.bookshop.utils.Constants;
 
 @Entity	
@@ -33,6 +37,15 @@ public class Order {
 	@PositiveOrZero(message = "{???}")
 	@Digits(integer = 6, fraction = 2, message = "{???}")
 	private Double totalPrice;
+	@Enumerated(EnumType.STRING)
+	@NotNull(message = "{???}")
+	private OrderStatus status;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "payment_method")
+	@NotNull(message = "{???}")
+	private PaymentMethod paymentMethod;
+	@NotNull(message = "{???}")
+	private Boolean paid;
 	@ManyToOne(cascade = CascadeType.DETACH)
 	@JoinColumn(name = "user_id")
 	@NotNull(message = "{???}")
