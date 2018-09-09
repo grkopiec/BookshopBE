@@ -44,10 +44,7 @@ public class OrdersServiceImpl implements OrdersService {
 		
 		List<OrderItem> orderItems = orderData.getOrderItems();
 		orderItems
-				.forEach(o -> {
-					String orderId = String.valueOf(savedOrder.getId());
-					o.setId(orderId);
-				});
+				.forEach(o -> o.setOrderId(savedOrder.getId()));
 		orderItemsRepository.saveAll(orderItems);
 	}
 
