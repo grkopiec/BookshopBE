@@ -19,6 +19,8 @@ import javax.validation.constraints.PositiveOrZero;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import pl.bookshop.enums.OrderStatus;
 import pl.bookshop.enums.PaymentMethod;
 import pl.bookshop.utils.Constants;
@@ -48,6 +50,7 @@ public class Order {
 	private Boolean paid;
 	@ManyToOne(cascade = CascadeType.DETACH)
 	@JoinColumn(name = "user_id")
+	@JsonIgnore
 	@NotNull(message = "{???}")
 	private User user;
 
@@ -67,6 +70,30 @@ public class Order {
 		this.totalPrice = totalPrice;
 	}
 
+	public OrderStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(OrderStatus status) {
+		this.status = status;
+	}
+
+	public PaymentMethod getPaymentMethod() {
+		return paymentMethod;
+	}
+
+	public void setPaymentMethod(PaymentMethod paymentMethod) {
+		this.paymentMethod = paymentMethod;
+	}
+
+	public Boolean getPaid() {
+		return paid;
+	}
+
+	public void setPaid(Boolean paid) {
+		this.paid = paid;
+	}
+
 	public User getUser() {
 		return user;
 	}
@@ -77,12 +104,12 @@ public class Order {
 
 	@Override
 	public String toString() {
-		return "Order [id=" + id + ", totalrice=" + totalPrice + "]";
+		return "Order [id=" + id + ", totalrice=" + totalPrice + ", status=" + status + ", paymentMethod=" + paymentMethod + ", paid=" + paid + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(totalPrice);
+		return Objects.hash(totalPrice, status, paymentMethod, paid);
 	}
 
 	@Override
@@ -98,6 +125,7 @@ public class Order {
 		}
 		
 		Order other = (Order) obj;
-		return Objects.equals(this.totalPrice, other.totalPrice);
+		return Objects.equals(this.totalPrice, other.totalPrice) && Objects.equals(this.status, other.status)
+				&& Objects.equals(this.paymentMethod, other.paymentMethod) && Objects.equals(this.paid, other.paid);
 	}
 }
