@@ -1,0 +1,5 @@
+{"_id":{"$oid":"5b97fc79095d9125bf62f658"},"price":40.17,"quantity":{"$numberLong":"1"},"orderId":{"$numberLong":"0"},"productId":{"$numberLong":"0"},"_class":"pl.bookshop.domains.mongo.OrderItem"}
+{"_id":{"$oid":"5b97fc79095d9125bf62f659"},"price":35.5,"quantity":{"$numberLong":"1"},"orderId":{"$numberLong":"0"},"productId":{"$numberLong":"1"},"_class":"pl.bookshop.domains.mongo.OrderItem"}
+{"_id":{"$oid":"5b97fc8d095d9125bf62f65a"},"price":42.0,"quantity":{"$numberLong":"1"},"orderId":{"$numberLong":"1"},"productId":{"$numberLong":"2"},"_class":"pl.bookshop.domains.mongo.OrderItem"}
+{"_id":{"$oid":"5b97fc8d095d9125bf62f65b"},"price":30.0,"quantity":{"$numberLong":"1"},"orderId":{"$numberLong":"1"},"productId":{"$numberLong":"3"},"_class":"pl.bookshop.domains.mongo.OrderItem"}
+{"_id":{"$oid":"5b97fc8d095d9125bf62f65c"},"price":1.15,"quantity":{"$numberLong":"3"},"orderId":{"$numberLong":"1"},"productId":{"$numberLong":"4"},"_class":"pl.bookshop.domains.mongo.OrderItem"}

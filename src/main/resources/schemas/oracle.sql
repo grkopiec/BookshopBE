@@ -114,4 +114,7 @@ INSERT INTO users (id, username, password, last_password_reset, authorities, acc
 INSERT INTO users (id, username, password, last_password_reset, authorities, account_non_expired, account_non_locked, credentials_non_expired, enabled)
 	VALUES (users_sequence.nextval, 'user', '$2a$10$JzNf.Zx0S1hT21jIaKNF.OKulAzg9kwm/Dsw9Keslcpb1oA2HnWU6', NULL, 'ROLE_USER', 1, 1, 1, 1);
 	
---TODO add example orders
+INSERT INTO orders (id, total_price, status, payment_method, paid, user_id)
+	VALUES (orders_sequence.nextval, 76.67, 'NEW', 'ON_DELIVERY', 0, 0);
+INSERT INTO orders (id, total_price, status, payment_method, paid, user_id)
+	VALUES (orders_sequence.nextval, 75.45, 'NEW', 'BANK_TRANSFER', 0, 0);
