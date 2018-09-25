@@ -19,7 +19,7 @@ public class OrderItem {
 	@Digits(integer = 6, fraction = 2, message = "{???}")
 	private Double price;
 	@NotNull(message = "{???}")
-	@Range(min = 1, max = 1000, message = "{???}")
+	@Range(min = 1, max = 999, message = "{???}")
 	private Long quantity;
 	private Long orderId;
 	private Long productId;
