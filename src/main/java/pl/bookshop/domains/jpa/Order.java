@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
@@ -49,6 +50,8 @@ public class Order {
 	private PaymentMethod paymentMethod;
 	@NotNull(message = "{???}")
 	private ShippingMethod shippingMethod;
+	@Size(min = 1, max = 1000, message = "{???}")
+	private String additionalMessage;
 	@NotNull(message = "{???}")
 	private Boolean paid;
 	@ManyToOne(cascade = CascadeType.DETACH)
