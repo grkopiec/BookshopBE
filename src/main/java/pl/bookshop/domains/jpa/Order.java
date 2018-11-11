@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import pl.bookshop.enums.OrderStatus;
 import pl.bookshop.enums.PaymentMethod;
+import pl.bookshop.enums.ShippingMethod;
 import pl.bookshop.utils.Constants;
 
 @Entity	
@@ -46,6 +47,8 @@ public class Order {
 	@Column(name = "payment_method")
 	@NotNull(message = "{???}")
 	private PaymentMethod paymentMethod;
+	@NotNull(message = "{???}")
+	private ShippingMethod shippingMethod;
 	@NotNull(message = "{???}")
 	private Boolean paid;
 	@ManyToOne(cascade = CascadeType.DETACH)
