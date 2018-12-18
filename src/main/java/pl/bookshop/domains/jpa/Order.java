@@ -20,8 +20,6 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import pl.bookshop.enums.OrderStatus;
 import pl.bookshop.enums.PaymentMethod;
 import pl.bookshop.enums.ShippingMethod;
@@ -37,27 +35,28 @@ public class Order {
 	@GeneratedValue(generator = Constants.PRODUCTS_SEQUENCE_GENERATOR)
 	private Long id;
 	@Column(name = "total_price")
-	@NotNull(message = "{???}")
-	@PositiveOrZero(message = "{???}")
-	@Digits(integer = 6, fraction = 2, message = "{???}")
+	@NotNull(message = "{order.totalPrice.notNull}")
+	@PositiveOrZero(message = "{order.totalPrice.positiveOrZero}")
+	@Digits(integer = 6, fraction = 2, message = "{order.totalPrice.digits}")
 	private Double totalPrice;
 	@Enumerated(EnumType.STRING)
-	@NotNull(message = "{???}")
+	@NotNull(message = "{order.status.notNull}")
 	private OrderStatus status;
 	@Enumerated(EnumType.STRING)
 	@Column(name = "payment_method")
-	@NotNull(message = "{???}")
+	@NotNull(message = "{order.paymentMethod.notNull}")
 	private PaymentMethod paymentMethod;
-	@NotNull(message = "{???}")
+	@Enumerated(EnumType.STRING)
+	@Column(name = "shipping_method")
+	@NotNull(message = "{order.shippingMethod.notNull}")
 	private ShippingMethod shippingMethod;
-	@Size(min = 1, max = 1000, message = "{???}")
+	@Size(min = 1, max = 1000, message = "{order.additionalMessage.size}")
 	private String additionalMessage;
-	@NotNull(message = "{???}")
+	@NotNull(message = "{order.paid.notNull}")
 	private Boolean paid;
 	@ManyToOne(cascade = CascadeType.DETACH)
 	@JoinColumn(name = "user_id")
-	@JsonIgnore
-	@NotNull(message = "{???}")
+	@NotNull(message = "{order.user.notNull}")
 	private User user;
 
 	public Long getId() {
@@ -92,6 +91,22 @@ public class Order {
 		this.paymentMethod = paymentMethod;
 	}
 
+	public ShippingMethod getShippingMethod() {
+		return shippingMethod;
+	}
+
+	public void setShippingMethod(ShippingMethod shippingMethod) {
+		this.shippingMethod = shippingMethod;
+	}
+
+	public String getAdditionalMessage() {
+		return additionalMessage;
+	}
+
+	public void setAdditionalMessage(String additionalMessage) {
+		this.additionalMessage = additionalMessage;
+	}
+
 	public Boolean getPaid() {
 		return paid;
 	}
@@ -110,12 +125,13 @@ public class Order {
 
 	@Override
 	public String toString() {
-		return "Order [id=" + id + ", totalrice=" + totalPrice + ", status=" + status + ", paymentMethod=" + paymentMethod + ", paid=" + paid + "]";
+		return "Order [id=" + id + ", totalrice=" + totalPrice + ", status=" + status + ", paymentMethod=" + paymentMethod + ", shippingMethod="
+				+ shippingMethod + ", additionalMessage=" + additionalMessage + ", paid=" + paid + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(totalPrice, status, paymentMethod, paid);
+		return Objects.hash(totalPrice, status, paymentMethod, shippingMethod, additionalMessage, paid);
 	}
 
 	@Override
@@ -132,6 +148,7 @@ public class Order {
 		
 		Order other = (Order) obj;
 		return Objects.equals(this.totalPrice, other.totalPrice) && Objects.equals(this.status, other.status)
-				&& Objects.equals(this.paymentMethod, other.paymentMethod) && Objects.equals(this.paid, other.paid);
+				&& Objects.equals(this.paymentMethod, other.paymentMethod) && Objects.equals(this.shippingMethod, other.shippingMethod)
+				&& Objects.equals(this.additionalMessage, other.additionalMessage) && Objects.equals(this.paid, other.paid);
 	}
 }

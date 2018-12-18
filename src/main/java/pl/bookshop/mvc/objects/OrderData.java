@@ -5,16 +5,18 @@ import java.util.Objects;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import pl.bookshop.domains.jpa.Order;
 import pl.bookshop.domains.mongo.OrderItem;
 
 public class OrderData {
 	@Valid
-	@NotNull(message = "{???}")
+	@NotNull(message = "{orderData.order.notNull}")
 	private Order order;
 	@Valid
-	@NotNull(message = "{???}")
+	@NotNull(message = "{orderData.orderItems.notNull}")
+	@Size(min = 1, max = 99, message = "{orderData.orderItems.size}")
 	private List<OrderItem> orderItems;
 
 	public Order getOrder() {

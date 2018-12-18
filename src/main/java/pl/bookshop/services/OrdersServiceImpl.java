@@ -40,7 +40,7 @@ public class OrdersServiceImpl implements OrdersService {
 	@Override
 	public void create(OrderData orderData) {
 		Order orderToSave = orderData.getOrder();
-		final Order savedOrder = ordersRepository.save(orderToSave);
+		Order savedOrder = ordersRepository.save(orderToSave);
 		
 		List<OrderItem> orderItems = orderData.getOrderItems();
 		orderItems

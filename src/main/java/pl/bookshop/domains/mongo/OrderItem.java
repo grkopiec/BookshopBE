@@ -14,14 +14,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class OrderItem {
 	@Id
 	private String id;
-	@NotNull(message = "{???}")
-	@PositiveOrZero(message = "{???}")
-	@Digits(integer = 6, fraction = 2, message = "{???}")
+	@NotNull(message = "{orderItem.price.notNull}")
+	@PositiveOrZero(message = "{orderItem.price.positiveOrZero}")
+	@Digits(integer = 6, fraction = 2, message = "{orderItem.price.digits}")
 	private Double price;
-	@NotNull(message = "{???}")
-	@Range(min = 1, max = 999, message = "{???}")
+	@NotNull(message = "{orderItem.quantity.notNull}")
+	@Range(min = 1, max = 999, message = "{orderItem.quantity.range}")
 	private Long quantity;
 	private Long orderId;
+	@NotNull(message = "{orderItem.productId.notNull}")
 	private Long productId;
 
 	public String getId() {
