@@ -85,8 +85,8 @@ CREATE TABLE orders (
 	total_price NUMBER(8,2) NOT NULL,
 	status VARCHAR2(18) NOT NULL,
 	payment_method VARCHAR2(13) NOT NULL,
-	shippingMethod VARCHAR2(15) NOT NULL,
-	additionalMessage VARCHAR2(1000) NOT NULL,
+	shipping_method VARCHAR2(15) NOT NULL,
+	additional_message VARCHAR2(1000),
 	paid NUMBER(1) NOT NULL,
 	user_id,
 	CONSTRAINT order_id_pk PRIMARY KEY (id),
@@ -116,7 +116,7 @@ INSERT INTO users (id, username, password, last_password_reset, authorities, acc
 INSERT INTO users (id, username, password, last_password_reset, authorities, account_non_expired, account_non_locked, credentials_non_expired, enabled)
 	VALUES (users_sequence.nextval, 'user', '$2a$10$JzNf.Zx0S1hT21jIaKNF.OKulAzg9kwm/Dsw9Keslcpb1oA2HnWU6', NULL, 'ROLE_USER', 1, 1, 1, 1);
 	
-INSERT INTO orders (id, total_price, status, payment_method, shippingMethod, additionalMessage, paid, user_id)
+INSERT INTO orders (id, total_price, status, payment_method, shipping_method, additional_message, paid, user_id)
 	VALUES (orders_sequence.nextval, 76.67, 'NEW', 'ON_DELIVERY', 'PERSONAL_PICKUP', 'I will come on Monday at 12 AM', 0, 0);
-INSERT INTO orders (id, total_price, status, payment_method, shippingMethod, additionalMessage, paid, user_id)
+INSERT INTO orders (id, total_price, status, payment_method, shipping_method, additional_message, paid, user_id)
 	VALUES (orders_sequence.nextval, 75.45, 'NEW', 'BANK_TRANSFER', 'COURIER', NULL, 0, 0);

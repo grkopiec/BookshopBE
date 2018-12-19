@@ -40,6 +40,7 @@ public class Order {
 	@Digits(integer = 6, fraction = 2, message = "{order.totalPrice.digits}")
 	private Double totalPrice;
 	@Enumerated(EnumType.STRING)
+	@Column(name = "status")
 	@NotNull(message = "{order.status.notNull}")
 	private OrderStatus status;
 	@Enumerated(EnumType.STRING)
@@ -50,8 +51,10 @@ public class Order {
 	@Column(name = "shipping_method")
 	@NotNull(message = "{order.shippingMethod.notNull}")
 	private ShippingMethod shippingMethod;
+	@Column(name = "additional_message")
 	@Size(min = 1, max = 1000, message = "{order.additionalMessage.size}")
 	private String additionalMessage;
+	@Column(name = "paid")
 	@NotNull(message = "{order.paid.notNull}")
 	private Boolean paid;
 	@ManyToOne(cascade = CascadeType.DETACH)
@@ -125,7 +128,7 @@ public class Order {
 
 	@Override
 	public String toString() {
-		return "Order [id=" + id + ", totalrice=" + totalPrice + ", status=" + status + ", paymentMethod=" + paymentMethod + ", shippingMethod="
+		return "Order [id=" + id + ", totalPrice=" + totalPrice + ", status=" + status + ", paymentMethod=" + paymentMethod + ", shippingMethod="
 				+ shippingMethod + ", additionalMessage=" + additionalMessage + ", paid=" + paid + "]";
 	}
 
