@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import pl.bookshop.domains.jpa.Order;
-import pl.bookshop.domains.mongo.OrderItem;
 import pl.bookshop.mvc.objects.OrderData;
+import pl.bookshop.mvc.objects.OrderElements;
 import pl.bookshop.services.OrdersService;
 //TODO check if proper user call his own order
 //TODO references in table can be NOT NULL
+//TODO reference from order to user can not be null
+//TODO should be used DAO objects
 @RestController
 @RequestMapping(path = "/orders")
 public class OrdersController {
@@ -38,6 +40,17 @@ public class OrdersController {
 	}
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
+	@RequestMapping(path = "/user/{id}")
+	public ResponseEntity<List<Order>> findForUser(@PathVariable Long id) {
+		List<Order> orders = ordersService.findForUser(id);
+		
+		if (orders.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<>(orders, HttpStatus.OK);
+	}
+	
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(path = "/{id}")
 	public ResponseEntity<Order> findOne(@PathVariable Long id) {
 		Order order = ordersService.findOne(id);
@@ -50,13 +63,13 @@ public class OrdersController {
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(path = "/items/{id}")
-	public ResponseEntity<List<OrderItem>> findItems(@PathVariable Long id) {
-		List<OrderItem> orderItems = ordersService.findItems(id);
+	public ResponseEntity<OrderElements> findItems(@PathVariable Long id) {
+		OrderElements orderElements = ordersService.findItems(id);
 		
-		if (orderItems.isEmpty()) {
+		if (orderElements.getOrderItems().isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<>(orderItems, HttpStatus.OK);
+		return new ResponseEntity<>(orderElements, HttpStatus.OK);
 	}
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
