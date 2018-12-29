@@ -27,63 +27,63 @@ import pl.bookshop.services.OrdersService;
 public class OrdersController {
 	@Autowired
 	private OrdersService ordersService;
-	
+
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping
 	public ResponseEntity<List<Order>> findAll() {
 		List<Order> orders = ordersService.findAll();
-		
+
 		if (orders.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 		return new ResponseEntity<List<Order>>(orders, HttpStatus.OK);
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(path = "/user/{id}")
 	public ResponseEntity<List<Order>> findForUser(@PathVariable Long id) {
 		List<Order> orders = ordersService.findForUser(id);
-		
+
 		if (orders.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 		return new ResponseEntity<>(orders, HttpStatus.OK);
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(path = "/{id}")
 	public ResponseEntity<Order> findOne(@PathVariable Long id) {
 		Order order = ordersService.findOne(id);
-		
+
 		if (order == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<>(order, HttpStatus.OK);
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(path = "/items/{id}")
 	public ResponseEntity<OrderElements> findItems(@PathVariable Long id) {
 		OrderElements orderElements = ordersService.findItems(id);
-		
+
 		if (orderElements.getOrderItems().isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<>(orderElements, HttpStatus.OK);
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> create(@RequestBody @Valid OrderData orderData) {
 		ordersService.create(orderData);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		Order order = ordersService.findOne(id);
-		
+
 		if (order == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}

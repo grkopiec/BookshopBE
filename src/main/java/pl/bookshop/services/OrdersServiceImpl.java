@@ -31,7 +31,7 @@ public class OrdersServiceImpl implements OrdersService {
 	public List<Order> findAll() {
 		return ordersRepository.findAll();
 	}
-	
+
 	@Override
 	public List<Order> findForUser(Long id) {
 		return ordersRepository.findByUserId(id);

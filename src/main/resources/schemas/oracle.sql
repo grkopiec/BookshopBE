@@ -83,7 +83,7 @@ CREATE TABLE users (
 CREATE TABLE orders (
 	id NUMBER,
 	total_price NUMBER(8,2) NOT NULL,
-	status VARCHAR2(18) NOT NULL,
+	status VARCHAR2(26) NOT NULL,
 	payment_method VARCHAR2(13) NOT NULL,
 	shipping_method VARCHAR2(15) NOT NULL,
 	additional_message VARCHAR2(1000),
