@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import pl.bookshop.domains.jpa.Order;
+import pl.bookshop.mvc.objects.ChangeStatus;
 import pl.bookshop.mvc.objects.OrderData;
 import pl.bookshop.mvc.objects.OrderElements;
 import pl.bookshop.services.OrdersService;
@@ -77,6 +78,13 @@ public class OrdersController {
 	public ResponseEntity<Void> create(@RequestBody @Valid OrderData orderData) {
 		ordersService.create(orderData);
 		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
+
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@RequestMapping(path = "/change-status/{id}", method = RequestMethod.PATCH)
+	public ResponseEntity<Void> changeStatus(@PathVariable Long id, @RequestBody @Valid ChangeStatus changeStatus) {
+		ordersService.changeStatus(id, changeStatus.getOrderStatus());
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")

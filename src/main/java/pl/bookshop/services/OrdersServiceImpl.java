@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import pl.bookshop.domains.jpa.Order;
 import pl.bookshop.domains.jpa.Product;
 import pl.bookshop.domains.mongo.OrderItem;
+import pl.bookshop.enums.OrderStatus;
 import pl.bookshop.mvc.objects.OrderData;
 import pl.bookshop.mvc.objects.OrderElements;
 import pl.bookshop.repositories.jpa.OrdersRepository;
@@ -65,6 +66,11 @@ public class OrdersServiceImpl implements OrdersService {
 		orderItems
 				.forEach(o -> o.setOrderId(savedOrder.getId()));
 		orderItemsRepository.saveAll(orderItems);
+	}
+	
+	@Override
+	public void changeStatus(Long id, OrderStatus orderStatus) {
+		ordersRepository.setStatus(id, orderStatus);
 	}
 
 	@Override

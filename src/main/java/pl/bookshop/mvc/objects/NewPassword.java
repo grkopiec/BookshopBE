@@ -33,7 +33,7 @@ public class NewPassword {
 	public void setNewPassword(String newPassword) {
 		this.newPassword = newPassword;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "NewPassword [currentPassword=" + currentPassword + ", newPassword=" + newPassword + "]";
@@ -43,7 +43,7 @@ public class NewPassword {
 	public int hashCode() {
 		return Objects.hash(currentPassword, newPassword);
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == this) {
@@ -55,7 +55,7 @@ public class NewPassword {
 		if (this.getClass() != obj.getClass()) {
 			return false;
 		}
-		
+
 		NewPassword other = (NewPassword) obj;
 		return Objects.equals(this.currentPassword, other.currentPassword) && Objects.equals(this.newPassword, other.newPassword);
 	}

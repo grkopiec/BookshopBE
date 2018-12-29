@@ -32,33 +32,33 @@ public class UsersController {
 	private UsersService usersService;
 	@Autowired
 	private UserUtils userUtils;
-	
+
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping
 	public ResponseEntity<List<UserData>> findAll() {
 		List<UserData> usersData = usersService.findAll();
-		
+
 		if (usersData.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 		return new ResponseEntity<List<UserData>>(usersData, HttpStatus.OK);
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(path = "/{id}")
 	public ResponseEntity<UserDetails> findOne(@PathVariable Long id, @AuthenticationPrincipal User authenticatedUser) {
 		if (authenticatedUser.getId() != id) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
-		
+
 		UserDetails userDetails = usersService.findOne(id);
-		
+
 		if (userDetails == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<>(userDetails, HttpStatus.OK);
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(path = "/admin", method = RequestMethod.POST)
 	public ResponseEntity<Void> create(@RequestBody @Validated(AdminUser.class) UserData userData) {
@@ -70,7 +70,7 @@ public class UsersController {
 		usersService.create(userData);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(path = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<UserDetails> update(
@@ -79,15 +79,15 @@ public class UsersController {
 		if (authenticatedUser.getId() != id) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
-		
+
 		UserDetails updatedUserDetails = usersService.update(id, userDetails);
-		
+
 		if (updatedUserDetails == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<>(updatedUserDetails, HttpStatus.OK);
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(path = "/change-password/{id}", method = RequestMethod.PATCH)
 	public ResponseEntity<Void> changePassword(
@@ -95,16 +95,16 @@ public class UsersController {
 		if (authenticatedUser.getId() != id) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
-		
+
 		usersService.changePassword(id, newPassword.getNewPassword());
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		UserDetails user = usersService.findOne(id);
-		
+
 		if (user == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
