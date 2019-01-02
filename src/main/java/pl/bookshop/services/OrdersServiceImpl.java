@@ -67,10 +67,15 @@ public class OrdersServiceImpl implements OrdersService {
 				.forEach(o -> o.setOrderId(savedOrder.getId()));
 		orderItemsRepository.saveAll(orderItems);
 	}
-	
+
 	@Override
 	public void changeStatus(Long id, OrderStatus orderStatus) {
 		ordersRepository.setStatus(id, orderStatus);
+	}
+
+	@Override
+	public void markAsPaid(Long id) {
+		ordersRepository.setPaid(id, Boolean.TRUE);
 	}
 
 	@Override

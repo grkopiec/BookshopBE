@@ -14,5 +14,6 @@ public interface OrdersService {
 	public OrderElements findItems(Long id);
 	public void create(OrderData orderData);
 	public void changeStatus(Long id, OrderStatus orderStatus);
+	public void markAsPaid(Long id);
 	public void delete(Long id);
 }

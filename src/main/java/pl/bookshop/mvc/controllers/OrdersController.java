@@ -88,6 +88,13 @@ public class OrdersController {
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@RequestMapping(path = "/mark-as-paid/{id}", method = RequestMethod.PATCH)
+	public ResponseEntity<Void> markAsPaid(@PathVariable Long id) {
+		ordersService.markAsPaid(id);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
+
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		Order order = ordersService.findOne(id);
