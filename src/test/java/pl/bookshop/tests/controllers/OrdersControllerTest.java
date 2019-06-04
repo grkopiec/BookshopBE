@@ -1,5 +1,6 @@
 package pl.bookshop.tests.controllers;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -73,6 +74,52 @@ public class OrdersControllerTest {
 				.andExpect(MockMvcResultMatchers.jsonPath("$[1].paid", Matchers.is(orders.get(1).getPaid())));
 		
 		Mockito.verify(ordersService, Mockito.times(1)).findAll();
+		Mockito.verifyNoMoreInteractions(ordersService);
+	}
+	
+	@Test
+	public void test_findForUser_success() throws Exception {
+		List<Order> orders = Arrays.asList(getOrder0(), getOrder1());
+		Long userId = 0L;
+		
+		Mockito.when(ordersService.findForUser(userId)).thenReturn(orders);
+		
+		mockMvc.perform(MockMvcRequestBuilders.get("/orders/user/{id}", userId))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+				.andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(2)))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].id", Matchers.is(orders.get(0).getId().intValue())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].totalPrice", Matchers.is(orders.get(0).getTotalPrice())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].status", Matchers.is(orders.get(0).getStatus().toString())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].paymentMethod", Matchers.is(orders.get(0).getPaymentMethod().toString())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].shippingMethod", Matchers.is(orders.get(0).getShippingMethod().toString())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].additionalMessage", Matchers.is(orders.get(0).getAdditionalMessage())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[0].paid", Matchers.is(orders.get(0).getPaid())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].id", Matchers.is(orders.get(1).getId().intValue())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].totalPrice", Matchers.is(orders.get(1).getTotalPrice())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].status", Matchers.is(orders.get(1).getStatus().toString())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].paymentMethod", Matchers.is(orders.get(1).getPaymentMethod().toString())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].shippingMethod", Matchers.is(orders.get(1).getShippingMethod().toString())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].additionalMessage", Matchers.is(orders.get(1).getAdditionalMessage())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].paid", Matchers.is(orders.get(1).getPaid())));
+
+		Mockito.verify(ordersService, Mockito.times(1)).findForUser(userId);
+		Mockito.verifyNoMoreInteractions(ordersService);
+	}
+	
+	/**
+	 * Should occur 204 code error, do not found orders for user
+	 */
+	@Test
+	public void test_findForUser_fail() throws Exception {
+		Long userId = 0L;
+		
+		Mockito.when(ordersService.findForUser(userId)).thenReturn(new ArrayList<Order>());
+		
+		mockMvc.perform(MockMvcRequestBuilders.get("/orders/user/{id}", userId))
+				.andExpect(MockMvcResultMatchers.status().isNoContent());
+		
+		Mockito.verify(ordersService, Mockito.times(1)).findForUser(userId);
 		Mockito.verifyNoMoreInteractions(ordersService);
 	}
 	
