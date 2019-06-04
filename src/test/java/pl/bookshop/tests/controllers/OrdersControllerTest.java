@@ -76,6 +76,43 @@ public class OrdersControllerTest {
 		Mockito.verifyNoMoreInteractions(ordersService);
 	}
 	
+	@Test
+	public void test_findOne_success() throws Exception {
+		Order order = getOrder0();
+		
+		Mockito.when(ordersService.findOne(order.getId())).thenReturn(order);
+		
+		mockMvc.perform(MockMvcRequestBuilders.get("/orders/{id}", order.getId()))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(order.getId().intValue())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.totalPrice", Matchers.is(order.getTotalPrice())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.status", Matchers.is(order.getStatus().toString())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.paymentMethod", Matchers.is(order.getPaymentMethod().toString())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.shippingMethod", Matchers.is(order.getShippingMethod().toString())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.additionalMessage", Matchers.is(order.getAdditionalMessage())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.paid", Matchers.is(order.getPaid())));
+		
+		Mockito.verify(ordersService, Mockito.times(1)).findOne(order.getId());
+		Mockito.verifyNoMoreInteractions(ordersService);
+	}
+	
+	/**
+	 * Should occur 404 code error, do not found order
+	 */
+	@Test
+	public void test_findOne_fail() throws Exception {
+		Order order = getOrder0();
+		
+		Mockito.when(ordersService.findOne(order.getId())).thenReturn(null);
+		
+		mockMvc.perform(MockMvcRequestBuilders.get("/orders/{id}", order.getId()))
+				.andExpect(MockMvcResultMatchers.status().isNotFound());
+		
+		Mockito.verify(ordersService, Mockito.times(1)).findOne(order.getId());
+		Mockito.verifyNoMoreInteractions(ordersService);
+	}
+	
 	private Order getOrder0() {
 		Order order0 = new Order();
 		order0.setId(RandomUtils.nextLong(0, 100));
