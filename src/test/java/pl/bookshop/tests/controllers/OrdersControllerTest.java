@@ -20,11 +20,15 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.Validator;
 
+import pl.bookshop.domains.jpa.Category;
 import pl.bookshop.domains.jpa.Order;
+import pl.bookshop.domains.jpa.Product;
+import pl.bookshop.domains.mongo.OrderItem;
 import pl.bookshop.enums.OrderStatus;
 import pl.bookshop.enums.PaymentMethod;
 import pl.bookshop.enums.ShippingMethod;
 import pl.bookshop.mvc.controllers.OrdersController;
+import pl.bookshop.mvc.objects.OrderElements;
 import pl.bookshop.services.OrdersService;
 import pl.bookshop.tests.utils.TestUtils;
 
@@ -159,7 +163,79 @@ public class OrdersControllerTest {
 		Mockito.verify(ordersService, Mockito.times(1)).findOne(order.getId());
 		Mockito.verifyNoMoreInteractions(ordersService);
 	}
+
+	@Test
+	public void test_findItems_success() throws Exception {
+		OrderElements orderElements = getOrderElements();
+		
+		Mockito.when(ordersService.findItems(orderElements.getOrderItems().get(0).getOrderId())).thenReturn(orderElements);
+		
+		mockMvc.perform(MockMvcRequestBuilders.get("/orders/items/{id}", orderElements.getOrderItems().get(0).getOrderId()))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.orderItems", Matchers.hasSize(2)))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.orderItems[0].id", Matchers.is(orderElements.getOrderItems().get(0).getId())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.orderItems[0].price", Matchers.is(orderElements.getOrderItems().get(0).getPrice())))
+				.andExpect(MockMvcResultMatchers.jsonPath(
+						"$.orderItems[0].quantity", Matchers.is(orderElements.getOrderItems().get(0).getQuantity().intValue())))
+				.andExpect(MockMvcResultMatchers.jsonPath(
+						"$.orderItems[0].orderId", Matchers.is(orderElements.getOrderItems().get(0).getOrderId().intValue())))
+				.andExpect(MockMvcResultMatchers.jsonPath(
+						"$.orderItems[0].productId", Matchers.is(orderElements.getOrderItems().get(0).getProductId().intValue())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.orderItems[1].id", Matchers.is(orderElements.getOrderItems().get(1).getId())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.orderItems[1].price", Matchers.is(orderElements.getOrderItems().get(1).getPrice())))
+				.andExpect(MockMvcResultMatchers.jsonPath(
+						"$.orderItems[1].quantity", Matchers.is(orderElements.getOrderItems().get(1).getQuantity().intValue())))
+				.andExpect(MockMvcResultMatchers.jsonPath(
+						"$.orderItems[1].orderId", Matchers.is(orderElements.getOrderItems().get(1).getOrderId().intValue())))
+				.andExpect(MockMvcResultMatchers.jsonPath(
+						"$.orderItems[1].productId", Matchers.is(orderElements.getOrderItems().get(1).getProductId().intValue())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.products", Matchers.hasSize(2)))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.products[0].id", Matchers.is(orderElements.getProducts().get(0).getId().intValue())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.products[0].name", Matchers.is(orderElements.getProducts().get(0).getName())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.products[0].producer", Matchers.is(orderElements.getProducts().get(0).getProducer())))
+				.andExpect(MockMvcResultMatchers.jsonPath(
+						"$.products[0].description", Matchers.is(orderElements.getProducts().get(0).getDescription())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.products[0].price", Matchers.is(orderElements.getProducts().get(0).getPrice())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.products[0].discount", Matchers.is(orderElements.getProducts().get(0).getDiscount())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.products[0].imagePath", Matchers.is(orderElements.getProducts().get(0).getImagePath())))
+				.andExpect(MockMvcResultMatchers.jsonPath(
+						"$.products[0].category.id", Matchers.is(orderElements.getProducts().get(0).getCategory().getId().intValue())))
+				.andExpect(MockMvcResultMatchers.jsonPath(
+						"$.products[0].category.name", Matchers.is(orderElements.getProducts().get(0).getCategory().getName())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.products[1].id", Matchers.is(orderElements.getProducts().get(1).getId().intValue())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.products[1].name", Matchers.is(orderElements.getProducts().get(1).getName())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.products[1].producer", Matchers.is(orderElements.getProducts().get(1).getProducer())))
+				.andExpect(MockMvcResultMatchers.jsonPath(
+						"$.products[1].description", Matchers.is(orderElements.getProducts().get(1).getDescription())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.products[1].price", Matchers.is(orderElements.getProducts().get(1).getPrice())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.products[1].discount", Matchers.is(orderElements.getProducts().get(1).getDiscount())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.products[1].imagePath", Matchers.is(orderElements.getProducts().get(1).getImagePath())))
+				.andExpect(MockMvcResultMatchers.jsonPath(
+						"$.products[1].category.id", Matchers.is(orderElements.getProducts().get(1).getCategory().getId().intValue())))
+				.andExpect(MockMvcResultMatchers.jsonPath(
+						"$.products[1].category.name", Matchers.is(orderElements.getProducts().get(1).getCategory().getName())));
+		
+		Mockito.verify(ordersService, Mockito.times(1)).findItems(orderElements.getOrderItems().get(0).getOrderId());
+		Mockito.verifyNoMoreInteractions(ordersService);
+	}
 	
+	/**
+	 * Should occur 404 code error, do not found orders
+	 */
+	@Test
+	public void test_findItems_fail() throws Exception {
+		Long orderId = 0L;
+		
+		Mockito.when(ordersService.findItems(orderId)).thenReturn(getEmptyOrderElements());
+		
+		mockMvc.perform(MockMvcRequestBuilders.get("/orders/items/{id}", orderId))
+				.andExpect(MockMvcResultMatchers.status().isNotFound());
+		
+		Mockito.verify(ordersService, Mockito.times(1)).findItems(orderId);
+		Mockito.verifyNoMoreInteractions(ordersService);
+	}
+
 	private Order getOrder0() {
 		Order order0 = new Order();
 		order0.setId(RandomUtils.nextLong(0, 100));
@@ -182,5 +258,79 @@ public class OrdersControllerTest {
 		order1.setAdditionalMessage(RandomStringUtils.randomAlphabetic(1000));
 		order1.setPaid(false);
 		return order1;
+	}
+	
+	private OrderElements getOrderElements() {
+		OrderElements orderElements = new OrderElements();
+		orderElements.setOrderItems(Arrays.asList(getOrderItem0(), getOrderItem1()));
+		orderElements.setProducts(Arrays.asList(getProduct0(), getProduct1()));
+		return orderElements;
+	}
+	
+	private OrderItem getOrderItem0() {
+		OrderItem orderItem0 = new OrderItem();
+		orderItem0.setId(String.valueOf(RandomUtils.nextLong(0, 100)));
+		orderItem0.setPrice(TestUtils.nextDoubleWithDecimalPlaces(1000, 10000, 2));
+		orderItem0.setQuantity(RandomUtils.nextLong(0, 10000));
+		orderItem0.setOrderId(RandomUtils.nextLong(0, 100));
+		orderItem0.setProductId(RandomUtils.nextLong(0, 100));
+		return orderItem0;
+	}
+	
+	private OrderItem getOrderItem1() {
+		OrderItem orderItem1 = new OrderItem();
+		orderItem1.setId(String.valueOf(RandomUtils.nextLong(0, 100)));
+		orderItem1.setPrice(TestUtils.nextDoubleWithDecimalPlaces(1000, 10000, 2));
+		orderItem1.setQuantity(RandomUtils.nextLong(0, 10000));
+		orderItem1.setOrderId(RandomUtils.nextLong(0, 100));
+		orderItem1.setProductId(RandomUtils.nextLong(0, 100));
+		return orderItem1;
+	}
+	
+	private Product getProduct0() {
+		Product product0 = new Product();
+		product0.setId(RandomUtils.nextLong(0, 100));
+		product0.setName(RandomStringUtils.randomAlphabetic(5));
+		product0.setProducer(RandomStringUtils.randomAlphabetic(10));
+		product0.setDescription(RandomStringUtils.randomAlphabetic(50));
+		product0.setPrice(TestUtils.nextDoubleWithDecimalPlaces(1000, 10000, 2));
+		product0.setDiscount(TestUtils.nextDoubleWithDecimalPlaces(1000, 10000, 2));
+		product0.setImagePath(RandomStringUtils.randomAlphabetic(60));
+		product0.setCategory(getCategory0());
+		return product0;
+	}
+	
+	private Category getCategory0() {
+		Category category0 = new Category();
+		category0.setId(RandomUtils.nextLong(0, 100));
+		category0.setName(RandomStringUtils.randomAlphabetic(20));
+		return category0;
+	}
+	
+	private Product getProduct1() {
+		Product product1 = new Product();
+		product1.setId(RandomUtils.nextLong(0, 100));
+		product1.setName(RandomStringUtils.randomAlphabetic(5));
+		product1.setProducer(RandomStringUtils.randomAlphabetic(10));
+		product1.setDescription(RandomStringUtils.randomAlphabetic(50));
+		product1.setPrice(TestUtils.nextDoubleWithDecimalPlaces(1000, 10000, 2));
+		product1.setDiscount(TestUtils.nextDoubleWithDecimalPlaces(1000, 10000, 2));
+		product1.setImagePath(RandomStringUtils.randomAlphabetic(60));
+		product1.setCategory(getCategory1());
+		return product1;
+	}
+	
+	private Category getCategory1() {
+		Category category1 = new Category();
+		category1.setId(RandomUtils.nextLong(0, 100));
+		category1.setName(RandomStringUtils.randomAlphabetic(20));
+		return category1;
+	}
+	
+	private OrderElements getEmptyOrderElements() {
+		OrderElements orderElements = new OrderElements();
+		orderElements.setOrderItems(new ArrayList<OrderItem>());
+		orderElements.setProducts(new ArrayList<Product>());
+		return orderElements;
 	}
 }
