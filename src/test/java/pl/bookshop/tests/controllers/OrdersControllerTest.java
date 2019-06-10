@@ -28,6 +28,7 @@ import pl.bookshop.enums.OrderStatus;
 import pl.bookshop.enums.PaymentMethod;
 import pl.bookshop.enums.ShippingMethod;
 import pl.bookshop.mvc.controllers.OrdersController;
+import pl.bookshop.mvc.objects.OrderData;
 import pl.bookshop.mvc.objects.OrderElements;
 import pl.bookshop.services.OrdersService;
 import pl.bookshop.tests.utils.TestUtils;
@@ -147,7 +148,7 @@ public class OrdersControllerTest {
 		Mockito.verify(ordersService, Mockito.times(1)).findOne(order.getId());
 		Mockito.verifyNoMoreInteractions(ordersService);
 	}
-	
+
 	/**
 	 * Should occur 404 code error, do not found order
 	 */
@@ -236,6 +237,29 @@ public class OrdersControllerTest {
 		Mockito.verifyNoMoreInteractions(ordersService);
 	}
 
+	@Test
+	public void test_create_success() throws Exception {
+		OrderData orderData = getOrderData();
+		
+		Mockito.doNothing().when(ordersService).create(getOrderData());
+		
+		mockMvc.perform(MockMvcRequestBuilders
+						.post("/orders")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(TestUtils.toJson(orderData)))
+				.andExpect(MockMvcResultMatchers.status().isCreated());
+		
+		Mockito.verify(ordersService, Mockito.times(1)).create(orderData);
+		Mockito.verifyNoMoreInteractions(ordersService);
+	}
+	
+	private OrderData getOrderData() {
+		OrderData orderData = new OrderData();
+		orderData.setOrder(getOrder0());
+		orderData.setOrderItems(Arrays.asList(getOrderItem0(), getOrderItem1()));
+		return orderData;
+	}
+
 	private Order getOrder0() {
 		Order order0 = new Order();
 		order0.setId(RandomUtils.nextLong(0, 100));
@@ -247,7 +271,7 @@ public class OrdersControllerTest {
 		order0.setPaid(true);
 		return order0;
 	}
-	
+
 	private Order getOrder1() {
 		Order order1 = new Order();
 		order1.setId(RandomUtils.nextLong(0, 100));
