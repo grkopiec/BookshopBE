@@ -28,6 +28,7 @@ import pl.bookshop.enums.OrderStatus;
 import pl.bookshop.enums.PaymentMethod;
 import pl.bookshop.enums.ShippingMethod;
 import pl.bookshop.mvc.controllers.OrdersController;
+import pl.bookshop.mvc.objects.ChangeStatus;
 import pl.bookshop.mvc.objects.OrderData;
 import pl.bookshop.mvc.objects.OrderElements;
 import pl.bookshop.services.OrdersService;
@@ -241,7 +242,7 @@ public class OrdersControllerTest {
 	public void test_create_success() throws Exception {
 		OrderData orderData = getOrderData();
 		
-		Mockito.doNothing().when(ordersService).create(getOrderData());
+		Mockito.doNothing().when(ordersService).create(orderData);
 		
 		mockMvc.perform(MockMvcRequestBuilders
 						.post("/orders")
@@ -252,7 +253,72 @@ public class OrdersControllerTest {
 		Mockito.verify(ordersService, Mockito.times(1)).create(orderData);
 		Mockito.verifyNoMoreInteractions(ordersService);
 	}
-	
+
+	@Test
+	public void test_changeStatus_success() throws Exception {
+		ChangeStatus changeStatus = getChangeStatus();
+		Long orderId = 0L;
+		
+		Mockito.doNothing().when(ordersService).changeStatus(orderId, changeStatus.getOrderStatus());
+		
+		mockMvc.perform(MockMvcRequestBuilders
+						.patch("/orders/change-status/{id}", orderId)
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(TestUtils.toJson(changeStatus)))
+				.andExpect(MockMvcResultMatchers.status().isOk());
+		
+		Mockito.verify(ordersService, Mockito.times(1)).changeStatus(orderId, changeStatus.getOrderStatus());
+		Mockito.verifyNoMoreInteractions(ordersService);
+	}
+
+	@Test
+	public void test_markAsPaid_success() throws Exception {
+		Long orderId = 0L;
+		
+		Mockito.doNothing().when(ordersService).markAsPaid(orderId);
+		
+		mockMvc.perform(MockMvcRequestBuilders
+						.patch("/orders/mark-as-paid/{id}", orderId))
+				.andExpect(MockMvcResultMatchers.status().isOk());
+		
+		Mockito.verify(ordersService, Mockito.times(1)).markAsPaid(orderId);
+		Mockito.verifyNoMoreInteractions(ordersService);
+	}
+
+	@Test
+	public void test_delete_success() throws Exception {
+		Order order = getOrder0();
+		
+		Mockito.when(ordersService.findOne(order.getId())).thenReturn(order);
+		Mockito.doNothing().when(ordersService).delete(order.getId());
+		
+		mockMvc.perform(MockMvcRequestBuilders
+						.delete("/orders/{id}", order.getId()))
+				.andExpect(MockMvcResultMatchers.status().isNoContent());
+		
+		Mockito.verify(ordersService, Mockito.times(1)).findOne(order.getId());
+		Mockito.verify(ordersService, Mockito.times(1)).delete(order.getId());
+		Mockito.verifyNoMoreInteractions(ordersService);
+	}
+
+	/**
+	 * Should occur 409 code error, order do not exist
+	 */
+	@Test
+	public void test_delete_fail() throws Exception {
+		Order order = getOrder0();
+		
+		Mockito.when(ordersService.findOne(order.getId())).thenReturn(null);
+		Mockito.doNothing().when(ordersService).delete(order.getId());
+		
+		mockMvc.perform(MockMvcRequestBuilders
+						.delete("/orders/{id}", order.getId()))
+				.andExpect(MockMvcResultMatchers.status().isNotFound());
+		
+		Mockito.verify(ordersService, Mockito.times(1)).findOne(order.getId());
+		Mockito.verifyNoMoreInteractions(ordersService);
+	}
+
 	private OrderData getOrderData() {
 		OrderData orderData = new OrderData();
 		orderData.setOrder(getOrder0());
@@ -356,5 +422,11 @@ public class OrdersControllerTest {
 		orderElements.setOrderItems(new ArrayList<OrderItem>());
 		orderElements.setProducts(new ArrayList<Product>());
 		return orderElements;
+	}
+	
+	private ChangeStatus getChangeStatus() {
+		ChangeStatus changeStatus = new ChangeStatus();
+		changeStatus.setOrderStatus(OrderStatus.NEW);
+		return changeStatus;
 	}
 }

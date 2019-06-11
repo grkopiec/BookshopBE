@@ -84,14 +84,14 @@ public class OrdersController {
 	@RequestMapping(path = "/change-status/{id}", method = RequestMethod.PATCH)
 	public ResponseEntity<Void> changeStatus(@PathVariable Long id, @RequestBody @Valid ChangeStatus changeStatus) {
 		ordersService.changeStatus(id, changeStatus.getOrderStatus());
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(path = "/mark-as-paid/{id}", method = RequestMethod.PATCH)
 	public ResponseEntity<Void> markAsPaid(@PathVariable Long id) {
 		ordersService.markAsPaid(id);
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
