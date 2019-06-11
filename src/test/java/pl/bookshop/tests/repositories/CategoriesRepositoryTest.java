@@ -31,7 +31,7 @@ import pl.bookshop.repositories.jpa.CategoriesRepository;
 public class CategoriesRepositoryTest {
 	@Autowired
 	private CategoriesRepository categoriesRepository;
-	
+
 	@Test
 	public void test_findByName_success() {
 		Category category = categoriesRepository.findByName("Books");
@@ -40,7 +40,7 @@ public class CategoriesRepositoryTest {
 		Assert.assertEquals(new Long(0), category.getId());
 		Assert.assertEquals(2, category.getProducts().size());
 	}
-	
+
 	/**
 	 * Should not find not exist value
 	 */
@@ -49,8 +49,7 @@ public class CategoriesRepositoryTest {
 		Category category = categoriesRepository.findByName("Abstract");
 		Assert.assertNull(category);
 	}
-	
-	
+
 	/**
 	 * Should find nothing because passed only half of name of category	
 	 */

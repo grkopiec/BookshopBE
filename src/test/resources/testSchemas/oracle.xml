@@ -21,4 +21,9 @@
 			account_non_locked="true" credentials_non_expired="true" enabled="true" />
 	<users id="1" username="user" password="admin" authorities="ROLE_USER" account_non_expired="true"
 			account_non_locked="true" credentials_non_expired="true" enabled="true" />
+			
+	<orders id="0" total_price="40.00" status="NEW" payment_method="BANK_TRANSFER" shipping_method="COURIER" additional_message="Please quick send"
+			paid="false" user_id="0" />
+	<orders id="1" total_price="42.00" status="FINISHED" payment_method="ON_DELIVERY" shipping_method="PERSONAL_PICKUP"
+			additional_message="I will come at Monday" paid="true" user_id="1" />
 </dataset>
