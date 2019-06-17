@@ -1,6 +1,7 @@
 package pl.bookshop.tests.repositories;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -21,6 +22,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 
 import pl.bookhoop.tests.context.PersistanceContext;
 import pl.bookshop.domains.jpa.Order;
+import pl.bookshop.enums.OrderStatus;
 import pl.bookshop.repositories.jpa.OrdersRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -48,5 +50,21 @@ public class OrdersRepositoryTest {
 	public void test_findByName_notExistFail() {
 		List<Order> orders = ordersRepository.findByUserId(2L);
 		Assert.assertEquals(0, orders.size());
+	}
+	
+	@Test
+	public void test_setStatus_success() {
+		ordersRepository.setStatus(0L, OrderStatus.WAITING_ON_PAYMENT);
+		Optional<Order> order = ordersRepository.findById(0L);
+		Assert.assertTrue(order.isPresent());
+		Assert.assertEquals(OrderStatus.WAITING_ON_PAYMENT, order.get().getStatus());
+	}
+	
+	@Test
+	public void test_setPaidStatus_success() {
+		ordersRepository.setPaid(0L, true);
+		Optional<Order> order = ordersRepository.findById(0L);
+		Assert.assertTrue(order.isPresent());
+		Assert.assertEquals(true, order.get().getPaid());
 	}
 }
