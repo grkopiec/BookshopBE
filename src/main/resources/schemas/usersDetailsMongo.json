@@ -1,2 +1,2 @@
-{"_id":{"$oid":"5a8b3c58086028fcaa01f398"},"userId":0.0,"name":"Jan","surname":"Kowalski","email":"jkowal@gmail.com","phone":"+48432987234","city":"Wrocław","street":"Wierzbowa 34c","state":"Wrocław","zipCode":"50-004"}
-{"_id":{"$oid":"5a91e8284379ad2f9b120c6f"},"userId":1.0,"name":"Piotr","surname":"Mostowiak","email":"pio23@gmail.com","phone":"+48259425698","city":"Warszawa","street":"Aleksandra Ksawerego 11","state":"Warszawa","zipCode":"00-710"}
+{"_id":{"$oid":"5a8b3c58086028fcaa01f398"},"userId":{"$numberLong":"0"},"name":"Jan","surname":"Kowalski","email":"jkowal@gmail.com","phone":"+48432987234","city":"Wrocław","street":"Wierzbowa 34c","state":"Wrocław","zipCode":"50-004"}
+{"_id":{"$oid":"5a91e8284379ad2f9b120c6f"},"userId":{"$numberLong":"1"},"name":"Piotr","surname":"Mostowiak","email":"pio23@gmail.com","phone":"+48259425698","city":"Warszawa","street":"Aleksandra Ksawerego 11","state":"Warszawa","zipCode":"00-710"}
