@@ -4,5 +4,11 @@
 			{"_id":{"$oid":"5a8b3c58086028fcaa01f398"},"userId":0.0,"name":"Jan","surname":"Kowalski"},
 			{"_id":{"$oid":"5a91e8284379ad2f9b120c6f"},"userId":1.0,"name":"Piotr","surname":"Mostowiak"}
 		]
+	},
+	"ordersItems": {
+		"data": [
+			{"_id":{"$oid":"5b97fc79095d9125bf62f658"},"price":40.17,"quantity":{"$numberLong":"1"},"orderId":{"$numberLong":"0"},"productId":{"$numberLong":"0"}},
+			{"_id":{"$oid":"5b97fc8d095d9125bf62f65a"},"price":42.0,"quantity":{"$numberLong":"1"},"orderId":{"$numberLong":"1"},"productId":{"$numberLong":"2"}}
+		]
 	}
 }
