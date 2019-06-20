@@ -253,7 +253,7 @@ public class ProductValidationTest {
 	}
 	
 	@Test
-	public void test_productCategory_isNull() {
+	public void test_productCategory_whenIsNull() {
 		Product product = getValidProduct();
 		product.setCategory(null);
 		
