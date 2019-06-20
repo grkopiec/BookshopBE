@@ -361,7 +361,7 @@ public class OrdersControllerTest {
 		OrderItem orderItem0 = new OrderItem();
 		orderItem0.setId(String.valueOf(RandomUtils.nextLong(0, 100)));
 		orderItem0.setPrice(TestUtils.nextDoubleWithDecimalPlaces(1000, 10000, 2));
-		orderItem0.setQuantity(RandomUtils.nextLong(0, 10000));
+		orderItem0.setQuantity(RandomUtils.nextLong(0, 100));
 		orderItem0.setOrderId(RandomUtils.nextLong(0, 100));
 		orderItem0.setProductId(RandomUtils.nextLong(0, 100));
 		return orderItem0;
@@ -371,7 +371,7 @@ public class OrdersControllerTest {
 		OrderItem orderItem1 = new OrderItem();
 		orderItem1.setId(String.valueOf(RandomUtils.nextLong(0, 100)));
 		orderItem1.setPrice(TestUtils.nextDoubleWithDecimalPlaces(1000, 10000, 2));
-		orderItem1.setQuantity(RandomUtils.nextLong(0, 10000));
+		orderItem1.setQuantity(RandomUtils.nextLong(0, 100));
 		orderItem1.setOrderId(RandomUtils.nextLong(0, 100));
 		orderItem1.setProductId(RandomUtils.nextLong(0, 100));
 		return orderItem1;
