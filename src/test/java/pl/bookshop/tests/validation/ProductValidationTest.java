@@ -190,10 +190,10 @@ public class ProductValidationTest {
 		Double price = TestUtils.nextDoubleWithDecimalPlaces(100000, 999999, 3);
 		Product product = getValidProduct();
 		product.setPrice(price);
-		System.out.println(price);
+
 		Set<ConstraintViolation<Product>> constraintViolations = validator.validate(product);
 		Assert.assertEquals(1, constraintViolations.size());
-		
+
 		Iterator<ConstraintViolation<Product>> iterator = constraintViolations.iterator();
 		Assert.assertEquals(
 				"Product price: " + price + " cannot have more than 6 digits before decimal places and 2 in digital places",
