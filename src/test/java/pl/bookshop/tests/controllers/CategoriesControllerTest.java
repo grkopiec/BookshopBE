@@ -198,7 +198,7 @@ public class CategoriesControllerTest {
 	 * Should occur 404 code error, do not found category. In this scenario object will not be change because do not exist requested id
 	 */
 	@Test
-	public void test_update_doNotFindIdfail() throws Exception {
+	public void test_update_doNotFindIdFail() throws Exception {
 		Category category = getCategory0();
 
 		Mockito.when(categoriesService.findOne(category.getId())).thenReturn(null);
