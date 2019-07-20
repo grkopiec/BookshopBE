@@ -189,7 +189,6 @@ public class ProductsServiceTest {
 		return product1;
 	}
 
-	//TODO move method that clone object and set id to TestUtil class
 	private Product getUpdatedProduct(Product product, Long id) {
 		Product updatedProduct = new Product();
 		BeanUtils.copyProperties(product, updatedProduct);

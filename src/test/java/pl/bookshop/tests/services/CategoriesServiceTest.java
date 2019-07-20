@@ -13,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.BeanUtils;
 
 import pl.bookshop.domains.jpa.Category;
 import pl.bookshop.repositories.jpa.CategoriesRepository;
@@ -129,7 +130,7 @@ public class CategoriesServiceTest {
 	public void test_update_success() {
 		Long id = RandomUtils.nextLong(0, 100);
 		Category category = getCategory0();
-		Category updatedCategory = getCategory(id, category.getName());
+		Category updatedCategory = getUpdatedCategory(category, id);
 
 		categoriesService.update(id, category);
 
@@ -161,10 +162,10 @@ public class CategoriesServiceTest {
 		return category1;
 	}
 	
-	private Category getCategory(Long id, String name) {
-		Category category = new Category();
-		category.setId(id);
-		category.setName(name);
-		return category;
+	private Category getUpdatedCategory(Category category, Long id) {
+		Category updatedCategory = new Category();
+		BeanUtils.copyProperties(category, updatedCategory);
+		updatedCategory.setId(id);
+		return updatedCategory;
 	}
 }
