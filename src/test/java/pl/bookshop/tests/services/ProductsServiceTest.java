@@ -134,7 +134,7 @@ public class ProductsServiceTest {
 	}
 
 	@Test
-	public void test_save_success() {
+	public void test_create_success() {
 		Product product = getProduct0();
 
 		productsService.create(product);
