@@ -51,6 +51,12 @@ public class TestUtils {
 		}
 		return list;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public static <T> T clone(T object) throws Exception {
+		ObjectMapper objectMapper = new ObjectMapper();
+		return (T) objectMapper.readValue(objectMapper.writeValueAsString(object), object.getClass());
+	}
 
 	private static Double fillDecimalPlaces(Double generatedDouble, Integer decimalPlaces) {
 		String doubleFormat = "#." + StringUtils.repeat('#', decimalPlaces);
