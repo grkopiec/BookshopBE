@@ -17,22 +17,15 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
-
 import pl.bookshop.enums.OrderStatus;
 import pl.bookshop.enums.PaymentMethod;
 import pl.bookshop.enums.ShippingMethod;
-import pl.bookshop.utils.Constants;
 
 @Entity	
 @Table(name = "orders")
 public class Order {
 	@Id
-	@GenericGenerator(name = Constants.ORDERS_SEQUENCE_GENERATOR, strategy = "sequence", parameters = {
-			@Parameter(name = "sequence_name", value = Constants.ORDERS_SEQUENCE)
-	})
-	@GeneratedValue(generator = Constants.PRODUCTS_SEQUENCE_GENERATOR)
+	@GeneratedValue
 	private Long id;
 	@Column(name = "total_price")
 	@NotNull(message = "{order.totalPrice.notNull}")

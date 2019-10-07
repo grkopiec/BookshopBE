@@ -11,21 +11,13 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import pl.bookshop.utils.Constants;
 
 @Entity
 @Table(name = "categories")
 public class Category {
 	@Id
-	@GenericGenerator(name = Constants.CATEGORIES_SEQUENCE_GENERATOR, strategy = "sequence", parameters = {
-			@Parameter(name = "sequence_name", value = Constants.CATEGORIES_SEQUENCE)
-	})
-	@GeneratedValue(generator = Constants.CATEGORIES_SEQUENCE_GENERATOR)
+	@GeneratedValue
 	private Long id;
 	@NotNull(message = "{category.name.notNull}")
 	@Size(min = 2, max = 100, message = "{category.name.size}")
