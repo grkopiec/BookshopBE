@@ -33,7 +33,6 @@
 		<jackson.version>2.9.4</jackson.version>
 		<apache-commons.version>3.7</apache-commons.version>
 		<commons-beanutils.version>1.9.3</commons-beanutils.version>
-		<javax.xml.bind.version>2.3.1</javax.xml.bind.version>
 		<mysql.version>8.0.17</mysql.version>
 	</properties>
 
@@ -168,11 +167,6 @@
 
 	  	<dependency>
 	    	<groupId>org.apache.logging.log4j</groupId>
-	    	<artifactId>log4j-api</artifactId>
-	    	<version>${log4j2.version}</version>
-	  	</dependency>
-	  	<dependency>
-	    	<groupId>org.apache.logging.log4j</groupId>
 	    	<artifactId>log4j-core</artifactId>
 	    	<version>${log4j2.version}</version>
 	  	</dependency>
@@ -209,12 +203,6 @@
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
 			<version>${commons-beanutils.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>javax.xml.bind</groupId>
-			<artifactId>jaxb-api</artifactId>
-			<version>${javax.xml.bind.version}</version>
 		</dependency>
 
 		<dependency>
