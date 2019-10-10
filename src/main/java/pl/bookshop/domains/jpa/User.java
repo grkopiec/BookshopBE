@@ -15,8 +15,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -29,17 +27,13 @@ import pl.bookshop.converters.AuthoritiesSerializer;
 import pl.bookshop.hibernate.CollectionStringConverter;
 import pl.bookshop.mvc.validation.groups.AdminUser;
 import pl.bookshop.mvc.validation.groups.NormalUser;
-import pl.bookshop.utils.Constants;
 //Add id to equals and hashCode here and for rest entities
 @Entity	
 @Table(name = "users")
 public class User implements UserDetails {
 	private static final long serialVersionUID = -7633438667478513077L;
 	@Id
-	@GenericGenerator(name = Constants.USERS_SEQUENCE_GENERATOR, strategy = "sequence", parameters = {
-			@Parameter(name = "sequence_name", value = Constants.USERS_SEQUENCE)
-	})
-	@GeneratedValue(generator = Constants.USERS_SEQUENCE_GENERATOR)
+	@GeneratedValue
 	private Long id;
 	@NotNull(groups = {AdminUser.class, NormalUser.class}, message = "{user.username.notNull}")
 	@Size(min = 2, max = 30, groups = {AdminUser.class, NormalUser.class}, message = "{user.username.size}")

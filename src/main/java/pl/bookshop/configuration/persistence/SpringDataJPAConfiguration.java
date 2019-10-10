@@ -4,7 +4,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
-import org.hibernate.dialect.Oracle10gDialect;
+import org.hibernate.dialect.MySQL8Dialect;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.annotation.Bean;
@@ -49,8 +49,8 @@ public class SpringDataJPAConfiguration {
 	@Bean
 	public JpaVendorAdapter jpaVendorAdapter() {
 		HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
-		hibernateJpaVendorAdapter.setDatabase(Database.ORACLE);
-		hibernateJpaVendorAdapter.setDatabasePlatform(Oracle10gDialect.class.getCanonicalName());
+		hibernateJpaVendorAdapter.setDatabase(Database.MYSQL);
+		hibernateJpaVendorAdapter.setDatabasePlatform(MySQL8Dialect.class.getCanonicalName());
 		hibernateJpaVendorAdapter.setShowSql(showSql);
 		return hibernateJpaVendorAdapter;
 	}
