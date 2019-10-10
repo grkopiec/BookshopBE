@@ -22,7 +22,7 @@ Regarding best practices I try use them in any aspect of project
 - [hibernate](http://hibernate.org/): layer that connect application with database
 - [maven](https://maven.apache.org/): tool using for manage dependencies and building project
 - [tomcat](http://tomcat.apache.org/): server on which I run application
-- [oracle express edition](http://www.oracle.com/technetwork/database/database-technologies/express-edition/overview/index.html): database that containing data used in application
+- [mysql](https://www.mysql.com/): database that containing data used in application
 - [mongodb](https://www.mongodb.com/): database that persist part of application data
 - [eclipse](https://www.eclipse.org/): ide that I use to developing
 
@@ -58,7 +58,7 @@ And install it for example like here [tomcat](https://www.ntu.edu.sg/home/ehchua
 
 Also need ide like [eclipse](https://spring.io/tools) and install it
 
-For easier display database structure is recommended to install [sql developer](http://www.oracle.com/technetwork/developer-tools/sql-developer/downloads/index.html)
+For easier display database structure is recommended to install [mysql workbench](https://dev.mysql.com/downloads/workbench)
 
 #### Prepare environment
 
@@ -79,30 +79,30 @@ Next open eclipse and import cloned project to workspace, after it create server
 After configure ide is time to setup database, first create new one, open command prompt and input
 
 ```code
-sqlplus sys as sysdba
+mysql -u admin -p
 ```
-Enter the password defined during install oracle express 11g database, and create new user with database and with below name and password
+Enter the password defined during install mysql database, and create new user with privilages and with below name and password
 
 ```code
-create user bookshop identified by admin;
+GRANT ALL PRIVILEGES ON *.* TO 'bookshop'@'localhost' IDENTIFIED BY 'admin';
 ```
 
-After it put all privileges on just created user
+After it login as recently created user
 
 ```code
-grant all privileges to bookshop;
+mysql -u bookshop -p
 ```
 
-In linux system it is required to start database by command
+And create database
 
-```code
-startup
+```
+CREATE DATABASE dbname;
 ```
 
-After this operations left sqlplus by command
+After this operations left mysql console by command
 
 ```code
-exit
+\q
 ```
 
 Now is a time to fill database with data, open sql developer and create new connection with below data
@@ -118,13 +118,7 @@ port: 1521
 sid: xe
 ```
 
-Open project folder and go to catalog src -> main -> resources -> sql and open file schema.sql and copy all sql command and run it on sql developer for bookshop database.
-
-For correctly project working it is required oracle driver in local repository then go to project folder and navigate to src -> main -> resources -> libs and open here command protompt and run below line.
-
-```code
-mvn install:install-file -Dfile=ojdbc6.jar -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=11.2.0 -Dpackaging=jar
-```
+Open project folder and go to catalog src -> main -> resources -> sql and open file mysql.sql and copy all sql command and run it on mysql workbench for bookshop database.
 
 After it is required to configure mongodb
 
